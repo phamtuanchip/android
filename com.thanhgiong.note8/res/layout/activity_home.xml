@@ -4,20 +4,27 @@
     android:layout_height="match_parent" >
 
     <SearchView
-        android:id="@+id/serchView"
+        android:id="@+id/searchView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ScrollView
-        android:id="@+id/scrollView1"
+        android:id="@+id/scrollView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/serchView" >
+        android:layout_below="@+id/searchView" >
 
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+        </ListView>
+       
         <include
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             layout="@layout/activity_display_note" />
+         
     </ScrollView>
 
 </RelativeLayout>
