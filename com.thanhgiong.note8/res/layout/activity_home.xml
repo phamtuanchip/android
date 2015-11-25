@@ -1,0 +1,91 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android">
+<SearchView
+        android:id="@+id/serchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+   
+<ScrollView 
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/upcomming_bg"
+    android:orientation="vertical" >
+
+         
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" 
+            android:layout_weight="1" >
+
+            <ImageView
+                android:id="@+id/imagefruits"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="img"
+                android:paddingBottom="15dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="15dp"
+                android:src="@drawable/ic_stat_name" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingRight="15dp"
+                android:paddingTop="35dp" >
+
+                <TextView
+                    android:id="@+id/txtApples"
+                    style="What"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0dp"
+                    android:layout_gravity="fill_vertical"
+                    android:layout_weight="0.50" />
+
+                <Button
+                    android:id="@+id/btViewApples"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="when" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom" >
+
+            <TextView
+                android:id="@+id/descheader"
+                 
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="description" />
+
+
+            <TextView
+                android:id="@+id/fruitDesc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
+</LinearLayout>
