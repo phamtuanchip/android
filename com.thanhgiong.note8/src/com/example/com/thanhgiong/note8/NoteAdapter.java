@@ -62,6 +62,7 @@ private static LayoutInflater inflater=null;
         holder.img=(ImageView) rowView.findViewById(R.id.img);	
         holder.img.setImageResource(R.drawable.ic_launcher);
         holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
+        holder.what.setText("tessst");
         holder.when=(TextView) rowView.findViewById(R.id.textwhen);
         holder.where=(TextView) rowView.findViewById(R.id.textWhere);
        
