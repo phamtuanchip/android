@@ -289,7 +289,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 			if (success) {
 				//finish();
-				setContentView(R.layout.activity_main);
+				setContentView(R.layout.activity_home);
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));

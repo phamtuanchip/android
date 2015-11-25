@@ -32,7 +32,7 @@ public class NoteList extends Activity {
 	      list.add(values[i]);
 	    }
 	    final StableArrayAdapter adapter = new StableArrayAdapter(this,
-	        android.R.layout.simple_list_item_1, list);
+	        android.R.layout.activity_list_item, list);
 	    listview.setAdapter(adapter);
 
 	    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

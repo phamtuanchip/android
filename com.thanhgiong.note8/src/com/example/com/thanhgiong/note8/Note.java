@@ -17,6 +17,7 @@ public class Note {
 	public Note(){
 		
 	}
+	 
 	public Note(String id, String title, String phone, String email, String street,String place, String date, String last_date, String remind, String location){
 		this.id = String.valueOf(id);
 		this.title = title;

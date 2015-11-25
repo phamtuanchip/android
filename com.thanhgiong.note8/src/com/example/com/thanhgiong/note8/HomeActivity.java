@@ -14,7 +14,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +33,18 @@ public class HomeActivity extends Activity {
       setContentView(R.layout.activity_home);
       
       mydb = new DBNote(this);
-      ArrayList array_list = mydb.getAllNote();
-      ArrayAdapter arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
-      
-      obj = (ListView)findViewById(R.id.listview);
+      ArrayList<Note> array_list = mydb.getAllNote();
+      array_list.add(new Note("1", "test2", null, null, null, null, null, null, null, null));
+      array_list.add(new Note("21", "test2", null, null, null, null, null, null, null, null));
+      NoteAdapter arrayAdapter=new NoteAdapter(this,array_list);
+      ScrollView s 
+      = (ScrollView)findViewById(R.id.scrollView1);
+      for(Note n : array_list) {
+    	  LinearLayout l1 = new LinearLayout(getApplicationContext());
+    	  
+    	  LinearLayout l2 = new LinearLayout(getApplicationContext());
+    	  
+      }
       obj.setAdapter(arrayAdapter);
       obj.setOnItemClickListener(new OnItemClickListener(){
          @Override

@@ -140,7 +140,7 @@ public class DBNote extends SQLiteOpenHelper {
 	    			          );
 	         array_list.add(n);
 	         res.moveToNext();
-	      }
+	      }	      
 	   return array_list;
 	   }
 	}
