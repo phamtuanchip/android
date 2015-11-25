@@ -20,18 +20,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("deprecation")
-public class MainActivity extends Activity {
+public class HomeActivity extends Activity {
    public final static String EXTRA_MESSAGE = "MESSAGE";
    private ListView obj;
-   DBHelper mydb;
+   DBNote mydb;
    
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_home);
       
-      mydb = new DBHelper(this);
-      ArrayList array_list = mydb.getAllCotacts();
+      mydb = new DBNote(this);
+      ArrayList array_list = mydb.getAllNote();
       ArrayAdapter arrayAdapter=new ArrayAdapter(this,android.R.layout.simple_list_item_1, array_list);
       
       obj = (ListView)findViewById(R.id.listview);
