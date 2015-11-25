@@ -24,7 +24,7 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class HomeActivity extends Activity {
    public final static String EXTRA_MESSAGE = "MESSAGE";
-   private ListView obj;
+   private ListView list;
    DBNote mydb;
    
    @Override
@@ -37,30 +37,23 @@ public class HomeActivity extends Activity {
       array_list.add(new Note("1", "test2", null, null, null, null, null, null, null, null));
       array_list.add(new Note("21", "test2", null, null, null, null, null, null, null, null));
       NoteAdapter arrayAdapter=new NoteAdapter(this,array_list);
-      ScrollView s 
-      = (ScrollView)findViewById(R.id.scrollView1);
-      for(Note n : array_list) {
-    	  LinearLayout l1 = new LinearLayout(getApplicationContext());
-    	  
-    	  LinearLayout l2 = new LinearLayout(getApplicationContext());
-    	  
-      }
-      obj.setAdapter(arrayAdapter);
-      obj.setOnItemClickListener(new OnItemClickListener(){
-         @Override
-         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
-            // TODO Auto-generated method stub
-            int id_To_Search = arg2 + 1;
-            
-            Bundle dataBundle = new Bundle();
-            dataBundle.putInt("id", id_To_Search);
-            
-            Intent intent = new Intent(getApplicationContext(),DisplayContact.class);
-            
-            intent.putExtras(dataBundle);
-            startActivity(intent);
-         }
-      });
+      list = (ListView) findViewById(R.id.listview);
+      list.setAdapter(new NoteAdapter(this, array_list));
+//      obj.setOnItemClickListener(new OnItemClickListener(){
+//         @Override
+//         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
+//            // TODO Auto-generated method stub
+//            int id_To_Search = arg2 + 1;
+//            
+//            Bundle dataBundle = new Bundle();
+//            dataBundle.putInt("id", id_To_Search);
+//            
+//            Intent intent = new Intent(getApplicationContext(),DisplayContact.class);
+//            
+//            intent.putExtras(dataBundle);
+//            startActivity(intent);
+//         }
+//      });
    }
    
    @Override
