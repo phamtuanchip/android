@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.thanhgiong.note8.R;
@@ -36,8 +37,11 @@ public class HomeActivity extends Activity {
       
       mydb = new DBNote(this);
       ArrayList<Note> array_list = mydb.getAllNote();
-      array_list.add(new Note("1", "test1", null, null, null, null, null, null, null, null));
-      array_list.add(new Note("2", "test2", null, null, null, null, null, null, null, null));
+      array_list.add(new Note("1", "test1", null, null, null, null, String.valueOf(System.currentTimeMillis()), null, null, null));
+      array_list.add(new Note("2", "test2", null, null, null, null,  String.valueOf(new Date(2015,11, 20).getTime()), null, null, null));
+      array_list.add(new Note("3", "test3", null, null, null, null,  String.valueOf(new Date(2015,11, 28).getTime()), null, null, null));
+      array_list.add(new Note("4", "test4", null, null, null, null,  String.valueOf(new Date(2015,11, 20).getTime()), null, null, null));
+      
       list = (ListView) findViewById(R.id.listView);
       list.setAdapter(new NoteAdapter(this, array_list));
 //      obj.setOnItemClickListener(new OnItemClickListener(){

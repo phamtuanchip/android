@@ -1,6 +1,9 @@
 package com.thanhgiong.note8;
 
-public class Note {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Note implements Parcelable {
 	
 	public String id;
 	public String title;
@@ -42,6 +45,27 @@ public class Note {
 	public String getlongitude(){
 		if(location == null || location.isEmpty()) return null;
 		return location.split(",")[1];
+	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		// TODO Auto-generated method stub
+		dest.writeString(id);
+		dest.writeString(title);
+		dest.writeString(phone);
+		dest.writeString(email);
+		dest.writeString(street);
+		dest.writeString(place);
+		dest.writeString(date);
+		dest.writeString(last_date);
+		dest.writeString(remind);
+		dest.writeString(location);
 	}
  
 }

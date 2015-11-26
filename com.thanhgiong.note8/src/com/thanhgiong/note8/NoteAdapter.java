@@ -1,10 +1,12 @@
 package com.thanhgiong.note8;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.thanhgiong.note8.R;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,11 +15,12 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class NoteAdapter extends BaseAdapter {
- List<Note> data_ ;
+static List<Note> data_ ;
 private static LayoutInflater inflater=null;	
 	Context currentContext_ ;
 	
@@ -53,28 +56,33 @@ private static LayoutInflater inflater=null;
 		if(rowView == null)
         rowView = inflater.inflate(R.layout.activity_display_note, arg2, false);
         Holder holder=new Holder();
-        holder.l1 = (LinearLayout) rowView.findViewById(R.id.l1);
-        holder.l2 = (LinearLayout) rowView.findViewById(R.id.l2);
-        holder.l2.setBackgroundResource(R.drawable.upcomming_bg);
+        //holder.l1 = (LinearLayout) rowView.findViewById(R.id.l1);
+        holder.l2 = (RelativeLayout) rowView.findViewById(R.id.l2);
+        Note n = (Note)getItem(position);
+        long d = System.currentTimeMillis() - Long.parseLong(n.date); 
+        if(d > TimeUnit.DAYS.toMillis(1))  holder.l2.setBackgroundResource(R.drawable.future_bg);
+        else if(d > 0) holder.l2.setBackgroundResource(R.drawable.upcomming_bg);
+        else holder.l2.setBackgroundResource(R.drawable.past_bg);
         holder.l21 = (LinearLayout) rowView.findViewById(R.id.l21);
         holder.l22 = (LinearLayout) rowView.findViewById(R.id.l22);
         holder.l23 = (LinearLayout) rowView.findViewById(R.id.l23);
         holder.l24 = (LinearLayout) rowView.findViewById(R.id.l24);
         
         holder.img=(ImageView) rowView.findViewById(R.id.img);	
-        holder.img.setImageResource(R.drawable.ic_launcher);
+        //holder.img.setImageResource(R.drawable.ic_launcher);
         holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
-        holder.what.setText("tessst");
+        //holder.what.setText("tessst");
         holder.when=(TextView) rowView.findViewById(R.id.textwhen);
         holder.where=(TextView) rowView.findViewById(R.id.textWhere);
-       
-		TextView display = new TextView(currentContext_) ;
-		display.setText(data_.get(position).title) ;
+		 
 		rowView.setOnClickListener(new OnClickListener() {            
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Toast.makeText(currentContext_, "You Clicked ", Toast.LENGTH_LONG).show();
+               //Toast.makeText(currentContext_, "You Clicked ", Toast.LENGTH_LONG).show();
+            	Intent i = new Intent(v.getContext(), NoteDetail.class);
+            	i.putExtra("note", (Note)getItem(getCount()));
+            	v.getContext().startActivity(i);
             }
         });   
 		return rowView;
@@ -83,7 +91,7 @@ private static LayoutInflater inflater=null;
 	 public class Holder
 	    { 
 		 	LinearLayout l1;
-		 	LinearLayout l2;
+		 	RelativeLayout l2;
 		 	LinearLayout l21;
 		 	LinearLayout l22;
 		 	LinearLayout l23;
