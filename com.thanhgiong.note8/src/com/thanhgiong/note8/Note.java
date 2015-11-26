@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Note implements Parcelable {
-	
+
 	public String id;
 	public String title;
 	public String phone;
@@ -15,12 +15,12 @@ public class Note implements Parcelable {
 	public String last_date;
 	public String remind;
 	public String location;
- 
-	
+
+
 	public Note(){
-		
+
 	}
-	 
+
 	public Note(String id, String title, String phone, String email, String street,String place, String date, String last_date, String remind, String location){
 		this.id = String.valueOf(id);
 		this.title = title;
@@ -33,7 +33,21 @@ public class Note implements Parcelable {
 		this.remind = remind;
 		this.location = location;
 	}
-	
+
+	public Note(Parcel p){
+		this.id = p.readString();
+		this.title =  p.readString();
+		this.phone =  p.readString();
+		this.email =  p.readString();
+		this.street =  p.readString();
+		this.place =  p.readString();
+		this.date =  p.readString();	 
+		this.last_date =  p.readString();
+		this.remind =  p.readString();
+		this.location =  p.readString();
+	}
+
+
 	public String getAddress(){
 		return street + "," + place ;
 	}
@@ -41,7 +55,7 @@ public class Note implements Parcelable {
 		if(location == null || location.isEmpty()) return null;
 		return location.split(",")[0];
 	}
-	
+
 	public String getlongitude(){
 		if(location == null || location.isEmpty()) return null;
 		return location.split(",")[1];
@@ -67,5 +81,23 @@ public class Note implements Parcelable {
 		dest.writeString(remind);
 		dest.writeString(location);
 	}
- 
+	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
+
+		@Override
+		public Note createFromParcel(Parcel source) {
+			// TODO Auto-generated method stub
+			return new Note(source);
+		}
+
+		@Override
+		public Note[] newArray(int size) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}; 
+			 
+		
+	
+	public Note[] newArray(int size) { return new Note[size]; } 
+
 }

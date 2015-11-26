@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 public class NoteAdapter extends BaseAdapter {
 static List<Note> data_ ;
+static Note n_;
 private static LayoutInflater inflater=null;	
 	Context currentContext_ ;
 	
@@ -58,8 +59,8 @@ private static LayoutInflater inflater=null;
         Holder holder=new Holder();
         //holder.l1 = (LinearLayout) rowView.findViewById(R.id.l1);
         holder.l2 = (RelativeLayout) rowView.findViewById(R.id.l2);
-        Note n = (Note)getItem(position);
-        long d = System.currentTimeMillis() - Long.parseLong(n.date); 
+        n_ = (Note)getItem(position);
+        long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
         if(d > TimeUnit.DAYS.toMillis(1))  holder.l2.setBackgroundResource(R.drawable.future_bg);
         else if(d > 0) holder.l2.setBackgroundResource(R.drawable.upcomming_bg);
         else holder.l2.setBackgroundResource(R.drawable.past_bg);
@@ -81,7 +82,7 @@ private static LayoutInflater inflater=null;
                 // TODO Auto-generated method stub
                //Toast.makeText(currentContext_, "You Clicked ", Toast.LENGTH_LONG).show();
             	Intent i = new Intent(v.getContext(), NoteDetail.class);
-            	i.putExtra("note", (Note)getItem(getCount()));
+            	i.putExtra("note", n_);
             	v.getContext().startActivity(i);
             }
         });   

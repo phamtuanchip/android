@@ -31,7 +31,7 @@ public class NoteDetail extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_note);
-		n_ = (Note)savedInstanceState.get("note");
+		n_ = (Note) this.getIntent().getExtras().get("note");
 		l2 = (RelativeLayout) findViewById(R.id.l2);
 		l21 = (LinearLayout)  findViewById(R.id.l21);
 		l22 = (LinearLayout)  findViewById(R.id.l22);
