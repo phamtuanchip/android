@@ -14,7 +14,9 @@
 #Huong dan cai dat 
 
 - Nhan vao download source code o day: https://github.com/phamtuanchip/android/archive/master.zip
-- download ve va unzip thu muc android-master va unzip eclipse-android ben trong
+- download ve va unzip thu muc android-master 
+- downloa eclopse o day https://drive.google.com/file/d/0Bw2eZ8CfkgNBZ3c2VzgxeWJZOGs/view?usp=sharing
+- unzip eclipse-android ben trong
 - download android SDK tai day: http://developer.android.com/sdk/index.html#Other
 - download java 7 SDK o day: http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-windows-i586.exe
 - cai dat java SDK
