@@ -1,6 +1,7 @@
 package com.thanhgiong.note8;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -37,7 +38,12 @@ public class NoteDetail extends Activity {
 		l22 = (LinearLayout)  findViewById(R.id.l22);
 		l23 = (LinearLayout)  findViewById(R.id.l23);
 		l24 = (LinearLayout)  findViewById(R.id.l24);
-		img=(ImageView)  findViewById(R.id.img);	
+ 		img=(ImageView)  findViewById(R.id.img);
+ 		long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
+        if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
+        else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
+        else l2.setBackgroundResource(R.drawable.past_bg);
+        
 		what=(TextView)  findViewById(R.id.txtTitle);
 		what.setText(n_.title);
 		when=(TextView)  findViewById(R.id.textwhen);

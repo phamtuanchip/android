@@ -1,5 +1,6 @@
 package com.thanhgiong.note8;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -72,8 +73,9 @@ private static LayoutInflater inflater=null;
         holder.img=(ImageView) rowView.findViewById(R.id.img);	
         //holder.img.setImageResource(R.drawable.ic_launcher);
         holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
-        //holder.what.setText("tessst");
+        holder.what.setText(n_.title);
         holder.when=(TextView) rowView.findViewById(R.id.textwhen);
+        holder.when.setText(String.valueOf(new Date(Long.parseLong(n_.date))));
         holder.where=(TextView) rowView.findViewById(R.id.textWhere);
 		 
 		rowView.setOnClickListener(new OnClickListener() {            
