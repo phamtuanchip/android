@@ -109,7 +109,9 @@ public class HomeActivity extends Activity implements OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnHAddnew: {
-			
+			Intent i = new Intent(v.getContext(), NoteEdit.class);
+        	//i.putExtra("note", n_);
+        	v.getContext().startActivity(i);
 		}
 		break;
 		case R.id.btnHswitch: {

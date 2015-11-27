@@ -52,7 +52,6 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		setContentView(R.layout.activity_display_edit);
 		isEdit = false;
 		Bundle b = this.getIntent().getExtras();
-		if(b != null) n_ = (Note) b.get("note");
 		l2 = (RelativeLayout) findViewById(R.id.l2);
 		l21 = (LinearLayout)  findViewById(R.id.l21);
 		l22 = (LinearLayout)  findViewById(R.id.l22);
@@ -60,14 +59,17 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		l24 = (LinearLayout)  findViewById(R.id.l24);
 		r1 = (RelativeLayout) findViewById(R.id.r1);
 		img=(ImageView)  findViewById(R.id.img);
-		long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
-		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
-		else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
-		else l2.setBackgroundResource(R.drawable.past_bg);
 		reminder = (RadioButton) findViewById(R.id.remind);
 		whatE =(EditText) findViewById(R.id.txtTitleE);
 		whenE =(EditText) findViewById(R.id.textwhenE);
 		whereE =(EditText) findViewById(R.id.textWhereE);
+		if(b != null) {
+			n_ = (Note)  b.get("note");
+			long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
+			if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
+			else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
+			else l2.setBackgroundResource(R.drawable.past_bg);
+		}
 		current_action = ACTION_TYPE_EDIT;
 		r1.setVisibility(View.VISIBLE);
 	}
