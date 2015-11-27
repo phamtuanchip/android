@@ -37,11 +37,12 @@ public class HomeActivity extends Activity {
       
       mydb = new DBNote(this);
       ArrayList<Note> array_list = mydb.getAllNote();
+      if(array_list == null || array_list.size() == 0) {
       array_list.add(new Note("1", "test1", null, null, null, null, String.valueOf(System.currentTimeMillis()), null, null, null));
       array_list.add(new Note("2", "test2", null, null, null, null,  String.valueOf(new Date(2015,11, 20).getTime()), null, null, null));
       array_list.add(new Note("3", "test3", null, null, null, null,  String.valueOf(new Date(2015,11, 28).getTime()), null, null, null));
       array_list.add(new Note("4", "test4", null, null, null, null,  String.valueOf(new Date(2015,11, 20).getTime()), null, null, null));
-      
+      }
       list = (ListView) findViewById(R.id.listView);
       list.setAdapter(new NoteAdapter(this, array_list));
 //      obj.setOnItemClickListener(new OnItemClickListener(){

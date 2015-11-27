@@ -71,7 +71,7 @@ public class DBNote extends SQLiteOpenHelper {
 		      contentValues.put(NOTE_COLUMN_EMAIL, n.email);	
 		      contentValues.put(NOTE_COLUMN_STREET, n.street);
 		      contentValues.put(NOTE_COLUMN_CITY, n.place);
-		      contentValues.put(NOTE_COLUMN_DATE, n.date);
+		      contentValues.put(NOTE_COLUMN_DATE, n.getDate());
 		      contentValues.put(NOTE_COLUMN_LAST_DATE, n.last_date);
 		      contentValues.put(NOTE_COLUMN_REMIND, n.remind);
 		      contentValues.put(NOTE_COLUMN_LOC, n.location);	      
@@ -103,7 +103,7 @@ public class DBNote extends SQLiteOpenHelper {
 	      contentValues.put(NOTE_COLUMN_EMAIL, n.email);	
 	      contentValues.put(NOTE_COLUMN_STREET, n.street);
 	      contentValues.put(NOTE_COLUMN_CITY, n.place);
-	      contentValues.put(NOTE_COLUMN_DATE, n.date);
+	      contentValues.put(NOTE_COLUMN_DATE, n.getDate());
 	      contentValues.put(NOTE_COLUMN_LAST_DATE, n.last_date);
 	      contentValues.put(NOTE_COLUMN_REMIND, n.remind);
 	      contentValues.put(NOTE_COLUMN_LOC, n.location);	      

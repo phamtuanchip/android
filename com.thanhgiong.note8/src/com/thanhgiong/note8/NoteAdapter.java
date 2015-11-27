@@ -56,7 +56,7 @@ private static LayoutInflater inflater=null;
 	public View getView(int position, View currentContext, ViewGroup arg2) {
 		View rowView = currentContext;
 		if(rowView == null)
-        rowView = inflater.inflate(R.layout.activity_display_note, arg2, false);
+        rowView = inflater.inflate(R.layout.activity_display_detail, arg2, false);
         Holder holder=new Holder();
         //holder.l1 = (LinearLayout) rowView.findViewById(R.id.l1);
         holder.l2 = (RelativeLayout) rowView.findViewById(R.id.l2);
@@ -75,7 +75,7 @@ private static LayoutInflater inflater=null;
         holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
         holder.what.setText(n_.title);
         holder.when=(TextView) rowView.findViewById(R.id.textwhen);
-        holder.when.setText(String.valueOf(new Date(Long.parseLong(n_.date))));
+        holder.when.setText(n_.getFormatedDate());
         holder.where=(TextView) rowView.findViewById(R.id.textWhere);
 		 
 		rowView.setOnClickListener(new OnClickListener() {            
