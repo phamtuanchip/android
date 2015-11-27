@@ -16,6 +16,7 @@ tmp/**/*
 *.swp
 *~.nib
 local.properties
+project.properties
 .classpath
 .settings/
 .loadpath
@@ -39,6 +40,7 @@ local.properties
 # generated files
 bin/
 gen/
+
 
 # Local configuration file (sdk path, etc)
 local.properties
