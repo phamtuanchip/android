@@ -27,7 +27,7 @@ import android.widget.Toast;
 public class NoteDetail extends Activity  implements OnClickListener, OnDateSetListener{
 	Note n_;
 	RelativeLayout l2;
-	RelativeLayout r1;
+	LinearLayout r1;
 	LinearLayout l21;
 	LinearLayout l22;
 	LinearLayout l23;
@@ -60,7 +60,7 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		l22 = (LinearLayout)  findViewById(R.id.l22);
 		l23 = (LinearLayout)  findViewById(R.id.l23);
 		l24 = (LinearLayout)  findViewById(R.id.l24);
-		r1 = (RelativeLayout) findViewById(R.id.r1);
+		r1 = (LinearLayout) findViewById(R.id.r1);
 		img=(ImageView)  findViewById(R.id.img);
 		long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
 		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
@@ -114,19 +114,20 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		} 
 		break;
 		case R.id.btnAddnew: {
-			setContentView(R.layout.activity_display_edit);
-			bindEField(null);
-			save = (Button) findViewById(R.id.btnSave);
-			if(save != null) save.setOnClickListener(this);
+			Intent i = new Intent(v.getContext(), NoteEdit.class);
+        	//i.putExtra("note", n_);
+        	v.getContext().startActivity(i);
 			isEdit = false;
 			current_action = ACTION_TYPE_ADDNEW;
 		} 
 		break;
-		case R.id.btnSave : {			
+		case R.id.btnSave : {		
+			Intent i = new Intent(v.getContext(), NoteDetail.class);
+			i.putExtra("note", n_);
 			setContentView(R.layout.activity_display_detail);
 			if(current_action == ACTION_TYPE_EDIT) update(n_);
 			else if (current_action == ACTION_TYPE_ADDNEW) save(n_);
-			r1 = (RelativeLayout)findViewById(R.id.r1);
+			r1 = (LinearLayout)findViewById(R.id.r1);
 			r1.setVisibility(View.VISIBLE);
 			edit.setOnClickListener(this);
 			isEdit = false;			
@@ -139,12 +140,12 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 	}
 	private void save(Note n) {
 		Note nd = new Note(n.id, n.title, n.phone, n.email, n.street,n.place, n.date, n.last_date, n.remind, n.location);
-		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT);
+		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 	}
 
 	private void update(Note n) {
 		Note nd = new Note(n.id, n.title, n.phone, n.email, n.street,n.place, n.date, n.last_date, n.remind, n.location);
-		Toast.makeText(this, "updated", Toast.LENGTH_SHORT);
+		Toast.makeText(this, "updated", Toast.LENGTH_SHORT).show();
 	}
 	private void bindEField(Note n_2) {
 		whatE =(EditText) findViewById(R.id.txtTitleE);

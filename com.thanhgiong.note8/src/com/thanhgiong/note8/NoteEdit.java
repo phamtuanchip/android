@@ -51,7 +51,8 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_edit);
 		isEdit = false;
-		n_ = (Note) this.getIntent().getExtras().get("note");
+		Bundle b = this.getIntent().getExtras();
+		if(b != null) n_ = (Note) b.get("note");
 		l2 = (RelativeLayout) findViewById(R.id.l2);
 		l21 = (LinearLayout)  findViewById(R.id.l21);
 		l22 = (LinearLayout)  findViewById(R.id.l22);
@@ -125,12 +126,12 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 	}
 	private void save(Note n) {
 		Note nd = new Note(n.id, n.title, n.phone, n.email, n.street,n.place, n.date, n.last_date, n.remind, n.location);
-		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT);
+		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 	}
 
 	private void update(Note n) {
 		Note nd = new Note(n.id, n.title, n.phone, n.email, n.street,n.place, n.date, n.last_date, n.remind, n.location);
-		Toast.makeText(this, "updated", Toast.LENGTH_SHORT);
+		Toast.makeText(this, "updated", Toast.LENGTH_SHORT).show();
 	}
 	private void bindEField(Note n_2) {
 		whatE =(EditText) findViewById(R.id.txtTitleE);
