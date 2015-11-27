@@ -100,12 +100,13 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		} case R.id.btnEdit: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
         	i.putExtra("note", n_);
+        	i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
         	v.getContext().startActivity(i);
 		} 
 		break;
 		case R.id.btnAddnew: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
-        	//i.putExtra("note", n_);
+        	i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
         	v.getContext().startActivity(i);
 			isEdit = false;
 			current_action = ACTION_TYPE_ADDNEW;

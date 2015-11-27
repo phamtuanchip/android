@@ -85,6 +85,7 @@ private static LayoutInflater inflater=null;
                //Toast.makeText(currentContext_, "You Clicked ", Toast.LENGTH_LONG).show();
             	Intent i = new Intent(v.getContext(), NoteDetail.class);
             	i.putExtra("note", n_);
+            	i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
             	v.getContext().startActivity(i);
             }
         });   

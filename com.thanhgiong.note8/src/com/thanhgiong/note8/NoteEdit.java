@@ -36,9 +36,9 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 	EditText whatE;
 	EditText whenE;
 	EditText whereE;
-	TextView when;
-	TextView where;
-	
+	ImageView when;
+	ImageView where;
+
 	RadioButton reminder;
 	ImageView img;
 	ImageButton save;
@@ -64,26 +64,29 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		whatE =(EditText) findViewById(R.id.txtTitleE);
 		whenE =(EditText) findViewById(R.id.textwhenE);
 		whereE =(EditText) findViewById(R.id.textWhereE);
-		when=(TextView)  findViewById(R.id.textwhen);
-		where=(TextView)  findViewById(R.id.textWhere);
+		when=(ImageView)  findViewById(R.id.date);
+		where=(ImageView)  findViewById(R.id.loc);
 		if(b != null) {
 			n_ = (Note)  b.get("note");
-			long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
-			if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
-			else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
-			else l2.setBackgroundResource(R.drawable.past_bg);
+			if(n_ != null) {
+				long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
+				if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
+				else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
+				else l2.setBackgroundResource(R.drawable.past_bg);
+			}
+			current_action = b.getInt("type");
 		}
 		save = (ImageButton) findViewById(R.id.btnSave);
 		save.setOnClickListener(this);
 		img.setOnClickListener(this);
 		when.setOnClickListener(this);
 		where.setOnClickListener(this);
-		current_action = ACTION_TYPE_EDIT;
+
 	}
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case  R.id.textwhen: {
+		case  R.id.date: {
 			DatePickerDialog dialog =  new DatePickerDialog(v.getContext(), this, 2015, 11,27);
 			dialog.show();
 		}
@@ -93,7 +96,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 			startActivityForResult(takePictureIntent, 1);
 		}
 		break;
-		case R.id.textWhere: {
+		case R.id.loc: {
 			String uri= "geo:47.6,-122.3";
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
 			if (isAppInstalled("com.google.android.apps.maps")) {
@@ -101,12 +104,18 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 				startActivity(intent);
 			}
 		}  
-		case R.id.btnSave : {		
+		case R.id.btnSave : {
+			Note n = new Note("5", "test5", null, null, null, null,  String.valueOf(new Date(2015,11, 20).getTime()), null, null, null);
+
+			if(current_action == ACTION_TYPE_EDIT) {
+				update(n);
+			}
+			else if (current_action == ACTION_TYPE_ADDNEW) {
+				save(n);
+			}
 			Intent i = new Intent(v.getContext(), NoteDetail.class);
-			i.putExtra("note", n_);
-			setContentView(R.layout.activity_display_detail);
-			if(current_action == ACTION_TYPE_EDIT) update(n_);
-			else if (current_action == ACTION_TYPE_ADDNEW) save(n_);
+			i.putExtra("note", n);
+			startActivity(i);
 			isEdit = false;			
 		} 
 		break;
