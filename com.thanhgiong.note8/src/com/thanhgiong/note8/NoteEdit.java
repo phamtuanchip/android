@@ -25,21 +25,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NoteDetail extends Activity  implements OnClickListener, OnDateSetListener{
+public class NoteEdit extends Activity  implements OnClickListener, OnDateSetListener{
 	Note n_;
 	RelativeLayout l2;
-	LinearLayout r1;
+	RelativeLayout r1;
 	LinearLayout l21;
 	LinearLayout l22;
 	LinearLayout l23;
 	LinearLayout l24;
-	TextView what;
-	TextView when;
-	TextView where;
+	EditText whatE;
+	EditText whenE;
+	EditText whereE;
+	ImageView when;
+	ImageView where;
+
 	RadioButton reminder;
 	ImageView img;
-	ImageButton edit;
-	ImageButton add;
+	ImageButton save;
 	public static int ACTION_TYPE_VIEW = 1;
 	public static int ACTION_TYPE_EDIT = 2;
 	public static int ACTION_TYPE_ADDNEW = 3;
@@ -48,39 +50,43 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_display_detail);
+		setContentView(R.layout.activity_display_edit);
 		isEdit = false;
-		n_ = (Note) this.getIntent().getExtras().get("note");
+		Bundle b = this.getIntent().getExtras();
 		l2 = (RelativeLayout) findViewById(R.id.l2);
 		l21 = (LinearLayout)  findViewById(R.id.l21);
 		l22 = (LinearLayout)  findViewById(R.id.l22);
 		l23 = (LinearLayout)  findViewById(R.id.l23);
 		l24 = (LinearLayout)  findViewById(R.id.l24);
-		r1 = (LinearLayout) findViewById(R.id.r1);
+		r1 = (RelativeLayout) findViewById(R.id.r1);
 		img=(ImageView)  findViewById(R.id.img);
-		long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
-		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
-		else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
-		else l2.setBackgroundResource(R.drawable.past_bg);
-		
-		what=(TextView)  findViewById(R.id.txtTitle);
-		when=(TextView)  findViewById(R.id.textwhen);
 		reminder = (RadioButton) findViewById(R.id.remind);
-		where=(TextView)  findViewById(R.id.textWhere);
-		when.setText(n_.getFormatedDate());
-		what.setText(n_.title);
-		
-		edit = (ImageButton) findViewById(R.id.btnEdit);
-		edit.setOnClickListener(this);
-		add = (ImageButton) findViewById(R.id.btnAddnew);
-		add.setOnClickListener(this);
-		current_action = ACTION_TYPE_VIEW;
-		r1.setVisibility(View.VISIBLE);
+		whatE =(EditText) findViewById(R.id.txtTitleE);
+		whenE =(EditText) findViewById(R.id.textwhenE);
+		whereE =(EditText) findViewById(R.id.textWhereE);
+		when=(ImageView)  findViewById(R.id.date);
+		where=(ImageView)  findViewById(R.id.loc);
+		if(b != null) {
+			n_ = (Note)  b.get("note");
+			if(n_ != null) {
+				long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
+				if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
+				else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
+				else l2.setBackgroundResource(R.drawable.past_bg);
+			}
+			current_action = b.getInt("type");
+		}
+		save = (ImageButton) findViewById(R.id.btnSave);
+		save.setOnClickListener(this);
+		img.setOnClickListener(this);
+		when.setOnClickListener(this);
+		where.setOnClickListener(this);
+
 	}
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case  R.id.textwhen: {
+		case  R.id.date: {
 			DatePickerDialog dialog =  new DatePickerDialog(v.getContext(), this, 2015, 11,27);
 			dialog.show();
 		}
@@ -90,37 +96,26 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 			startActivityForResult(takePictureIntent, 1);
 		}
 		break;
-		case R.id.textWhere: {
+		case R.id.loc: {
 			String uri= "geo:47.6,-122.3";
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
 			if (isAppInstalled("com.google.android.apps.maps")) {
 				intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 				startActivity(intent);
 			}
-		} case R.id.btnEdit: {
-			Intent i = new Intent(v.getContext(), NoteEdit.class);
-        	i.putExtra("note", n_);
-        	i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
-        	v.getContext().startActivity(i);
-		} 
-		break;
-		case R.id.btnAddnew: {
-			Intent i = new Intent(v.getContext(), NoteEdit.class);
-        	i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
-        	v.getContext().startActivity(i);
-			isEdit = false;
-			current_action = ACTION_TYPE_ADDNEW;
-		} 
-		break;
-		case R.id.btnSave : {		
+		}  
+		case R.id.btnSave : {
+			Note n = new Note("5", "test5", null, null, null, null,  String.valueOf(new Date(2015,11, 20).getTime()), null, null, null);
+
+			if(current_action == ACTION_TYPE_EDIT) {
+				update(n);
+			}
+			else if (current_action == ACTION_TYPE_ADDNEW) {
+				save(n);
+			}
 			Intent i = new Intent(v.getContext(), NoteDetail.class);
-			i.putExtra("note", n_);
-			setContentView(R.layout.activity_display_detail);
-			if(current_action == ACTION_TYPE_EDIT) update(n_);
-			else if (current_action == ACTION_TYPE_ADDNEW) save(n_);
-			r1 = (LinearLayout)findViewById(R.id.r1);
-			r1.setVisibility(View.VISIBLE);
-			edit.setOnClickListener(this);
+			i.putExtra("note", n);
+			startActivity(i);
 			isEdit = false;			
 		} 
 		break;
@@ -138,16 +133,26 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		Note nd = new Note(n.id, n.title, n.phone, n.email, n.street,n.place, n.date, n.last_date, n.remind, n.location);
 		Toast.makeText(this, "updated", Toast.LENGTH_SHORT).show();
 	}
-	 
+	private void bindEField(Note n_2) {
+		whatE =(EditText) findViewById(R.id.txtTitleE);
+		whenE =(EditText) findViewById(R.id.textwhenE);
+		whereE =(EditText) findViewById(R.id.textWhereE);
+		reminder = (RadioButton) findViewById(R.id.remind);
+		if(n_2!= null) {
+			whatE.setText(n_2.title);
+			whenE.setText(n_2.getFormatedDate());
+			whereE.setText(n_2.getAddress());
+			reminder.setChecked(Boolean.parseBoolean(n_2.remind));
+		} else {
+			whatE.setText(null);
+			whenE.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm").format(new Date()));
+			whereE.setText(null);
+			reminder.setChecked(false);
+		}
+
+	}
 	private void bindField(Note n_2) {
-		what=(TextView)  findViewById(R.id.txtTitle);
-		when=(TextView)  findViewById(R.id.textwhen);
 		reminder = (RadioButton) findViewById(R.id.re);
-		where=(TextView)  findViewById(R.id.textWhere);
-		
-		what.setText(n_2.title);
-		when.setText(n_2.getFormatedDate());
-		where.setText(n_2.getAddress());
 		reminder.setChecked(Boolean.parseBoolean(n_2.remind));
 	}
 	private boolean isAppInstalled(String uri) {
@@ -172,8 +177,7 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 	public void onDateSet(android.widget.DatePicker view, int year,
 			int monthOfYear, int dayOfMonth) {
 		// TODO Auto-generated method stub
-
-		when.setText(new StringBuilder()
+		whenE.setText(new StringBuilder()
 		// Month is 0 based so add 1
 		.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year).append(" "));
 	}

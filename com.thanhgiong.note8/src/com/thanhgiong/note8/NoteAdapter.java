@@ -1,5 +1,6 @@
 package com.thanhgiong.note8;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +56,7 @@ private static LayoutInflater inflater=null;
 	public View getView(int position, View currentContext, ViewGroup arg2) {
 		View rowView = currentContext;
 		if(rowView == null)
-        rowView = inflater.inflate(R.layout.activity_display_note, arg2, false);
+        rowView = inflater.inflate(R.layout.activity_display_detail, arg2, false);
         Holder holder=new Holder();
         //holder.l1 = (LinearLayout) rowView.findViewById(R.id.l1);
         holder.l2 = (RelativeLayout) rowView.findViewById(R.id.l2);
@@ -72,8 +73,9 @@ private static LayoutInflater inflater=null;
         holder.img=(ImageView) rowView.findViewById(R.id.img);	
         //holder.img.setImageResource(R.drawable.ic_launcher);
         holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
-        //holder.what.setText("tessst");
+        holder.what.setText(n_.title);
         holder.when=(TextView) rowView.findViewById(R.id.textwhen);
+        holder.when.setText(n_.getFormatedDate());
         holder.where=(TextView) rowView.findViewById(R.id.textWhere);
 		 
 		rowView.setOnClickListener(new OnClickListener() {            
@@ -83,6 +85,7 @@ private static LayoutInflater inflater=null;
                //Toast.makeText(currentContext_, "You Clicked ", Toast.LENGTH_LONG).show();
             	Intent i = new Intent(v.getContext(), NoteDetail.class);
             	i.putExtra("note", n_);
+            	i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
             	v.getContext().startActivity(i);
             }
         });   

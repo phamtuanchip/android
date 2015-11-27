@@ -1,126 +1,132 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollView1"
-    android:layout_width="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/l2"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    tools:context=".DisplayContact" >
+    android:background="@drawable/upcomming_bg"
+    android:orientation="vertical" >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="370dp"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin" >
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_stat_name" />
 
-        <EditText
-            android:id="@+id/editTextName"
+    <LinearLayout
+        android:id="@+id/l1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/img"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/l21"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/img"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/edit" />
+
+            <TextView
+                android:id="@+id/txtTitle"
+                style="What"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="What" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l22"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/l21"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/date" />
+
+            <TextView
+                android:id="@+id/textwhen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="when" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l23"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/l22"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/loc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/loc" />
+
+            <TextView
+                android:id="@+id/textWhere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:text="where" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l24"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/l23"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/re"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/remind" />
+
+            <RadioButton
+                android:id="@+id/remind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Remind?" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/r1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:visibility="invisible" >
+
+        <ImageButton
+            android:id="@+id/btnEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="82dp"
-            android:layout_marginTop="5dp"
-            android:ems="10"
-            android:inputType="text" >
-        </EditText>
+            android:src="@drawable/edit2" />
 
-        <EditText
-            android:id="@+id/editTextEmail"
+        <ImageButton
+            android:id="@+id/btnAddnew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTextStreet"
-            android:layout_below="@+id/editTextStreet"
-            android:layout_marginTop="22dp"
-            android:ems="10"
-            android:inputType="textEmailAddress" />
+            android:layout_toLeftOf="@+id/btnEdit"
+            android:src="@drawable/addnew" />
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/editTextName"
-            android:layout_alignParentLeft="true"
-            android:text="@string/name"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTextCity"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="28dp"
-            android:onClick="run"
-            android:text="@string/save" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/editTextEmail"
-            android:layout_alignLeft="@+id/textView1"
-            android:text="@string/email"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/editTextPhone"
-            android:layout_alignLeft="@+id/textView1"
-            android:text="@string/phone"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/editTextEmail"
-            android:layout_alignLeft="@+id/textView5"
-            android:text="@string/street"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/editTextCity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/editTextName"
-            android:layout_below="@+id/editTextEmail"
-            android:layout_marginTop="30dp"
-            android:ems="10"
-            android:inputType="text" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/editTextCity"
-            android:layout_alignBottom="@+id/editTextCity"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/editTextEmail"
-            android:text="@string/country"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/editTextStreet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTextName"
-            android:layout_below="@+id/editTextPhone"
-            android:ems="10"
-            android:inputType="text" >
-
-            <requestFocus />
-        </EditText>
-
-        <EditText
-            android:id="@+id/editTextPhone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/editTextStreet"
-            android:layout_below="@+id/editTextName"
-            android:ems="10"
-            android:inputType="phone|text" />
-    </RelativeLayout>
-
-</ScrollView>
+</RelativeLayout>

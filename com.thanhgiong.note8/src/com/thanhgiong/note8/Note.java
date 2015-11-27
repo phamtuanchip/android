@@ -1,5 +1,9 @@
 package com.thanhgiong.note8;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,7 +15,7 @@ public class Note implements Parcelable {
 	public String email;
 	public String street;
 	public String place;
-	public String date;
+	protected String date;
 	public String last_date;
 	public String remind;
 	public String location;
@@ -28,7 +32,7 @@ public class Note implements Parcelable {
 		this.email = email;
 		this.street = street;
 		this.place = place;
-		this.date = date;		 
+		this.setDate(date);		 
 		this.last_date = last_date;
 		this.remind = remind;
 		this.location = location;
@@ -41,7 +45,7 @@ public class Note implements Parcelable {
 		this.email =  p.readString();
 		this.street =  p.readString();
 		this.place =  p.readString();
-		this.date =  p.readString();	 
+		this.setDate(p.readString());	 
 		this.last_date =  p.readString();
 		this.remind =  p.readString();
 		this.location =  p.readString();
@@ -76,7 +80,7 @@ public class Note implements Parcelable {
 		dest.writeString(email);
 		dest.writeString(street);
 		dest.writeString(place);
-		dest.writeString(date);
+		dest.writeString(getDate());
 		dest.writeString(last_date);
 		dest.writeString(remind);
 		dest.writeString(location);
@@ -98,6 +102,35 @@ public class Note implements Parcelable {
 			 
 		
 	
-	public Note[] newArray(int size) { return new Note[size]; } 
+	public Note[] newArray(int size) { return new Note[size]; }
+
+	public String getDate() {
+		return date;
+	}
+	
+	public String getFormatedDate(){
+		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		try {
+			
+			return sf.format(new Date(Long.parseLong(date)));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		return sf.format(new Date());
+	}
+
+	public void setDate(String date) {		
+		this.date = date;
+	} 
+	
+	public void setDateValue(String f) {
+		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		try {
+			date = String.valueOf(sf.parse(f));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
