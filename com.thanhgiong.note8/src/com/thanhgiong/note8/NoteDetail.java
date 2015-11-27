@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -35,15 +36,10 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 	TextView what;
 	TextView when;
 	TextView where;
-	EditText whatE;
-	EditText whenE;
-	EditText whereE;
-
 	RadioButton reminder;
 	ImageView img;
-	Button edit;
-	Button save;
-	Button add;
+	ImageButton edit;
+	ImageButton add;
 	public static int ACTION_TYPE_VIEW = 1;
 	public static int ACTION_TYPE_EDIT = 2;
 	public static int ACTION_TYPE_ADDNEW = 3;
@@ -74,16 +70,10 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		when.setText(n_.getFormatedDate());
 		what.setText(n_.title);
 		
-		edit = (Button) findViewById(R.id.btnEdit);
+		edit = (ImageButton) findViewById(R.id.btnEdit);
 		edit.setOnClickListener(this);
-		img.setOnClickListener(this);
-		when.setOnClickListener(this);
-		where.setOnClickListener(this);
-		add = (Button) findViewById(R.id.btnAddnew);
+		add = (ImageButton) findViewById(R.id.btnAddnew);
 		add.setOnClickListener(this);
-		whatE =(EditText) findViewById(R.id.txtTitleE);
-		whenE =(EditText) findViewById(R.id.textwhenE);
-		whereE =(EditText) findViewById(R.id.textWhereE);
 		current_action = ACTION_TYPE_VIEW;
 		r1.setVisibility(View.VISIBLE);
 	}
@@ -147,24 +137,7 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		Note nd = new Note(n.id, n.title, n.phone, n.email, n.street,n.place, n.date, n.last_date, n.remind, n.location);
 		Toast.makeText(this, "updated", Toast.LENGTH_SHORT).show();
 	}
-	private void bindEField(Note n_2) {
-		whatE =(EditText) findViewById(R.id.txtTitleE);
-		whenE =(EditText) findViewById(R.id.textwhenE);
-		whereE =(EditText) findViewById(R.id.textWhereE);
-		reminder = (RadioButton) findViewById(R.id.remind);
-		if(n_2!= null) {
-			whatE.setText(n_2.title);
-			whenE.setText(n_2.getFormatedDate());
-			whereE.setText(n_2.getAddress());
-			reminder.setChecked(Boolean.parseBoolean(n_2.remind));
-		} else {
-			whatE.setText(null);
-			whenE.setText(new SimpleDateFormat("dd/MM/yyyy hh:mm").format(new Date()));
-			whereE.setText(null);
-			reminder.setChecked(false);
-		}
-
-	}
+	 
 	private void bindField(Note n_2) {
 		what=(TextView)  findViewById(R.id.txtTitle);
 		when=(TextView)  findViewById(R.id.textwhen);

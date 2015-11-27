@@ -115,18 +115,18 @@
         android:orientation="horizontal"
         android:visibility="invisible" >
 
-        <Button
+        <ImageButton
             android:id="@+id/btnEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit" />
+            android:src="@drawable/edit2" />
 
-        <Button
+        <ImageButton
             android:id="@+id/btnAddnew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/btnEdit"
-            android:text="Add" />
+            android:src="@drawable/addnew" />
     </LinearLayout>
 
 </RelativeLayout>

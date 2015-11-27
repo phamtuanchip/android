@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -35,12 +36,12 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 	EditText whatE;
 	EditText whenE;
 	EditText whereE;
-
+	TextView when;
+	TextView where;
+	
 	RadioButton reminder;
 	ImageView img;
-	Button edit;
-	Button save;
-	Button add;
+	ImageButton save;
 	public static int ACTION_TYPE_VIEW = 1;
 	public static int ACTION_TYPE_EDIT = 2;
 	public static int ACTION_TYPE_ADDNEW = 3;
@@ -63,6 +64,8 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		whatE =(EditText) findViewById(R.id.txtTitleE);
 		whenE =(EditText) findViewById(R.id.textwhenE);
 		whereE =(EditText) findViewById(R.id.textWhereE);
+		when=(TextView)  findViewById(R.id.textwhen);
+		where=(TextView)  findViewById(R.id.textWhere);
 		if(b != null) {
 			n_ = (Note)  b.get("note");
 			long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
@@ -70,8 +73,12 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 			else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
 			else l2.setBackgroundResource(R.drawable.past_bg);
 		}
+		save = (ImageButton) findViewById(R.id.btnSave);
+		save.setOnClickListener(this);
+		img.setOnClickListener(this);
+		when.setOnClickListener(this);
+		where.setOnClickListener(this);
 		current_action = ACTION_TYPE_EDIT;
-		r1.setVisibility(View.VISIBLE);
 	}
 
 	public void onClick(View v) {
@@ -93,31 +100,13 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 				intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
 				startActivity(intent);
 			}
-		} case R.id.btnEdit: {
-			setContentView(R.layout.activity_display_edit);
-			bindEField(n_);
-			save = (Button) findViewById(R.id.btnSave);
-			if(save != null) save.setOnClickListener(this);
-			isEdit = true;
-			current_action = ACTION_TYPE_EDIT;
-		} 
-		break;
-		case R.id.btnAddnew: {
-			setContentView(R.layout.activity_display_edit);
-			bindEField(null);
-			save = (Button) findViewById(R.id.btnSave);
-			if(save != null) save.setOnClickListener(this);
-			isEdit = false;
-			current_action = ACTION_TYPE_ADDNEW;
-		} 
-		break;
-		case R.id.btnSave : {			
+		}  
+		case R.id.btnSave : {		
+			Intent i = new Intent(v.getContext(), NoteDetail.class);
+			i.putExtra("note", n_);
 			setContentView(R.layout.activity_display_detail);
 			if(current_action == ACTION_TYPE_EDIT) update(n_);
 			else if (current_action == ACTION_TYPE_ADDNEW) save(n_);
-			r1 = (RelativeLayout)findViewById(R.id.r1);
-			r1.setVisibility(View.VISIBLE);
-			edit.setOnClickListener(this);
 			isEdit = false;			
 		} 
 		break;
