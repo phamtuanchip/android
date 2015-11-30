@@ -3,21 +3,33 @@
     android:id="@+id/l2"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/upcomming_bg"
+    android:background="@drawable/bg"
     android:orientation="vertical" >
-
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_stat_name" />
 
     <LinearLayout
         android:id="@+id/l1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/img"
         android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/l20"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="@dimen/icon_w"
+                android:layout_height="@dimen/icon_h"
+                android:src="@drawable/camera" />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="@dimen/photo_w"
+                android:layout_height="@dimen/photo_h"
+                android:src="@drawable/photography" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l21"
@@ -28,9 +40,9 @@
 
             <ImageView
                 android:id="@+id/edit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/edit" />
+                android:layout_width="@dimen/icon_w"
+                android:layout_height="@dimen/icon_h"
+                android:src="@drawable/ic_launcher" />
 
             <TextView
                 android:id="@+id/txtTitle"
@@ -51,9 +63,9 @@
 
             <ImageView
                 android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/date" />
+                android:layout_width="@dimen/icon_w"
+                android:layout_height="@dimen/icon_h"
+                android:src="@drawable/date2" />
 
             <TextView
                 android:id="@+id/textwhen"
@@ -73,9 +85,9 @@
 
             <ImageView
                 android:id="@+id/loc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/loc" />
+                android:layout_width="@dimen/icon_w"
+                android:layout_height="@dimen/icon_h"
+                android:src="@drawable/loc2" />
 
             <TextView
                 android:id="@+id/textWhere"
@@ -95,9 +107,9 @@
 
             <ImageView
                 android:id="@+id/re"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/remind" />
+                android:layout_width="@dimen/icon_w"
+                android:layout_height="@dimen/icon_h"
+                android:src="@drawable/remind2" />
 
             <RadioButton
                 android:id="@+id/remind"
@@ -107,26 +119,10 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/r1"
-        android:layout_width="fill_parent"
+    <include
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:visibility="invisible" >
-
-        <ImageButton
-            android:id="@+id/btnEdit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/edit2" />
-
-        <ImageButton
-            android:id="@+id/btnAddnew"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/btnEdit"
-            android:src="@drawable/addnew" />
-    </LinearLayout>
+        layout="@layout/bottom_menu" />
 
 </RelativeLayout>

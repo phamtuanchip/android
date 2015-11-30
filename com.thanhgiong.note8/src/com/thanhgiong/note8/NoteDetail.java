@@ -1,22 +1,18 @@
 package com.thanhgiong.note8;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.CalendarContract.Reminders;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,43 +35,67 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 	RadioButton reminder;
 	ImageView img;
 	ImageButton edit;
-	ImageButton add;
+	ImageButton add ;
+	ImageButton del;
+	ImageButton save;
+	ImageButton sw ;
+	ImageButton lock ;
+	ImageButton home;
+	
 	public static int ACTION_TYPE_VIEW = 1;
 	public static int ACTION_TYPE_EDIT = 2;
 	public static int ACTION_TYPE_ADDNEW = 3;
 	int current_action ;
 	boolean isEdit = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_detail);
 		isEdit = false;
 		n_ = (Note) this.getIntent().getExtras().get("note");
-		l2 = (RelativeLayout) findViewById(R.id.l2);
-		l21 = (LinearLayout)  findViewById(R.id.l21);
-		l22 = (LinearLayout)  findViewById(R.id.l22);
-		l23 = (LinearLayout)  findViewById(R.id.l23);
-		l24 = (LinearLayout)  findViewById(R.id.l24);
-		r1 = (LinearLayout) findViewById(R.id.r1);
+		 
 		img=(ImageView)  findViewById(R.id.img);
-		long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
-		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
-		else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
-		else l2.setBackgroundResource(R.drawable.past_bg);
-		
+		Bitmap bm = BitmapFactory.decodeFile(n_.image);
+		img.setImageBitmap(bm);
+//		long d = System.currentTimeMillis() - Long.parseLong(n_.when); 
+//		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
+//		else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
+//		else l2.setBackgroundResource(R.drawable.past_bg);
+
 		what=(TextView)  findViewById(R.id.txtTitle);
 		when=(TextView)  findViewById(R.id.textwhen);
 		reminder = (RadioButton) findViewById(R.id.remind);
 		where=(TextView)  findViewById(R.id.textWhere);
 		when.setText(n_.getFormatedDate());
-		what.setText(n_.title);
+		what.setText(n_.what);
+		where.setText(n_.where);
+		reminder.setChecked(Boolean.parseBoolean(n_.remind));
 		
+		int displayButton[]= {View.VISIBLE, View.VISIBLE, View.VISIBLE, View.GONE,View.VISIBLE,View.VISIBLE, View.VISIBLE};
 		edit = (ImageButton) findViewById(R.id.btnEdit);
-		edit.setOnClickListener(this);
 		add = (ImageButton) findViewById(R.id.btnAddnew);
+		del = (ImageButton) findViewById(R.id.btnDel);
+		save = (ImageButton) findViewById(R.id.btnSave);
+		sw = (ImageButton) findViewById(R.id.btnSwitch);
+		lock= (ImageButton) findViewById(R.id.btnLock); 
+		home=(ImageButton) findViewById(R.id.btnHome);
+		
+		edit.setVisibility(displayButton[0]);
+		add.setVisibility(displayButton[1]);
+		del.setVisibility(displayButton[2]);
+		save.setVisibility(displayButton[3]);
+		sw.setVisibility(displayButton[4]);
+		lock.setVisibility(displayButton[5]);
+		home.setVisibility(displayButton[6]);
+		
+		edit.setOnClickListener(this);
+		lock.setOnClickListener(this);
 		add.setOnClickListener(this);
+		home.setOnClickListener(this);
+		del.setOnClickListener(this);
+		
 		current_action = ACTION_TYPE_VIEW;
-		r1.setVisibility(View.VISIBLE);
 	}
 
 	public void onClick(View v) {
@@ -87,6 +107,7 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		break;
 		case R.id.img: {
 			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			
 			startActivityForResult(takePictureIntent, 1);
 		}
 		break;
@@ -99,57 +120,46 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 			}
 		} case R.id.btnEdit: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
-        	i.putExtra("note", n_);
-        	i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
-        	v.getContext().startActivity(i);
+			i.putExtra("note", n_);
+			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
+			this.fileList();
+			v.getContext().startActivity(i);
 		} 
 		break;
 		case R.id.btnAddnew: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
-        	i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
-        	v.getContext().startActivity(i);
+			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
+			this.fileList();
+			v.getContext().startActivity(i);
 			isEdit = false;
 			current_action = ACTION_TYPE_ADDNEW;
 		} 
 		break;
-		case R.id.btnSave : {		
-			Intent i = new Intent(v.getContext(), NoteDetail.class);
-			i.putExtra("note", n_);
-			setContentView(R.layout.activity_display_detail);
-			if(current_action == ACTION_TYPE_EDIT) update(n_);
-			else if (current_action == ACTION_TYPE_ADDNEW) save(n_);
-			r1 = (LinearLayout)findViewById(R.id.r1);
-			r1.setVisibility(View.VISIBLE);
-			edit.setOnClickListener(this);
-			isEdit = false;			
-		} 
+		case R.id.btnHome: {
+			Intent i = new Intent(v.getContext(), HomeActivity.class);
+			this.fileList();
+			v.getContext().startActivity(i);
+		}
+		break;
+		case R.id.btnLock: {
+			Intent i = new Intent(v.getContext(), LoginActivity.class);
+			this.fileList();
+			v.getContext().startActivity(i);
+		}
+		break;
+		case R.id.btnDel: {
+			SQLiteDatabase db =  openOrCreateDatabase("note8db",MODE_PRIVATE, null);
+			db.delete("note8tb", "id= ?", new String[]{n_.id});
+			db.close();
+			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+		}
 		break;
 		default:
 			break;
 		}
 
 	}
-	private void save(Note n) {
-		Note nd = new Note(n.id, n.title, n.phone, n.email, n.street,n.place, n.date, n.last_date, n.remind, n.location);
-		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
-	}
 
-	private void update(Note n) {
-		Note nd = new Note(n.id, n.title, n.phone, n.email, n.street,n.place, n.date, n.last_date, n.remind, n.location);
-		Toast.makeText(this, "updated", Toast.LENGTH_SHORT).show();
-	}
-	 
-	private void bindField(Note n_2) {
-		what=(TextView)  findViewById(R.id.txtTitle);
-		when=(TextView)  findViewById(R.id.textwhen);
-		reminder = (RadioButton) findViewById(R.id.re);
-		where=(TextView)  findViewById(R.id.textWhere);
-		
-		what.setText(n_2.title);
-		when.setText(n_2.getFormatedDate());
-		where.setText(n_2.getAddress());
-		reminder.setChecked(Boolean.parseBoolean(n_2.remind));
-	}
 	private boolean isAppInstalled(String uri) {
 		PackageManager pm = getApplicationContext().getPackageManager();
 		boolean app_installed = false;
@@ -174,7 +184,8 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		// TODO Auto-generated method stub
 
 		when.setText(new StringBuilder()
-		// Month is 0 based so add 1
-		.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year).append(" "));
+				// Month is 0 based so add 1
+				.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year).append(" "));
 	}
+	
 }

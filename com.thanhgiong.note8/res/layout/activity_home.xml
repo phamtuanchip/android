@@ -5,51 +5,25 @@
 
     <SearchView
         android:id="@+id/searchView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/searchView"
-        android:fillViewport="true"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content" />
+ 
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent"
+             android:layout_below="@+id/searchView"
+             android:orientation="vertical" 
+             >
         </ListView>
-    </ScrollView>
+    
 
-    <LinearLayout
-        android:id="@+id/r1"
+     <include
+        android:id="@+id/menu"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/wallet_dim_foreground_holo_dark"
-        android:orientation="horizontal" >
-
-        <ImageButton
-            android:id="@+id/btnHAddnew"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/addnew" />
-
-        <ImageButton
-            android:id="@+id/btnHswitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/btnHAddnew"
-            android:src="@drawable/switch1" />
-
-        <Button
-            android:id="@+id/btnHsetPwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/btnHswitch"
-            android:text="pwd" />
-    </LinearLayout>
+        layout="@layout/bottom_menu" />
 
 </RelativeLayout>

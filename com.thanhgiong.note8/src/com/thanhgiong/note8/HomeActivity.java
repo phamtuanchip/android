@@ -1,122 +1,120 @@
 package com.thanhgiong.note8;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.thanhgiong.note8.R;
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.support.v7.widget.SearchView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.Toast;
 
 @SuppressWarnings("deprecation")
 public class HomeActivity extends Activity implements OnClickListener{
 	public final static String EXTRA_MESSAGE = "MESSAGE";
 	private ListView list;
-	DBNote mydb;
+	public static List<Note> data_;
 
+	SearchView search;
+	ImageButton edit;
 	ImageButton add ;
+	ImageButton del;
+	ImageButton save;
 	ImageButton sw ;
+	ImageButton lock ;
+	ImageButton home;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
-		mydb = new DBNote(this);
-		ArrayList<Note> array_list = mydb.getAllNote();
-		if(array_list == null || array_list.size() == 0) {
-			array_list.add(new Note("1", "test1", null, null, null, null, String.valueOf(System.currentTimeMillis()), null, null, null));
-			array_list.add(new Note("2", "test2", null, null, null, null,  String.valueOf(new Date(2015,11, 20).getTime()), null, null, null));
-			array_list.add(new Note("3", "test3", null, null, null, null,  String.valueOf(new Date(2015,11, 28).getTime()), null, null, null));
-			array_list.add(new Note("4", "test4", null, null, null, null,  String.valueOf(new Date(2015,11, 20).getTime()), null, null, null));
-		}
-		add = (ImageButton) findViewById(R.id.btnHAddnew);
-		sw = (ImageButton) findViewById(R.id.btnHswitch);
+		int displayButton[]= {View.GONE, View.VISIBLE, View.GONE, View.GONE,View.VISIBLE,View.VISIBLE, View.GONE};
+		edit = (ImageButton) findViewById(R.id.btnEdit);
+		add = (ImageButton) findViewById(R.id.btnAddnew);
+		del = (ImageButton) findViewById(R.id.btnDel);
+		save = (ImageButton) findViewById(R.id.btnSave);
+		sw = (ImageButton) findViewById(R.id.btnSwitch);
+		lock= (ImageButton) findViewById(R.id.btnLock); 
+		home=(ImageButton) findViewById(R.id.btnHome);
+		
+		edit.setVisibility(displayButton[0]);
+		add.setVisibility(displayButton[1]);
+		del.setVisibility(displayButton[2]);
+		save.setVisibility(displayButton[3]);
+		sw.setVisibility(displayButton[4]);
+		lock.setVisibility(displayButton[5]);
+		home.setVisibility(displayButton[6]);
+		
 		add.setOnClickListener(this);
 		sw.setOnClickListener(this);
+		lock.setOnClickListener(this);
+		
 		list = (ListView) findViewById(R.id.listView);
-		list.setAdapter(new NoteAdapter(this, array_list));
-		//      obj.setOnItemClickListener(new OnItemClickListener(){
-		//         @Override
-		//         public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {
-		//            // TODO Auto-generated method stub
-		//            int id_To_Search = arg2 + 1;
-		//            
-		//            Bundle dataBundle = new Bundle();
-		//            dataBundle.putInt("id", id_To_Search);
-		//            
-		//            Intent intent = new Intent(getApplicationContext(),DisplayContact.class);
-		//            
-		//            intent.putExtras(dataBundle);
-		//            startActivity(intent);
-		//         }
-		//      });
+		list.setAdapter(new NoteAdapter(this, getData()));
+		 
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main_menu, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		super.onOptionsItemSelected(item);
-
-		switch(item.getItemId())
-		{
-		case R.id.item1 :Bundle dataBundle = new Bundle();
-		dataBundle.putInt("id", 0);
-
-		Intent intent = new Intent(getApplicationContext(),NoteDetail.class);
-		intent.putExtras(dataBundle);
-
-		startActivity(intent);
-		return true;
-		default:
-			return super.onOptionsItemSelected(item);
+	private List<Note> getData() {
+		SQLiteDatabase db =    openOrCreateDatabase("note8db",MODE_PRIVATE, null);
+		db.execSQL("CREATE TABLE IF NOT EXISTS note8tb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125) )");
+		Cursor cs = db.rawQuery("SELECT * FROM note8tb", null);
+		data_  = new ArrayList<Note>();
+		if(cs.moveToFirst()) {
+			do {
+			 Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3), cs.getString(4), cs.getString(5));
+			 data_.add(n);
+			} while (cs.moveToNext());
 		}
+		db.close();
+		return data_;
 	}
-
-	public boolean onKeyDown(int keycode, KeyEvent event) {
-		if (keycode == KeyEvent.KEYCODE_BACK) {
-			moveTaskToBack(true);
+	private List<Note> searchData(String key) {
+		SQLiteDatabase db =    openOrCreateDatabase("note8db",MODE_PRIVATE, null);
+		db.execSQL("CREATE TABLE IF NOT EXISTS note8tb (id integer primatery key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125) )");
+		Cursor cs = db.rawQuery("SELECT * FROM note8tb where nwhat like '?'", new String[]{key});
+		data_  = new ArrayList<Note>();
+		if(cs.isBeforeFirst()) {
+			do {
+			 Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3), cs.getString(4), cs.getString(5));
+			 data_.add(n);
+			} while (cs.moveToNext());
 		}
-		return super.onKeyDown(keycode, event);
+		db.close();
+		return data_;
 	}
-
+	 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btnHAddnew: {
-			Intent i = new Intent(v.getContext(), NoteEdit.class);
+		case R.id.btnAddnew: {
+			Intent i = new Intent(this, NoteEdit.class);
 			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
         	v.getContext().startActivity(i);
 		}
 		break;
-		case R.id.btnHswitch: {
+		case R.id.btnSwitch: {
 			Toast.makeText(this, "Change view", Toast.LENGTH_SHORT).show();
+			list = (ListView) findViewById(R.id.listView);
+			if (list.getAdapter() instanceof NoteAdapter) {
+				list.setAdapter(new NoteListAdapter(this, getData()));
+				
+			} else {
+				list.setAdapter(new NoteAdapter(this, getData()));
+			}
+			
 		}
+		break;
+		case R.id.btnLock: {
+			Intent i = new Intent(this, LoginActivity.class);
+        	v.getContext().startActivity(i);
+		}
+		break;
 		default:
 			break;
 		}

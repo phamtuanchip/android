@@ -1,18 +1,21 @@
 package com.thanhgiong.note8;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -22,14 +25,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.thanhgiong.note8.R;
+import android.widget.Toast;
 
 /**
  * A login screen that offers login via email/password.
@@ -40,8 +39,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	 * A dummy authentication store containing known user names and passwords.
 	 * TODO: remove after connecting to a real authentication system.
 	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:123456" };
+	private static final String PREFS_NAME = "note8Info";
+	private static final String PREFS_KEY = "pwd";
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -52,41 +51,105 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	private EditText mPasswordView;
 	private View mProgressView;
 	private View mLoginFormView;
+	View createPass ;
 
+	EditText e1 ;
+	EditText e2 ;
+	Button saveP ;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-
-		// Set up the login form.
-		//mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-		populateAutoComplete();
-
-		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView
-				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-					@Override
-					public boolean onEditorAction(TextView textView, int id,
-							KeyEvent keyEvent) {
-						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
-							return true;
-						}
-						return false;
-					}
-				});
-
-		Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-		mEmailSignInButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				attemptLogin();
-			}
-		});
-
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 		mLoginFormView = findViewById(R.id.login_form);
 		mProgressView = findViewById(R.id.login_progress);
+		createPass = findViewById(R.id.createPass);
+		// Kiem tra xem da luu mat khau lan nao chua
+		if(settings.getString(PREFS_KEY, null) == null) {
+			createPass.setVisibility(View.VISIBLE);
+			mLoginFormView.setVisibility(View.GONE);
+			e1 = (EditText) findViewById(R.id.password1) ;
+			e2 = (EditText) findViewById(R.id.password2) ;
+			saveP = (Button) findViewById(R.id.savePass);
+			saveP.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+					SharedPreferences.Editor editor = settings.edit();
+					String p1 =  e1.getText().toString();
+					if (!TextUtils.isEmpty(p1) && !isPasswordValid(p1)) {
+						e1.setError(getString(R.string.error_invalid_password));
+						e1.requestFocus();
+						return;
+					}
+					String p2 =  e2.getText().toString();
+					if (!TextUtils.isEmpty(p2) && !isPasswordValid(p2)) {
+						e2.setError(getString(R.string.error_invalid_password));
+						e2.requestFocus();
+						return;
+					} else 	if(!p1.equals(p2)) {
+						e2.setError(getString(R.string.error_invalid_confirm));
+						e2.requestFocus();
+					} else {
+						editor.putString(PREFS_KEY,p1);
+						editor.commit();
+						Toast.makeText(v.getContext(),"password saved!", Toast.LENGTH_SHORT).show();
+						Intent i = new Intent(v.getContext(), LoginActivity.class);
+						v.getContext().startActivity(i);
+					}
+
+				}
+			});
+
+		} else {
+			createPass.setVisibility(View.GONE);
+			mLoginFormView.setVisibility(View.VISIBLE);
+
+			// Set up the login form.
+			//mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+			populateAutoComplete();
+
+			mPasswordView = (EditText) findViewById(R.id.password);
+			mPasswordView
+			.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+				@Override
+				public boolean onEditorAction(TextView textView, int id,
+						KeyEvent keyEvent) {
+					if (id == R.id.login || id == EditorInfo.IME_NULL) {
+						attemptLogin();
+						return true;
+					}
+					return false;
+				}
+			});
+
+			Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+			mEmailSignInButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					attemptLogin();
+				}
+			});
+
+
+		}
 	}
+
+	@Override
+	protected void onStop(){
+		super.onStop();
+
+		// We need an Editor object to make preference changes.
+		// All objects are from android.context.Context
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		// editor.putBoolean("silentMode", mSilentMode);
+
+		// Commit the edits!
+		editor.commit();
+	}
+
 
 	private void populateAutoComplete() {
 		getLoaderManager().initLoader(0, null, this);
@@ -121,15 +184,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		}
 
 		// Check for a valid email address.
-//		if (TextUtils.isEmpty(email)) {
-//			mEmailView.setError(getString(R.string.error_field_required));
-//			focusView = mEmailView;
-//			cancel = true;
-//		} else if (!isEmailValid(email)) {
-//			mEmailView.setError(getString(R.string.error_invalid_email));
-//			focusView = mEmailView;
-//			cancel = true;
-//		}
+		//		if (TextUtils.isEmpty(email)) {
+		//			mEmailView.setError(getString(R.string.error_field_required));
+		//			focusView = mEmailView;
+		//			cancel = true;
+		//		} else if (!isEmailValid(email)) {
+		//			mEmailView.setError(getString(R.string.error_invalid_email));
+		//			focusView = mEmailView;
+		//			cancel = true;
+		//		}
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -168,25 +231,25 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 			mLoginFormView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 0 : 1)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLoginFormView.setVisibility(show ? View.GONE
-									: View.VISIBLE);
-						}
-					});
+			.alpha(show ? 0 : 1)
+			.setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLoginFormView.setVisibility(show ? View.GONE
+							: View.VISIBLE);
+				}
+			});
 
 			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
 			mProgressView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mProgressView.setVisibility(show ? View.VISIBLE
-									: View.GONE);
-						}
-					});
+			.alpha(show ? 1 : 0)
+			.setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mProgressView.setVisibility(show ? View.VISIBLE
+							: View.GONE);
+				}
+			});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
@@ -264,25 +327,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
 			try {
-				// Simulate network access.
 				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				return false;
 			}
-
-			//for (String credential : DUMMY_CREDENTIALS) {
-			//	String[] pieces = credential.split(":");
-				//if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					//return pieces[1].equals(mPassword);
-				//}
-			//}
-
-			// TODO: register the new account here.
-			return true;
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+			String savedPWD = settings.getString(PREFS_KEY, null);
+			return savedPWD.equals(mPassword);
 		}
 
 		@Override
@@ -297,7 +349,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				startActivity(i);
 			} else {
 				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
+				.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
 			}
 		}

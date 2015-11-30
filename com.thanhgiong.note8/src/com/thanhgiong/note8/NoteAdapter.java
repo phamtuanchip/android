@@ -1,38 +1,35 @@
 package com.thanhgiong.note8;
 
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import com.thanhgiong.note8.R;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class NoteAdapter extends BaseAdapter {
-static List<Note> data_ ;
-static Note n_;
-private static LayoutInflater inflater=null;	
+public class NoteAdapter extends BaseAdapter implements Filterable{
+	static List<Note> data_ ;
+	static Note n_;
+	private static LayoutInflater inflater=null;	
 	Context currentContext_ ;
-	
+
 	public NoteAdapter(Context currentContext, List<Note> data) {
 		super();
 		currentContext_ = currentContext ;
 		data_ = data ;
-		 inflater = ( LayoutInflater )currentContext.
-                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
+		inflater = ( LayoutInflater )currentContext.
+				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
 	}
 	@Override
 	public int getCount() {
@@ -56,54 +53,57 @@ private static LayoutInflater inflater=null;
 	public View getView(int position, View currentContext, ViewGroup arg2) {
 		View rowView = currentContext;
 		if(rowView == null)
-        rowView = inflater.inflate(R.layout.activity_display_detail, arg2, false);
-        Holder holder=new Holder();
-        //holder.l1 = (LinearLayout) rowView.findViewById(R.id.l1);
-        holder.l2 = (RelativeLayout) rowView.findViewById(R.id.l2);
-        n_ = (Note)getItem(position);
-        long d = System.currentTimeMillis() - Long.parseLong(n_.date); 
-        if(d > TimeUnit.DAYS.toMillis(1))  holder.l2.setBackgroundResource(R.drawable.future_bg);
-        else if(d > 0) holder.l2.setBackgroundResource(R.drawable.upcomming_bg);
-        else holder.l2.setBackgroundResource(R.drawable.past_bg);
-        holder.l21 = (LinearLayout) rowView.findViewById(R.id.l21);
-        holder.l22 = (LinearLayout) rowView.findViewById(R.id.l22);
-        holder.l23 = (LinearLayout) rowView.findViewById(R.id.l23);
-        holder.l24 = (LinearLayout) rowView.findViewById(R.id.l24);
-        
-        holder.img=(ImageView) rowView.findViewById(R.id.img);	
-        //holder.img.setImageResource(R.drawable.ic_launcher);
-        holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
-        holder.what.setText(n_.title);
-        holder.when=(TextView) rowView.findViewById(R.id.textwhen);
-        holder.when.setText(n_.getFormatedDate());
-        holder.where=(TextView) rowView.findViewById(R.id.textWhere);
-		 
+			rowView = inflater.inflate(R.layout.activity_display_block, arg2, false);
+		Holder holder=new Holder();
+		n_ = (Note)getItem(position);
+		//        long d = System.currentTimeMillis() - Long.parseLong(n_.when); 
+		//        if(d > TimeUnit.DAYS.toMillis(1))  holder.l2.setBackgroundResource(R.drawable.future_bg);
+		//        else if(d > 0) holder.l2.setBackgroundResource(R.drawable.upcomming_bg);
+		//        else holder.l2.setBackgroundResource(R.drawable.past_bg);
+
+		holder.img=(ImageView) rowView.findViewById(R.id.image);	
+		if(n_.image != null && !n_.image.isEmpty()) {
+			Bitmap bm = BitmapFactory.decodeFile(n_.image);
+			holder.img.setImageBitmap(bm);
+		}
+		holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
+		holder.what.setText(n_.what);
+		holder.when=(TextView) rowView.findViewById(R.id.textwhen);
+		holder.when.setText(n_.when);
+		holder.remind = (ImageView) rowView.findViewById(R.id.re);
+		if(!Boolean.parseBoolean(n_.remind)) holder.remind.setVisibility(View.GONE); 
+		else holder.remind.setVisibility(View.VISIBLE); 
+		
+		//holder.where=(TextView) rowView.findViewById(R.id.textWhere);
+		//holder.where.setText(n_.where);
+
 		rowView.setOnClickListener(new OnClickListener() {            
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-               //Toast.makeText(currentContext_, "You Clicked ", Toast.LENGTH_LONG).show();
-            	Intent i = new Intent(v.getContext(), NoteDetail.class);
-            	i.putExtra("note", n_);
-            	i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
-            	v.getContext().startActivity(i);
-            }
-        });   
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Toast.makeText(currentContext_, "You Clicked ", Toast.LENGTH_LONG).show();
+				Intent i = new Intent(v.getContext(), NoteDetail.class);
+				i.putExtra("note", n_);
+				i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
+				v.getContext().startActivity(i);
+			}
+		});   
 		return rowView;
 	}
 
-	 public class Holder
-	    { 
-		 	LinearLayout l1;
-		 	RelativeLayout l2;
-		 	LinearLayout l21;
-		 	LinearLayout l22;
-		 	LinearLayout l23;
-		 	LinearLayout l24;
-	        TextView what;
-	        TextView when;
-	        TextView where;
-	        RadioButton rimder;
-	        ImageView img;
-	    }
+	public class Holder
+	{ 
+		TextView what;
+		TextView when;
+		TextView where;
+		RadioButton rimder;
+		ImageView img;
+		ImageView remind;
+	}
+
+	@Override
+	public Filter getFilter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
