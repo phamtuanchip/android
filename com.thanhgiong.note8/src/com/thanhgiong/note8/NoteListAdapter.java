@@ -60,14 +60,14 @@ private static LayoutInflater inflater=null;
         holder.remind = (ImageView) rowView.findViewById(R.id.re);
         holder.loc = (ImageView) rowView.findViewById(R.id.loc);
         holder.img = (ImageView) rowView.findViewById(R.id.img);
-        if(Boolean.parseBoolean(n_.remind)) holder.remind.setVisibility(View.GONE);
+        if(!Boolean.parseBoolean(n_.remind)) holder.remind.setVisibility(View.GONE);
         else holder.remind.setVisibility(View.VISIBLE);
         
-        if(n_.where != null && !n_.where.isEmpty()) holder.loc.setVisibility(View.GONE);
-        else holder.loc.setVisibility(View.VISIBLE);
+        if(n_.where != null && !n_.where.isEmpty()) holder.loc.setVisibility(View.VISIBLE);
+        else holder.loc.setVisibility(View.GONE);
         
-        if(n_.image != null && !n_.image.isEmpty()) holder.img.setVisibility(View.GONE);
-        else holder.img.setVisibility(View.VISIBLE);
+        if(n_.image != null && !n_.image.isEmpty()) holder.img.setVisibility(View.VISIBLE);
+        else holder.img.setVisibility(View.GONE);
         
 		rowView.setOnClickListener(new OnClickListener() {            
             @Override
