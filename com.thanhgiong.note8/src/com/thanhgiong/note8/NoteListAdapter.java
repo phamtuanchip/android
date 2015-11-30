@@ -55,7 +55,7 @@ private static LayoutInflater inflater=null;
         n_ = (Note)getItem(position);
         holder.what=(TextView) rowView.findViewById(R.id.txtWhat);
         holder.what.setText(n_.what);
-        holder.when=(TextView) rowView.findViewById(R.id.textwhen);
+        holder.when=(TextView) rowView.findViewById(R.id.txtWhen);
         holder.when.setText(n_.when);
         holder.remind = (ImageView) rowView.findViewById(R.id.re);
         holder.loc = (ImageView) rowView.findViewById(R.id.loc);
