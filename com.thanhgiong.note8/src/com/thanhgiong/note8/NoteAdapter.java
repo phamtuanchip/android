@@ -2,6 +2,7 @@ package com.thanhgiong.note8;
 
 import java.util.List;
 
+import android.R.drawable;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -65,7 +66,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable{
 		if(n_.binary != null) {
 			Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
 			holder.img.setImageBitmap(bm);
-		}
+		} else holder.img.setImageBitmap(BitmapFactory.decodeResource(currentContext_.getResources(), R.drawable.bg_default)); 
 		holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
 		holder.what.setText(n_.what);
 		holder.when=(TextView) rowView.findViewById(R.id.textwhen);

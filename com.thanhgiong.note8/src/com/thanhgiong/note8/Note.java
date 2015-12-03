@@ -41,6 +41,7 @@ public class Note implements Parcelable {
 		this.remind =  p.readString();
 		this.image =  p.readString();
 		this.binary = new byte[p.readInt()];
+		if(binary.length > 0)
 		p.readByteArray(this.binary);
 	}
 

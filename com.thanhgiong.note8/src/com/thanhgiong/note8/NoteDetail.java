@@ -52,7 +52,7 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		if(n_.binary != null) {
 			Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
 			img.setImageBitmap(bm);
-		}
+		} else img.setImageBitmap(BitmapFactory.decodeResource(getBaseContext().getResources(), R.drawable.bg_default)); 
 //		long d = System.currentTimeMillis() - Long.parseLong(n_.when); 
 //		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
 //		else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
