@@ -10,16 +10,16 @@
         android:id="@+id/l2"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical"
-         android:layout_marginTop="30dp"
-         android:layout_marginLeft="25dp"
+        android:layout_marginLeft="25dp"
         android:layout_marginRight="20dp"
-         >
+        android:layout_marginTop="30dp"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/l20"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+             android:paddingTop="10dp"
             android:orientation="horizontal" >
 
             <ImageView
@@ -33,15 +33,15 @@
                 android:layout_width="@dimen/photo_w"
                 android:layout_height="@dimen/photo_h"
                 android:layout_centerHorizontal="true"
-                 android:layout_marginBottom="15dp"
+               
                 android:src="@drawable/bg_default" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l21"
             android:layout_width="fill_parent"
-             android:layout_marginTop="30dp"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
             android:orientation="horizontal" >
 
             <ImageView
@@ -61,8 +61,8 @@
         <LinearLayout
             android:id="@+id/l22"
             android:layout_width="fill_parent"
-             android:layout_marginTop="30dp"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
             android:orientation="horizontal" >
 
             <ImageView
@@ -81,8 +81,8 @@
         <LinearLayout
             android:id="@+id/l23"
             android:layout_width="fill_parent"
-             android:layout_marginTop="30dp"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
             android:orientation="horizontal" >
 
             <ImageView
@@ -101,8 +101,8 @@
         <LinearLayout
             android:id="@+id/l24"
             android:layout_width="fill_parent"
-             android:layout_marginTop="30dp"
             android:layout_height="wrap_content"
+             android:paddingTop="10dp"
             android:orientation="horizontal" >
 
             <ImageView

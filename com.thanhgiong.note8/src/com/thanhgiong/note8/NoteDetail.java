@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -56,13 +57,20 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 //		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
 //		else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
 //		else l2.setBackgroundResource(R.drawable.past_bg);
-
+		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/angelina.ttf");
 		what=(TextView)  findViewById(R.id.txtTitle);
 		when=(TextView)  findViewById(R.id.textwhen);
 		where=(TextView)  findViewById(R.id.textWhere);
-		when.setText(n_.getFormatedDate());
+		
+		what.setTypeface(tf);
 		what.setText(n_.what);
+		
+		when.setTypeface(tf);
+		when.setText(n_.getFormatedDate());
+		
+		where.setTypeface(tf);
 		where.setText(n_.where);
+		
 		remind = (TextView)  findViewById(R.id.textRemind);
 		if(Boolean.parseBoolean(n_.remind)) remind.setVisibility(View.VISIBLE);
 		else remind.setVisibility(View.GONE);

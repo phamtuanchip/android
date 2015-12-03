@@ -6,17 +6,23 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -28,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -53,6 +60,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 	AlbumStorageDirFactory mAlbumStorageDirFactory = null;
 	private static final String JPEG_FILE_PREFIX = "IMG_";
 	private static final String JPEG_FILE_SUFFIX = ".jpg";
+	LocationManager locationManager;
 	Bitmap mImageBitmap;
 	public static int ACTION_TYPE_VIEW = 1;
 	public static int ACTION_TYPE_EDIT = 2;
@@ -75,6 +83,21 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		whereE =(EditText) findViewById(R.id.textWhereE);
 		when=(ImageView)  findViewById(R.id.date);
 		where=(ImageView)  findViewById(R.id.loc);
+		String location_context = Context.LOCATION_SERVICE;  
+		locationManager = (LocationManager)getSystemService(location_context); 
+		Criteria criteria = new Criteria(); 
+		criteria.setAccuracy(Criteria.ACCURACY_COARSE); 
+		criteria.setPowerRequirement(Criteria.POWER_LOW); 
+		criteria.setAltitudeRequired(false); 
+		criteria.setBearingRequired(false); 
+		criteria.setSpeedRequired(false); 
+		criteria.setCostAllowed(true);
+		String bestProvider = locationManager.getBestProvider(criteria, true);
+		// String provider = LocationManager.GPS_PROVIDER;    
+		Location location = locationManager.getLastKnownLocation(bestProvider);
+		testProviders();
+		if(location != null)
+			whereE.setText(location.getLongitude()+","+location.getLatitude());
 		if(b != null) {
 			n_ = (Note)  b.get("note");
 			if(n_!= null && n_.binary != null) {
@@ -96,7 +119,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		sw = (ImageButton) findViewById(R.id.btnSwitch);
 		lock= (ImageButton) findViewById(R.id.btnLock); 
 		home=(ImageButton) findViewById(R.id.btnHome);
-		
+
 		edit.setVisibility(displayButton[0]);
 		add.setVisibility(displayButton[1]);
 		del.setVisibility(displayButton[2]);
@@ -104,7 +127,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		sw.setVisibility(displayButton[4]);
 		lock.setVisibility(displayButton[5]);
 		home.setVisibility(displayButton[6]);
-		
+
 		save.setOnClickListener(this);
 		home.setOnClickListener(this);
 		lock.setOnClickListener(this);
@@ -124,7 +147,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 			try {
 				f = createImageFile();
 				if(f != null)
-				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 			} catch (IOException e) {
 				e.printStackTrace();
 				f = null;
@@ -145,9 +168,9 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		case R.id.btnSave : {
 			byte[] binary = null;
 			if(mImageBitmap != null) {
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-			binary = stream.toByteArray();
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				binary = stream.toByteArray();
 			}
 			Note n = new Note(null, whatE.getText().toString(), whenE.getText().toString(), whereE.getText().toString(),
 					String.valueOf(reminder.isChecked()), image, binary);
@@ -157,7 +180,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 			}
 			else if (current_action == ACTION_TYPE_ADDNEW) {
 				n_ = save(n);
-				
+
 			}
 			Intent i = new Intent(v.getContext(), NoteDetail.class);
 			i.putExtra("note", n);
@@ -173,7 +196,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		case R.id.btnLock: {
 			Intent i = new Intent(v.getContext(), LoginActivity.class);
 			this.fileList();
-        	v.getContext().startActivity(i);
+			v.getContext().startActivity(i);
 		}
 		break;
 		default:
@@ -191,7 +214,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		values.put("nremind", n.remind);
 		values.put("nimage", n.image);
 		values.put("nbinary", n.binary);
-//		db.execSQL("Insert into note8tb (nwhat, nwhen, nwhere, nremind, nimage)  values ('"+n.what+"',"+n.when+"','"+n.where+"',"+n.remind+"',"+n.image+"')");
+		//		db.execSQL("Insert into note8tb (nwhat, nwhen, nwhere, nremind, nimage)  values ('"+n.what+"',"+n.when+"','"+n.where+"',"+n.remind+"',"+n.image+"')");
 		n.id= String.valueOf(db.insert("note8tb", null, values));
 		db.close(); 
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
@@ -207,12 +230,12 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		values.put("nremind", n.remind);
 		values.put("nimage", n.image);
 		values.put("nbinary", n.binary);
-//		Cursor cs = db.rawQuery("select * from note8tb where id = ?", new String[]{n.id});
-//		db.execSQL("Update table note8tb set nwhat='"+n.what+"', nwhen='"+n.when+"'nwhere='"+n.where+"',"
-//				+ " nremind='"+n.remind+"', nimage='"+n.image+"' where id = ?", new String[]{n.id});
+		//		Cursor cs = db.rawQuery("select * from note8tb where id = ?", new String[]{n.id});
+		//		db.execSQL("Update table note8tb set nwhat='"+n.what+"', nwhen='"+n.when+"'nwhere='"+n.where+"',"
+		//				+ " nremind='"+n.remind+"', nimage='"+n.image+"' where id = ?", new String[]{n.id});
 		db.update("note8tb", values, "id= ?", new String[]{n.id});
 		db.close(); 
-		  
+
 		Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
 	}
 	private boolean isAppInstalled(String uri) {
@@ -238,40 +261,64 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 			int monthOfYear, int dayOfMonth) {
 		// TODO Auto-generated method stub
 		whenE.setText(new StringBuilder()
-		// Month is 0 based so add 1
-		.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year).append(" "));
+				// Month is 0 based so add 1
+				.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year).append(" "));
 	}
 
 	@Override
 	public void onTimeSet(TimePicker arg0, int arg1, int arg2) {
 		textTimeE.setText(new StringBuilder()
-		// Month is 0 based so add 1
-		.append(arg1).append("/").append(arg2 + 1).append(" "));
-		
+				// Month is 0 based so add 1
+				.append(arg1).append("/").append(arg2 + 1).append(" "));
+
 	}
 	@Override
-	  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		 Bundle extras = data.getExtras();
-		    mImageBitmap = (Bitmap) extras.get("data");
-		    img_frame.setImageBitmap(mImageBitmap);
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Bundle extras = data.getExtras();
+		mImageBitmap = (Bitmap) extras.get("data");
+		img_frame.setImageBitmap(mImageBitmap);
 		Toast.makeText(this, "Snaped", Toast.LENGTH_SHORT).show();
 	}
-	
-	private File createImageFile() throws IOException {
-	    // Create an image file name
-	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-	    String imageFileName = "JPEG_" + timeStamp + "_";
-	    File storageDir =  
-	            Environment.getDataDirectory();
-	    File image = File.createTempFile(
-	        imageFileName,  /* prefix */
-	        ".jpg",         /* suffix */
-	        storageDir      /* directory */
-	    );
 
-	    // Save a file: path for use with ACTION_VIEW intents
-	    this.image = "file:" + image.getAbsolutePath();
-	    return image;
+	private File createImageFile() throws IOException {
+		// Create an image file name
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		String imageFileName = "JPEG_" + timeStamp + "_";
+		File storageDir =  
+				Environment.getDataDirectory();
+		File image = File.createTempFile(
+				imageFileName,  /* prefix */
+				".jpg",         /* suffix */
+				storageDir      /* directory */
+				);
+
+		// Save a file: path for use with ACTION_VIEW intents
+		this.image = "file:" + image.getAbsolutePath();
+		return image;
 	}
-	 
+	public void testProviders() { 
+		EditText tv = (EditText)findViewById(R.id.textwhenE);  
+		StringBuilder sb = new StringBuilder("Enabled Providers:");    
+		List<String> providers = locationManager.getProviders(true);    
+		for (String provider : providers) {
+			Log.e(provider+"0000000000000", provider);
+			locationManager.requestLocationUpdates(provider, 1000, 0,
+					new LocationListener() {
+				public void onLocationChanged(Location location) {}
+				public void onProviderDisabled(String provider){}
+				public void onProviderEnabled(String provider){}      
+				public void onStatusChanged(String provider, int status,Bundle extras){}
+			});
+			sb.append("\n").append(provider).append(": ");
+			Location location = locationManager.getLastKnownLocation(provider);    
+			if (location != null) {      
+				double lat = location.getLatitude();      
+				double lng = location.getLongitude();      
+				sb.append(lat).append(", ").append(lng);   
+			} else {      
+				sb.append("No Location");    
+			}  
+		} 
+		tv.setText(sb.toString()); 
+	}
 }
