@@ -17,10 +17,11 @@ public class Note implements Parcelable {
 	public String remind;
 	public byte[] binary;
 
-	public Note(){
+	public Note() {
 
 	}
-	public Note(String id, String what, String when, String where, String remind, String image){
+
+	public Note(String id, String what, String when, String where, String remind, String image) {
 		this.id = id;
 		this.what = what;
 		this.when = when;
@@ -29,23 +30,23 @@ public class Note implements Parcelable {
 		this.image = image;
 	}
 
-	public Note(String id, String what, String when, String where, String remind, String image, byte[] binary){
+	public Note(String id, String what, String when, String where, String remind, String image, byte[] binary) {
 		this(id, what, when, where, remind, image);
 		this.binary = binary;
 	}
-	public Note(Parcel p){
+
+	public Note(Parcel p) {
 		this.id = p.readString();
-		this.what =  p.readString();
-		this.when =  p.readString();
-		this.where =  p.readString();
-		this.remind =  p.readString();
-		this.image =  p.readString();
+		this.what = p.readString();
+		this.when = p.readString();
+		this.where = p.readString();
+		this.remind = p.readString();
+		this.image = p.readString();
 		this.binary = new byte[p.readInt()];
-		if(binary.length > 0)
-		p.readByteArray(this.binary);
+		if (binary.length > 0)
+			p.readByteArray(this.binary);
 	}
 
-	 
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
@@ -61,11 +62,12 @@ public class Note implements Parcelable {
 		dest.writeString(where);
 		dest.writeString(remind);
 		dest.writeString(image);
-		if(binary!= null) {
-		dest.writeInt(binary.length);	
-		dest.writeByteArray(binary);
+		if (binary != null) {
+			dest.writeInt(binary.length);
+			dest.writeByteArray(binary);
 		}
 	}
+
 	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
 
 		@Override
@@ -79,31 +81,31 @@ public class Note implements Parcelable {
 			// TODO Auto-generated method stub
 			return null;
 		}
-	}; 
-			 
-		
-	
-	public Note[] newArray(int size) { return new Note[size]; }
+	};
+
+	public Note[] newArray(int size) {
+		return new Note[size];
+	}
 
 	public String getDate() {
 		return when;
 	}
-	
-	public String getFormatedDate(){
+
+	public String getFormatedDate() {
 		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
 		try {
-			
+
 			return sf.format(new Date(Long.parseLong(when)));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return sf.format(new Date());
 	}
 
-	public void setDate(String date) {		
+	public void setDate(String date) {
 		this.when = date;
-	} 
-	
+	}
+
 	public void setDateValue(String f) {
 		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
 		try {

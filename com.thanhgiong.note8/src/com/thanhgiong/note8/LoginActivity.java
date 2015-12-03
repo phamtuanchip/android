@@ -47,15 +47,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	private UserLoginTask mAuthTask = null;
 
 	// UI references.
-	//private AutoCompleteTextView mEmailView;
+	// private AutoCompleteTextView mEmailView;
 	private EditText mPasswordView;
 	private View mProgressView;
 	private View mLoginFormView;
-	View createPass ;
+	View createPass;
 
-	EditText e1 ;
-	EditText e2 ;
-	Button saveP ;
+	EditText e1;
+	EditText e2;
+	Button saveP;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,11 +66,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		mProgressView = findViewById(R.id.login_progress);
 		createPass = findViewById(R.id.createPass);
 		// Kiem tra xem da luu mat khau lan nao chua
-		if(settings.getString(PREFS_KEY, null) == null) {
+		if (settings.getString(PREFS_KEY, null) == null) {
 			createPass.setVisibility(View.VISIBLE);
 			mLoginFormView.setVisibility(View.GONE);
-			e1 = (EditText) findViewById(R.id.password1) ;
-			e2 = (EditText) findViewById(R.id.password2) ;
+			e1 = (EditText) findViewById(R.id.password1);
+			e2 = (EditText) findViewById(R.id.password2);
 			saveP = (Button) findViewById(R.id.savePass);
 			saveP.setOnClickListener(new OnClickListener() {
 
@@ -77,24 +78,24 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				public void onClick(View v) {
 					SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 					SharedPreferences.Editor editor = settings.edit();
-					String p1 =  e1.getText().toString();
+					String p1 = e1.getText().toString();
 					if (!TextUtils.isEmpty(p1) && !isPasswordValid(p1)) {
 						e1.setError(getString(R.string.error_invalid_password));
 						e1.requestFocus();
 						return;
 					}
-					String p2 =  e2.getText().toString();
+					String p2 = e2.getText().toString();
 					if (!TextUtils.isEmpty(p2) && !isPasswordValid(p2)) {
 						e2.setError(getString(R.string.error_invalid_password));
 						e2.requestFocus();
 						return;
-					} else 	if(!p1.equals(p2)) {
+					} else if (!p1.equals(p2)) {
 						e2.setError(getString(R.string.error_invalid_confirm));
 						e2.requestFocus();
 					} else {
-						editor.putString(PREFS_KEY,p1);
+						editor.putString(PREFS_KEY, p1);
 						editor.commit();
-						Toast.makeText(v.getContext(),"password saved!", Toast.LENGTH_SHORT).show();
+						Toast.makeText(v.getContext(), "password saved!", Toast.LENGTH_SHORT).show();
 						Intent i = new Intent(v.getContext(), LoginActivity.class);
 						v.getContext().startActivity(i);
 					}
@@ -107,15 +108,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			mLoginFormView.setVisibility(View.VISIBLE);
 
 			// Set up the login form.
-			//mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+			// mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 			populateAutoComplete();
 
 			mPasswordView = (EditText) findViewById(R.id.password);
-			mPasswordView
-			.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 				@Override
-				public boolean onEditorAction(TextView textView, int id,
-						KeyEvent keyEvent) {
+				public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
 					if (id == R.id.login || id == EditorInfo.IME_NULL) {
 						attemptLogin();
 						return true;
@@ -132,12 +131,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 				}
 			});
 
-
 		}
 	}
 
 	@Override
-	protected void onStop(){
+	protected void onStop() {
 		super.onStop();
 
 		// We need an Editor object to make preference changes.
@@ -149,7 +147,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		// Commit the edits!
 		editor.commit();
 	}
-
 
 	private void populateAutoComplete() {
 		getLoaderManager().initLoader(0, null, this);
@@ -163,14 +160,14 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	public void attemptLogin() {
 		if (mAuthTask != null) {
 			return;
-		} 
+		}
 
 		//// Reset errors.
-		//mEmailView.setError(null);
+		// mEmailView.setError(null);
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
-		//String email = mEmailView.getText().toString();
+		// String email = mEmailView.getText().toString();
 		String password = mPasswordView.getText().toString();
 
 		boolean cancel = false;
@@ -184,15 +181,15 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		}
 
 		// Check for a valid email address.
-		//		if (TextUtils.isEmpty(email)) {
-		//			mEmailView.setError(getString(R.string.error_field_required));
-		//			focusView = mEmailView;
-		//			cancel = true;
-		//		} else if (!isEmailValid(email)) {
-		//			mEmailView.setError(getString(R.string.error_invalid_email));
-		//			focusView = mEmailView;
-		//			cancel = true;
-		//		}
+		// if (TextUtils.isEmpty(email)) {
+		// mEmailView.setError(getString(R.string.error_field_required));
+		// focusView = mEmailView;
+		// cancel = true;
+		// } else if (!isEmailValid(email)) {
+		// mEmailView.setError(getString(R.string.error_invalid_email));
+		// focusView = mEmailView;
+		// cancel = true;
+		// }
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -226,30 +223,25 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		// for very easy animations. If available, use these APIs to fade-in
 		// the progress spinner.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-			int shortAnimTime = getResources().getInteger(
-					android.R.integer.config_shortAnimTime);
+			int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-			mLoginFormView.animate().setDuration(shortAnimTime)
-			.alpha(show ? 0 : 1)
-			.setListener(new AnimatorListenerAdapter() {
-				@Override
-				public void onAnimationEnd(Animator animation) {
-					mLoginFormView.setVisibility(show ? View.GONE
-							: View.VISIBLE);
-				}
-			});
+			mLoginFormView.animate().setDuration(shortAnimTime).alpha(show ? 0 : 1)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+						}
+					});
 
 			mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-			mProgressView.animate().setDuration(shortAnimTime)
-			.alpha(show ? 1 : 0)
-			.setListener(new AnimatorListenerAdapter() {
-				@Override
-				public void onAnimationEnd(Animator animation) {
-					mProgressView.setVisibility(show ? View.VISIBLE
-							: View.GONE);
-				}
-			});
+			mProgressView.animate().setDuration(shortAnimTime).alpha(show ? 1 : 0)
+					.setListener(new AnimatorListenerAdapter() {
+						@Override
+						public void onAnimationEnd(Animator animation) {
+							mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+						}
+					});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
@@ -303,12 +295,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
 		// Create adapter to tell the AutoCompleteTextView what to show in its
 		// dropdown list.
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				LoginActivity.this,
-				android.R.layout.simple_dropdown_item_1line,
-				emailAddressCollection);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(LoginActivity.this,
+				android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-		//mEmailView.setAdapter(adapter);
+		// mEmailView.setAdapter(adapter);
 	}
 
 	/**
@@ -343,13 +333,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 			showProgress(false);
 
 			if (success) {
-				//finish();
-				//setContentView(R.layout.activity_home);
+				// finish();
+				// setContentView(R.layout.activity_home);
 				Intent i = new Intent(getBaseContext(), HomeActivity.class);
 				startActivity(i);
 			} else {
-				mPasswordView
-				.setError(getString(R.string.error_incorrect_password));
+				mPasswordView.setError(getString(R.string.error_incorrect_password));
 				mPasswordView.requestFocus();
 			}
 		}
