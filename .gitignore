@@ -40,7 +40,9 @@ project.properties
 # generated files
 bin/
 gen/
-.recommenders
+
+.recommenders/
+
 
 # Local configuration file (sdk path, etc)
 local.properties

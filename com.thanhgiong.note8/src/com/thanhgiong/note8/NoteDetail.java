@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -47,9 +48,9 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		n_ = (Note) this.getIntent().getExtras().get("note");
 		 
 		img=(ImageView)  findViewById(R.id.image);
-		if(n_.image != null && !n_.image.isEmpty()) {
-		Bitmap bm = BitmapFactory.decodeFile(n_.image);
-		img.setImageBitmap(bm);
+		if(n_.binary != null) {
+			Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
+			img.setImageBitmap(bm);
 		}
 //		long d = System.currentTimeMillis() - Long.parseLong(n_.when); 
 //		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
@@ -65,6 +66,7 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		remind = (TextView)  findViewById(R.id.textRemind);
 		if(Boolean.parseBoolean(n_.remind)) remind.setVisibility(View.VISIBLE);
 		else remind.setVisibility(View.GONE);
+		
 		int displayButton[]= {View.VISIBLE, View.VISIBLE, View.GONE, View.GONE,View.GONE,View.VISIBLE, View.VISIBLE};
 		edit = (ImageButton) findViewById(R.id.btnEdit);
 		add = (ImageButton) findViewById(R.id.btnAddnew);

@@ -1,7 +1,9 @@
 package com.thanhgiong.note8;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -56,6 +59,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 	public static int ACTION_TYPE_ADDNEW = 3;
 	int current_action ;
 	boolean isEdit = false;
+	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS note8tb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125), nbinary BLOB )";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,12 +77,10 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		where=(ImageView)  findViewById(R.id.loc);
 		if(b != null) {
 			n_ = (Note)  b.get("note");
-//			if(n_ != null) {
-//				long d = System.currentTimeMillis() - Long.parseLong(n_.when); 
-//				if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
-//				else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
-//				else l2.setBackgroundResource(R.drawable.past_bg);
-//			}
+			if(n_!= null && n_.binary != null) {
+				mImageBitmap = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
+				img_frame.setImageBitmap(mImageBitmap);
+			}
 			current_action = b.getInt("type");
 		}
 		whenE.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
@@ -141,16 +143,21 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		}  
 		break;
 		case R.id.btnSave : {
-			 
+			byte[] binary = null;
+			if(mImageBitmap != null) {
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+			binary = stream.toByteArray();
+			}
 			Note n = new Note(null, whatE.getText().toString(), whenE.getText().toString(), whereE.getText().toString(),
-					String.valueOf(reminder.isChecked()), image);
-			
+					String.valueOf(reminder.isChecked()), image, binary);
 			if(current_action == ACTION_TYPE_EDIT) {
 				n.id = n_.id;
 				update(n);
 			}
 			else if (current_action == ACTION_TYPE_ADDNEW) {
-				save(n);
+				n_ = save(n);
+				
 			}
 			Intent i = new Intent(v.getContext(), NoteDetail.class);
 			i.putExtra("note", n);
@@ -174,19 +181,21 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		}
 
 	}
-	private void save(Note n) {
+	private Note save(Note n) {
 		SQLiteDatabase db =  openOrCreateDatabase("note8db",MODE_PRIVATE, null);
-		db.execSQL("CREATE TABLE IF NOT EXISTS note8tb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125) )");
+		db.execSQL(CREATE_TABLE);
 		ContentValues values = new ContentValues();
 		values.put("nwhat", n.what);
 		values.put("nwhen", n.when);
 		values.put("nwhere", n.where);
 		values.put("nremind", n.remind);
 		values.put("nimage", n.image);
+		values.put("nbinary", n.binary);
 //		db.execSQL("Insert into note8tb (nwhat, nwhen, nwhere, nremind, nimage)  values ('"+n.what+"',"+n.when+"','"+n.where+"',"+n.remind+"',"+n.image+"')");
-		db.insert("note8tb", null, values);
+		n.id= String.valueOf(db.insert("note8tb", null, values));
 		db.close(); 
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+		return n;
 	}
 
 	private void update(Note n) {
@@ -197,7 +206,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		values.put("nwhere", n.where);
 		values.put("nremind", n.remind);
 		values.put("nimage", n.image);
-		
+		values.put("nbinary", n.binary);
 //		Cursor cs = db.rawQuery("select * from note8tb where id = ?", new String[]{n.id});
 //		db.execSQL("Update table note8tb set nwhat='"+n.what+"', nwhen='"+n.when+"'nwhere='"+n.where+"',"
 //				+ " nremind='"+n.remind+"', nimage='"+n.image+"' where id = ?", new String[]{n.id});
@@ -247,18 +256,6 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		    img_frame.setImageBitmap(mImageBitmap);
 		Toast.makeText(this, "Snaped", Toast.LENGTH_SHORT).show();
 	}
-	private File setUpPhotoFile() throws IOException {
-
-		File f = createImageFile();
-		image = f.getAbsolutePath();
-
-		return f;
-	}
-	 
-	 
-	private String getAlbumName() {
-		return "note8img";
-	}
 	
 	private File createImageFile() throws IOException {
 	    // Create an image file name
@@ -276,4 +273,5 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 	    this.image = "file:" + image.getAbsolutePath();
 	    return image;
 	}
+	 
 }

@@ -62,12 +62,12 @@ public class HomeActivity extends Activity implements OnClickListener{
 	}
 	private List<Note> getData() {
 		SQLiteDatabase db =    openOrCreateDatabase("note8db",MODE_PRIVATE, null);
-		db.execSQL("CREATE TABLE IF NOT EXISTS note8tb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125) )");
+		db.execSQL(NoteEdit.CREATE_TABLE);
 		Cursor cs = db.rawQuery("SELECT * FROM note8tb", null);
 		data_  = new ArrayList<Note>();
 		if(cs.moveToFirst()) {
 			do {
-			 Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3), cs.getString(4), cs.getString(5));
+			 Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3), cs.getString(4), cs.getString(5), cs.getBlob(6));
 			 data_.add(n);
 			} while (cs.moveToNext());
 		}
@@ -76,12 +76,12 @@ public class HomeActivity extends Activity implements OnClickListener{
 	}
 	private List<Note> searchData(String key) {
 		SQLiteDatabase db =    openOrCreateDatabase("note8db",MODE_PRIVATE, null);
-		db.execSQL("CREATE TABLE IF NOT EXISTS note8tb (id integer primatery key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125) )");
+		db.execSQL(NoteEdit.CREATE_TABLE);
 		Cursor cs = db.rawQuery("SELECT * FROM note8tb where nwhat like '?'", new String[]{key});
 		data_  = new ArrayList<Note>();
 		if(cs.isBeforeFirst()) {
 			do {
-			 Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3), cs.getString(4), cs.getString(5));
+			 Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3), cs.getString(4), cs.getString(5), cs.getBlob(6));
 			 data_.add(n);
 			} while (cs.moveToNext());
 		}

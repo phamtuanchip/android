@@ -62,8 +62,8 @@ public class NoteAdapter extends BaseAdapter implements Filterable{
 		//        else holder.l2.setBackgroundResource(R.drawable.past_bg);
 
 		holder.img=(ImageView) rowView.findViewById(R.id.image);	
-		if(n_.image != null && !n_.image.isEmpty()) {
-			Bitmap bm = BitmapFactory.decodeFile(n_.image);
+		if(n_.binary != null) {
+			Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
 			holder.img.setImageBitmap(bm);
 		}
 		holder.what=(TextView) rowView.findViewById(R.id.txtTitle);
