@@ -15,24 +15,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class NoteDetail extends Activity  implements OnClickListener, OnDateSetListener{
 	Note n_;
-	RelativeLayout l2;
-	LinearLayout r1;
-	LinearLayout l21;
-	LinearLayout l22;
-	LinearLayout l23;
-	LinearLayout l24;
 	TextView what;
 	TextView when;
 	TextView where;
-	RadioButton reminder;
+	TextView remind;
 	ImageView img;
 	ImageButton edit;
 	ImageButton add ;
@@ -55,9 +46,11 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 		isEdit = false;
 		n_ = (Note) this.getIntent().getExtras().get("note");
 		 
-		img=(ImageView)  findViewById(R.id.img);
+		img=(ImageView)  findViewById(R.id.image);
+		if(n_.image != null && !n_.image.isEmpty()) {
 		Bitmap bm = BitmapFactory.decodeFile(n_.image);
 		img.setImageBitmap(bm);
+		}
 //		long d = System.currentTimeMillis() - Long.parseLong(n_.when); 
 //		if(d > TimeUnit.DAYS.toMillis(1))  l2.setBackgroundResource(R.drawable.future_bg);
 //		else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
@@ -65,14 +58,14 @@ public class NoteDetail extends Activity  implements OnClickListener, OnDateSetL
 
 		what=(TextView)  findViewById(R.id.txtTitle);
 		when=(TextView)  findViewById(R.id.textwhen);
-		reminder = (RadioButton) findViewById(R.id.remind);
 		where=(TextView)  findViewById(R.id.textWhere);
 		when.setText(n_.getFormatedDate());
 		what.setText(n_.what);
 		where.setText(n_.where);
-		reminder.setChecked(Boolean.parseBoolean(n_.remind));
-		
-		int displayButton[]= {View.VISIBLE, View.VISIBLE, View.VISIBLE, View.GONE,View.VISIBLE,View.VISIBLE, View.VISIBLE};
+		remind = (TextView)  findViewById(R.id.textRemind);
+		if(Boolean.parseBoolean(n_.remind)) remind.setVisibility(View.VISIBLE);
+		else remind.setVisibility(View.GONE);
+		int displayButton[]= {View.VISIBLE, View.VISIBLE, View.GONE, View.GONE,View.GONE,View.VISIBLE, View.VISIBLE};
 		edit = (ImageButton) findViewById(R.id.btnEdit);
 		add = (ImageButton) findViewById(R.id.btnAddnew);
 		del = (ImageButton) findViewById(R.id.btnDel);

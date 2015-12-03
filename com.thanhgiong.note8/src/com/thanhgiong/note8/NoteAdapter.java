@@ -70,10 +70,19 @@ public class NoteAdapter extends BaseAdapter implements Filterable{
 		holder.what.setText(n_.what);
 		holder.when=(TextView) rowView.findViewById(R.id.textwhen);
 		holder.when.setText(n_.when);
+		holder.where =(TextView) rowView.findViewById(R.id.txtWhere);
+		holder.loc=(ImageView) rowView.findViewById(R.id.loc);
 		holder.remind = (ImageView) rowView.findViewById(R.id.re);
 		if(!Boolean.parseBoolean(n_.remind)) holder.remind.setVisibility(View.GONE); 
 		else holder.remind.setVisibility(View.VISIBLE); 
-		
+		if(n_.when != null && !n_.when.isEmpty())  {
+			holder.where.setText(n_.where);
+			holder.loc.setVisibility(View.VISIBLE); 
+			
+		} else {
+			holder.where.setVisibility(View.GONE);
+			holder.loc.setVisibility(View.GONE); 
+		}
 		//holder.where=(TextView) rowView.findViewById(R.id.textWhere);
 		//holder.where.setText(n_.where);
 
@@ -99,6 +108,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable{
 		RadioButton rimder;
 		ImageView img;
 		ImageView remind;
+		ImageView loc;
 	}
 
 	@Override

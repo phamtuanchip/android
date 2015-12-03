@@ -1,128 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/l2"
+    android:id="@+id/l1"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/bg"
+    android:layout_height="fill_parent"
+    android:background="@drawable/not_bg_n"
     android:orientation="vertical" >
 
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="@dimen/photo_w"
+        android:layout_height="@dimen/photo_h"
+        android:src="@drawable/bg_default" />
+
     <LinearLayout
-        android:id="@+id/l1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/l2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/image"
+        android:layout_marginLeft="15dp"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/l20"
+        <TextView
+            android:id="@+id/txtTitle"
+            style="What"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/img"
-                android:layout_width="@dimen/icon_w"
-                android:layout_height="@dimen/icon_h"
-                android:src="@drawable/camera" />
-
-            <ImageView
-                android:id="@+id/image"
-                android:layout_width="@dimen/photo_w"
-                android:layout_height="@dimen/photo_h"
-                android:src="@drawable/photography" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:text="What" />
 
         <LinearLayout
             android:id="@+id/l21"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/img"
+            android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/edit"
-                android:layout_width="@dimen/icon_w"
-                android:layout_height="@dimen/icon_h"
-                android:src="@drawable/ic_launcher" />
+                android:id="@+id/when"
+                android:layout_width="@dimen/icon_w_sm"
+                android:layout_height="@dimen/icon_h_sm"
+                android:src="@drawable/calendar2" />
 
             <TextView
-                android:id="@+id/txtTitle"
-                style="What"
-                android:layout_width="wrap_content"
+                android:id="@+id/textwhen"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="What" />
+                android:text="when" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l22"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/l21"
+            android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/date"
-                android:layout_width="@dimen/icon_w"
-                android:layout_height="@dimen/icon_h"
-                android:src="@drawable/date2" />
+                android:id="@+id/where"
+                android:layout_width="@dimen/icon_w_sm"
+                android:layout_height="@dimen/icon_h_sm"
+                android:src="@drawable/location44" />
 
             <TextView
-                android:id="@+id/textwhen"
-                android:layout_width="wrap_content"
+                android:id="@+id/textWhere"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:text="when" />
+                android:text="where" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l23"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/l22"
-            android:orientation="horizontal" >
-
-            <ImageView
-                android:id="@+id/loc"
-                android:layout_width="@dimen/icon_w"
-                android:layout_height="@dimen/icon_h"
-                android:src="@drawable/loc2" />
-
-            <TextView
-                android:id="@+id/textWhere"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingTop="10dp"
-                android:text="where" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/l24"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/l23"
+            android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
             <ImageView
                 android:id="@+id/re"
-                android:layout_width="@dimen/icon_w"
-                android:layout_height="@dimen/icon_h"
+                android:layout_width="@dimen/icon_w_sm"
+                android:layout_height="@dimen/icon_h_sm"
                 android:src="@drawable/remind2" />
 
-            <RadioButton
-                android:id="@+id/remind"
+            <TextView
+                android:id="@+id/textRemind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Remind?" />
+                android:text="15 mins before" />
         </LinearLayout>
     </LinearLayout>
 
     <include
         android:id="@+id/menu"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         layout="@layout/bottom_menu" />
 
 </RelativeLayout>

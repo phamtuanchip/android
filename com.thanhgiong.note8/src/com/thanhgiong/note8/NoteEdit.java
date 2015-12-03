@@ -38,6 +38,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 	ImageView when;
 	ImageView where;
 	ImageView img;
+	ImageView img_frame;
 	RadioButton reminder;
 	ImageButton edit;
 	ImageButton add ;
@@ -62,6 +63,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 		isEdit = false;
 		Bundle b = this.getIntent().getExtras();
 		img=(ImageView)  findViewById(R.id.img);
+		img_frame=(ImageView)  findViewById(R.id.image);
 		reminder = (RadioButton) findViewById(R.id.remind);
 		whatE =(EditText) findViewById(R.id.txtTitleE);
 		whenE =(EditText) findViewById(R.id.textwhenE);
@@ -118,8 +120,8 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			File f = null;
 			try {
-				f = setUpPhotoFile();
-				image = f.getAbsolutePath();
+				f = createImageFile();
+				if(f != null)
 				takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -242,7 +244,7 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 	  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		 Bundle extras = data.getExtras();
 		    mImageBitmap = (Bitmap) extras.get("data");
-		    img.setImageBitmap(mImageBitmap);
+		    img_frame.setImageBitmap(mImageBitmap);
 		Toast.makeText(this, "Snaped", Toast.LENGTH_SHORT).show();
 	}
 	private File setUpPhotoFile() throws IOException {
@@ -252,37 +254,26 @@ public class NoteEdit extends Activity  implements OnClickListener, OnDateSetLis
 
 		return f;
 	}
-	private File createImageFile() throws IOException {
-		// Create an image file name
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imageFileName = JPEG_FILE_PREFIX + timeStamp + "_";
-		File albumF = getAlbumDir();
-		File imageF = File.createTempFile(imageFileName, JPEG_FILE_SUFFIX, albumF);
-		return imageF;
-	}
-	private File getAlbumDir() {
-		File storageDir = null;
-
-		if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-
-			storageDir = mAlbumStorageDirFactory.getAlbumStorageDir(getAlbumName());
-
-			if (storageDir != null) {
-				if (! storageDir.mkdirs()) {
-					if (! storageDir.exists()){
-						Log.d("CameraSample", "failed to create directory");
-						return null;
-					}
-				}
-			}
-
-		} else {
-			Log.v(getString(R.string.app_name), "External storage is not mounted READ/WRITE.");
-		}
-
-		return storageDir;
-	}
+	 
+	 
 	private String getAlbumName() {
 		return "note8img";
+	}
+	
+	private File createImageFile() throws IOException {
+	    // Create an image file name
+	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	    String imageFileName = "JPEG_" + timeStamp + "_";
+	    File storageDir =  
+	            Environment.getDataDirectory();
+	    File image = File.createTempFile(
+	        imageFileName,  /* prefix */
+	        ".jpg",         /* suffix */
+	        storageDir      /* directory */
+	    );
+
+	    // Save a file: path for use with ACTION_VIEW intents
+	    this.image = "file:" + image.getAbsolutePath();
+	    return image;
 	}
 }
