@@ -53,11 +53,6 @@ public class NoteDetail extends Activity implements OnClickListener, OnDateSetLi
 			img.setImageBitmap(bm);
 		} else
 			img.setImageBitmap(BitmapFactory.decodeResource(getBaseContext().getResources(), R.drawable.bg_default));
-		// long d = System.currentTimeMillis() - Long.parseLong(n_.when);
-		// if(d > TimeUnit.DAYS.toMillis(1))
-		// l2.setBackgroundResource(R.drawable.future_bg);
-		// else if(d > 0) l2.setBackgroundResource(R.drawable.upcomming_bg);
-		// else l2.setBackgroundResource(R.drawable.past_bg);
 		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/angelina.ttf");
 		what = (TextView) findViewById(R.id.txtTitle);
 		when = (TextView) findViewById(R.id.textwhen);

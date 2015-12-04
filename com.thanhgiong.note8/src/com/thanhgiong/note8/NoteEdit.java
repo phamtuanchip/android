@@ -10,7 +10,6 @@ import java.util.List;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -26,17 +25,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class NoteEdit extends Activity implements OnClickListener, OnDateSetListener, OnTimeSetListener {
+public class NoteEdit extends Activity implements OnClickListener, OnDateSetListener {
 	Note n_;
 	EditText whatE;
 	EditText whenE;
@@ -45,6 +42,9 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	EditText textTimeE;
 	ImageView when;
 	ImageView where;
+	// GPSTracker class
+    GPSTracker gps;
+
 	ImageView img;
 	ImageView img_frame;
 	RadioButton reminder;
@@ -79,21 +79,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		whereE = (EditText) findViewById(R.id.textWhereE);
 		when = (ImageView) findViewById(R.id.date);
 		where = (ImageView) findViewById(R.id.loc);
-		String location_context = Context.LOCATION_SERVICE;
-		locationManager = (LocationManager) getSystemService(location_context);
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-		criteria.setPowerRequirement(Criteria.POWER_LOW);
-		criteria.setAltitudeRequired(false);
-		criteria.setBearingRequired(false);
-		criteria.setSpeedRequired(false);
-		criteria.setCostAllowed(true);
-		String bestProvider = locationManager.getBestProvider(criteria, true);
-		// String provider = LocationManager.GPS_PROVIDER;
-		Location location = locationManager.getLastKnownLocation(bestProvider);
-		testProviders();
-		if (location != null)
-			whereE.setText(location.getLongitude() + "," + location.getLatitude());
 		if (b != null) {
 			n_ = (Note) b.get("note");
 			if (n_ != null && n_.binary != null) {
@@ -153,12 +138,31 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		}
 			break;
 		case R.id.loc: {
-			String uri = "geo:47.6,-122.3";
-			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-			if (isAppInstalled("com.google.android.apps.maps")) {
-				intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-				startActivity(intent);
-			}
+//			gps = new GPSTracker(NoteEdit.this);
+//            // check if GPS enabled     
+//            if(gps.canGetLocation()){
+//                 
+//                double latitude = gps.getLatitude();
+//                double longitude = gps.getLongitude();
+//            	String uri = "geo:"+latitude+","+longitude+"";
+//    			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+//    			if (isAppInstalled("com.google.android.apps.maps")) {
+//    				intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+//    				startActivity(intent);
+//    			}
+//                // \n is for new line
+//                //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();    
+//            }else{
+//                // can't get location
+//                // GPS or Network is not enabled
+//                // Ask user to enable GPS/network in settings
+//                gps.showSettingsAlert();
+//            }
+			
+			Intent i = new Intent(this, MapPane.class);
+			startActivity(i);
+
+		
 		}
 			break;
 		case R.id.btnSave: {
@@ -210,9 +214,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		values.put("nremind", n.remind);
 		values.put("nimage", n.image);
 		values.put("nbinary", n.binary);
-		// db.execSQL("Insert into note8tb (nwhat, nwhen, nwhere, nremind,
-		// nimage) values
-		// ('"+n.what+"',"+n.when+"','"+n.where+"',"+n.remind+"',"+n.image+"')");
 		n.id = String.valueOf(db.insert("note8tb", null, values));
 		db.close();
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
@@ -228,15 +229,8 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		values.put("nremind", n.remind);
 		values.put("nimage", n.image);
 		values.put("nbinary", n.binary);
-		// Cursor cs = db.rawQuery("select * from note8tb where id = ?", new
-		// String[]{n.id});
-		// db.execSQL("Update table note8tb set nwhat='"+n.what+"',
-		// nwhen='"+n.when+"'nwhere='"+n.where+"',"
-		// + " nremind='"+n.remind+"', nimage='"+n.image+"' where id = ?", new
-		// String[]{n.id});
 		db.update("note8tb", values, "id= ?", new String[] { n.id });
 		db.close();
-
 		Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
 	}
 
@@ -261,18 +255,8 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	}
 
 	public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-		// TODO Auto-generated method stub
 		whenE.setText(new StringBuilder()
-				// Month is 0 based so add 1
-				.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year).append(" "));
-	}
-
-	@Override
-	public void onTimeSet(TimePicker arg0, int arg1, int arg2) {
-		textTimeE.setText(new StringBuilder()
-				// Month is 0 based so add 1
-				.append(arg1).append("/").append(arg2 + 1).append(" "));
-
+				.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year));
 	}
 
 	@Override
@@ -284,7 +268,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	}
 
 	private File createImageFile() throws IOException {
-		// Create an image file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = "JPEG_" + timeStamp + "_";
 		File storageDir = Environment.getDataDirectory();
@@ -292,8 +275,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 				".jpg", /* suffix */
 				storageDir /* directory */
 		);
-
-		// Save a file: path for use with ACTION_VIEW intents
 		this.image = "file:" + image.getAbsolutePath();
 		return image;
 	}
@@ -303,7 +284,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		StringBuilder sb = new StringBuilder("Enabled Providers:");
 		List<String> providers = locationManager.getProviders(true);
 		for (String provider : providers) {
-			Log.e(provider + "0000000000000", provider);
 			locationManager.requestLocationUpdates(provider, 1000, 0, new LocationListener() {
 				public void onLocationChanged(Location location) {
 				}
@@ -329,4 +309,23 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		}
 		tv.setText(sb.toString());
 	}
+	
+	public void checkLocation(){
+		String location_context = Context.LOCATION_SERVICE;
+		locationManager = (LocationManager) getSystemService(location_context);
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+		criteria.setPowerRequirement(Criteria.POWER_LOW);
+		criteria.setAltitudeRequired(false);
+		criteria.setBearingRequired(false);
+		criteria.setSpeedRequired(false);
+		criteria.setCostAllowed(true);
+		String bestProvider = locationManager.getBestProvider(criteria, true);
+		String provider = LocationManager.GPS_PROVIDER;
+		Location location = locationManager.getLastKnownLocation(bestProvider);
+		//testProviders();
+		if (location != null)
+			whereE.setText(location.getLongitude() + "," + location.getLatitude());
+	}
+	
 }
