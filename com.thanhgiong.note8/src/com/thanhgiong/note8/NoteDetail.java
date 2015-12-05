@@ -105,7 +105,7 @@ public class NoteDetail extends Activity implements OnClickListener {
 		case R.id.btnEdit: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
 			i.putExtra("note", n_);
-			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
+			i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
 			this.fileList();
 			v.getContext().startActivity(i);
 		}

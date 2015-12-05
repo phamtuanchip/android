@@ -77,7 +77,7 @@ public class NoteListAdapter extends BaseAdapter {
 			holder.img.setVisibility(View.VISIBLE);
 		else
 			holder.img.setVisibility(View.GONE);
-
+		rowView.setTag(position);
 		rowView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -85,7 +85,8 @@ public class NoteListAdapter extends BaseAdapter {
 				// Toast.makeText(currentContext_, "You Clicked ",
 				// Toast.LENGTH_LONG).show();
 				Intent i = new Intent(v.getContext(), NoteDetail.class);
-				i.putExtra("note", n_);
+				Integer position = (Integer) v.getTag();
+				i.putExtra("note", (Note)getItem(position));
 				i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
 				v.getContext().startActivity(i);
 			}

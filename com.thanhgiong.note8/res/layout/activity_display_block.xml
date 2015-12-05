@@ -31,7 +31,7 @@
             android:id="@+id/loc"
             android:layout_width="@dimen/icon_w_sm"
             android:layout_height="@dimen/icon_h_sm"
-            android:src="@drawable/loc2" />
+            android:src="@drawable/loc4" />
     </LinearLayout>
 
     <LinearLayout

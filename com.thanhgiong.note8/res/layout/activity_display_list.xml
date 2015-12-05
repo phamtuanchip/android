@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/l21"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
@@ -35,22 +35,23 @@
             android:layout_width="@dimen/icon_w_sm"
             android:layout_height="@dimen/icon_h_sm"
             android:layout_gravity="right"
-            android:src="@drawable/remind2" />
+            android:src="@drawable/remind4" />
 
         <ImageView
             android:id="@+id/loc"
             android:layout_width="@dimen/icon_w_sm"
             android:layout_height="@dimen/icon_h_sm"
             android:layout_gravity="right"
-            android:src="@drawable/loc" />
+            android:src="@drawable/loc4" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/txtWhat"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/l21"
-        android:paddingLeft="30dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:textSize="@dimen/textsize_m" />
 
 </RelativeLayout>

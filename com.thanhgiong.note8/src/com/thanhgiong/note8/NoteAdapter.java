@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -83,14 +84,18 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 		} else {
 			holder.loc.setVisibility(View.GONE);
 		}
+		rowView.setTag(position);
 		rowView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), NoteDetail.class);
-				i.putExtra("note", n_);
+				Integer position = (Integer) v.getTag();
+				i.putExtra("note", (Note)getItem(position));
 				i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
 				v.getContext().startActivity(i);
 			}
+			 
+
 		});
 		return rowView;
 	}
