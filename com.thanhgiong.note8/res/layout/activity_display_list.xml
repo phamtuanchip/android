@@ -4,15 +4,15 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/not_bg_n"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp" >
 
     <LinearLayout
         android:id="@+id/l21"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:paddingTop="15dp" >
 
         <TextView
@@ -50,7 +50,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/l21"
-        android:paddingLeft="15dp"
+        android:paddingLeft="10dp"
         android:paddingRight="15dp"
         android:textSize="@dimen/textsize_m" />
 
