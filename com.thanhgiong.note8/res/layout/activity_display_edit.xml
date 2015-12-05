@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ScrollView01"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="@drawable/not_bg_n" >
 
     <LinearLayout
         android:id="@+id/l2"
@@ -14,7 +15,6 @@
             android:id="@+id/l1"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="@drawable/not_bg_n"
             android:orientation="vertical" >
 
             <LinearLayout
@@ -23,7 +23,7 @@
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:orientation="vertical" >
 
                 <LinearLayout
