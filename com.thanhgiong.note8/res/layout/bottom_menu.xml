@@ -3,7 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
-    android:background="@drawable/upcomming_bg"
+    android:background="@drawable/bg_menu"
     android:orientation="horizontal"
     android:paddingLeft="20dp"
     android:paddingRight="20dp" >
@@ -12,42 +12,58 @@
         android:id="@+id/btnEdit"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/edit" />
+        android:background="@drawable/edit"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/btnAddnew"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/addnew4" />
+        android:background="@drawable/addnew4"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/btnDel"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/delete4" />
+        android:background="@drawable/delete4"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/btnSave"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/save4" />
+        android:background="@drawable/save4"
+        android:visibility="gone" />
+
+    <ImageButton
+        android:id="@+id/btnCancel"
+        android:layout_width="@dimen/icon_w"
+        android:layout_height="@dimen/icon_h"
+        android:background="@drawable/cancel04"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/btnSwitch"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/switch4" />
+        android:background="@drawable/switch4"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/btnLock"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/pwd4" />
+        android:layout_gravity="right"
+        android:background="@drawable/pwd4"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/btnHome"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/home4" />
+        android:layout_gravity="right"
+        android:background="@drawable/home4"
+        android:visibility="gone" />
 
 </LinearLayout>

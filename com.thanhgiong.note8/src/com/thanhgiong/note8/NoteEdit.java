@@ -51,11 +51,10 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	ImageView img;
 	ImageView img_frame;
 	CheckBox reminder;
-	ImageButton edit;
 	ImageButton add;
 	ImageButton del;
 	ImageButton save;
-	ImageButton sw;
+	ImageButton cancel;
 	ImageButton lock;
 	ImageButton home;
 	LocationManager locationManager;
@@ -64,7 +63,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	public static int ACTION_TYPE_EDIT = 2;
 	public static int ACTION_TYPE_ADDNEW = 3;
 	int current_action;
-	boolean isEdit = false;
 	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS note8tb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125), nbinary BLOB )";
 
 	@Override
@@ -81,6 +79,13 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		whereE = (EditText) findViewById(R.id.textWhereE);
 		when = (ImageView) findViewById(R.id.date);
 		where = (ImageView) findViewById(R.id.loc);
+		add = (ImageButton) findViewById(R.id.btnAddnew);
+		del = (ImageButton) findViewById(R.id.btnDel);
+		save = (ImageButton) findViewById(R.id.btnSave);
+		cancel = (ImageButton) findViewById(R.id.btnCancel);
+		lock = (ImageButton) findViewById(R.id.btnLock);
+		home = (ImageButton) findViewById(R.id.btnHome);
+		
 		whenE.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		current_action = b.getInt("type");
 		if (b != null) {
@@ -99,31 +104,20 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 				whenE.setText(n_.when);
 				whereE.setText(n_.where);
 				reminder.setChecked(Boolean.parseBoolean(n_.remind));
+				add.setVisibility(View.VISIBLE);
 			}
 		}
 
 		img.setOnClickListener(this);
 		when.setOnClickListener(this);
 		where.setOnClickListener(this);
-
-		int displayButton[] = { View.GONE, View.GONE, View.GONE, View.VISIBLE, View.GONE, View.VISIBLE, View.VISIBLE };
-		edit = (ImageButton) findViewById(R.id.btnEdit);
-		add = (ImageButton) findViewById(R.id.btnAddnew);
-		del = (ImageButton) findViewById(R.id.btnDel);
-		save = (ImageButton) findViewById(R.id.btnSave);
-		sw = (ImageButton) findViewById(R.id.btnSwitch);
-		lock = (ImageButton) findViewById(R.id.btnLock);
-		home = (ImageButton) findViewById(R.id.btnHome);
-
-		edit.setVisibility(displayButton[0]);
-		add.setVisibility(displayButton[1]);
-		del.setVisibility(displayButton[2]);
-		save.setVisibility(displayButton[3]);
-		sw.setVisibility(displayButton[4]);
-		lock.setVisibility(displayButton[5]);
-		home.setVisibility(displayButton[6]);
+		save.setVisibility(View.VISIBLE);
+		cancel.setVisibility(View.VISIBLE);
+		lock.setVisibility(View.VISIBLE);
+		home.setVisibility(View.VISIBLE);
 
 		save.setOnClickListener(this);
+		cancel.setOnClickListener(this);
 		home.setOnClickListener(this);
 		lock.setOnClickListener(this);
 
@@ -201,7 +195,10 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			Intent i = new Intent(v.getContext(), NoteDetail.class);
 			i.putExtra("note", n);
 			startActivity(i);
-			isEdit = false;
+		}
+			break;
+		case R.id.btnCancel: {
+			this.finish();
 		}
 			break;
 		case R.id.btnHome: {

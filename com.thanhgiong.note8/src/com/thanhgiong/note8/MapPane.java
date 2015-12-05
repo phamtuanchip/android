@@ -7,8 +7,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-public class MapPane extends Activity implements OnMapReadyCallback, OnInfoWindowClickListener {
+public class MapPane extends AppCompatActivity  implements OnMapReadyCallback, OnInfoWindowClickListener {
 	LatLng current;
 	GPSTracker gps;
 
@@ -28,8 +29,11 @@ public class MapPane extends Activity implements OnMapReadyCallback, OnInfoWindo
 			// Ask user to enable GPS/network in settings
 			gps.showSettingsAlert();
 		}
-		MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-		mapFragment.getMapAsync(this);
+		 
+	 SupportMapFragment mapFragment = 
+	 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map); 
+	 mapFragment.getMapAsync(this); 
+
 	}
 
 	@Override

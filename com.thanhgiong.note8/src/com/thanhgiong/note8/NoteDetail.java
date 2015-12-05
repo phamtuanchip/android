@@ -29,8 +29,6 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 	ImageButton edit;
 	ImageButton add;
 	ImageButton del;
-	ImageButton save;
-	ImageButton sw;
 	ImageButton lock;
 	ImageButton home;
 	LinearLayout l1;
@@ -77,23 +75,17 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 			}
 		}
 
-		int displayButton[] = { View.VISIBLE, View.VISIBLE, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE,
-				View.VISIBLE };
 		edit = (ImageButton) findViewById(R.id.btnEdit);
 		add = (ImageButton) findViewById(R.id.btnAddnew);
 		del = (ImageButton) findViewById(R.id.btnDel);
-		save = (ImageButton) findViewById(R.id.btnSave);
-		sw = (ImageButton) findViewById(R.id.btnSwitch);
 		lock = (ImageButton) findViewById(R.id.btnLock);
 		home = (ImageButton) findViewById(R.id.btnHome);
 
-		edit.setVisibility(displayButton[0]);
-		add.setVisibility(displayButton[1]);
-		del.setVisibility(displayButton[2]);
-		save.setVisibility(displayButton[3]);
-		sw.setVisibility(displayButton[4]);
-		lock.setVisibility(displayButton[5]);
-		home.setVisibility(displayButton[6]);
+		edit.setVisibility(View.VISIBLE);
+		add.setVisibility(View.VISIBLE);
+		del.setVisibility(View.VISIBLE);
+		lock.setVisibility(View.VISIBLE);
+		home.setVisibility(View.VISIBLE);
 
 		edit.setOnClickListener(this);
 		lock.setOnClickListener(this);
@@ -147,10 +139,10 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		Intent i = new Intent(v.getContext(), NoteEdit.class);
-		i.putExtra("note", n_);
-		i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
-		v.getContext().startActivity(i);
+//		Intent i = new Intent(v.getContext(), NoteEdit.class);
+//		i.putExtra("note", n_);
+//		i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
+//		v.getContext().startActivity(i);
 		return false;
 	}
 

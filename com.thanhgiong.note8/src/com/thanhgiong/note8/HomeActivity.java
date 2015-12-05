@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -22,37 +21,22 @@ public class HomeActivity extends Activity implements OnClickListener {
 	public final static String EXTRA_MESSAGE = "MESSAGE";
 	private ListView list;
 	public static List<Note> data_;
-
-	SearchView search;
-	ImageButton edit;
 	ImageButton add;
-	ImageButton del;
-	ImageButton save;
 	ImageButton sw;
 	ImageButton lock;
-	ImageButton home;
 	SharedPreferences settings;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		int displayButton[] = { View.GONE, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE, View.VISIBLE, View.GONE };
-		edit = (ImageButton) findViewById(R.id.btnEdit);
 		add = (ImageButton) findViewById(R.id.btnAddnew);
-		del = (ImageButton) findViewById(R.id.btnDel);
-		save = (ImageButton) findViewById(R.id.btnSave);
 		sw = (ImageButton) findViewById(R.id.btnSwitch);
 		lock = (ImageButton) findViewById(R.id.btnLock);
-		home = (ImageButton) findViewById(R.id.btnHome);
 
-		edit.setVisibility(displayButton[0]);
-		add.setVisibility(displayButton[1]);
-		del.setVisibility(displayButton[2]);
-		save.setVisibility(displayButton[3]);
-		sw.setVisibility(displayButton[4]);
-		lock.setVisibility(displayButton[5]);
-		home.setVisibility(displayButton[6]);
+		add.setVisibility(View.VISIBLE);
+		sw.setVisibility(View.VISIBLE);
+		lock.setVisibility(View.VISIBLE);
 
 		add.setOnClickListener(this);
 		sw.setOnClickListener(this);
@@ -113,7 +97,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
 			v.getContext().startActivity(i);
 		}
-			break;
+		break;
 		case R.id.btnSwitch: {
 			Toast.makeText(this, "Change view", Toast.LENGTH_SHORT).show();
 			list = (ListView) findViewById(R.id.listView);
@@ -128,12 +112,12 @@ public class HomeActivity extends Activity implements OnClickListener {
 			editor.commit();
 
 		}
-			break;
+		break;
 		case R.id.btnLock: {
 			Intent i = new Intent(this, LoginActivity.class);
 			v.getContext().startActivity(i);
 		}
-			break;
+		break;
 		default:
 			break;
 		}
