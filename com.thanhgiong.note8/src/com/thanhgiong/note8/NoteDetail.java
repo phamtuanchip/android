@@ -8,14 +8,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NoteDetail extends Activity implements OnClickListener {
+public class NoteDetail extends Activity implements OnClickListener, OnTouchListener {
 	Note n_;
 	TextView what;
 	TextView when;
@@ -29,7 +33,7 @@ public class NoteDetail extends Activity implements OnClickListener {
 	ImageButton sw;
 	ImageButton lock;
 	ImageButton home;
-
+	LinearLayout l1;
 	public static int ACTION_TYPE_VIEW = 1;
 	public static int ACTION_TYPE_EDIT = 2;
 	public static int ACTION_TYPE_ADDNEW = 3;
@@ -40,6 +44,7 @@ public class NoteDetail extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_detail);
 		Bundle b = this.getIntent().getExtras();
+		l1 = (LinearLayout)findViewById(R.id.l2);
 		img = (ImageView) findViewById(R.id.image);
 		what = (TextView) findViewById(R.id.txtWhat);
 		when = (TextView) findViewById(R.id.textwhen);
@@ -95,38 +100,33 @@ public class NoteDetail extends Activity implements OnClickListener {
 		add.setOnClickListener(this);
 		home.setOnClickListener(this);
 		del.setOnClickListener(this);
-
+		l1.setOnTouchListener(this);
 		current_action = ACTION_TYPE_VIEW;
 	}
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-
 		case R.id.btnEdit: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
 			i.putExtra("note", n_);
 			i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
-			this.fileList();
 			v.getContext().startActivity(i);
 		}
 			break;
 		case R.id.btnAddnew: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
 			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
-			this.fileList();
 			v.getContext().startActivity(i);
 			current_action = ACTION_TYPE_ADDNEW;
 		}
 			break;
 		case R.id.btnHome: {
 			Intent i = new Intent(v.getContext(), HomeActivity.class);
-			this.fileList();
 			v.getContext().startActivity(i);
 		}
 			break;
 		case R.id.btnLock: {
 			Intent i = new Intent(v.getContext(), LoginActivity.class);
-			this.fileList();
 			v.getContext().startActivity(i);
 		}
 			break;
@@ -136,7 +136,6 @@ public class NoteDetail extends Activity implements OnClickListener {
 			db.close();
 			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
 			Intent i = new Intent(v.getContext(), HomeActivity.class);
-			this.fileList();
 			v.getContext().startActivity(i);
 		}
 			break;
@@ -144,6 +143,15 @@ public class NoteDetail extends Activity implements OnClickListener {
 			break;
 		}
 
+	}
+
+	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		Intent i = new Intent(v.getContext(), NoteEdit.class);
+		i.putExtra("note", n_);
+		i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
+		v.getContext().startActivity(i);
+		return false;
 	}
 
 }

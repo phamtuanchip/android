@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:background="@drawable/upcomming_bg"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp" >
 
     <ImageButton
         android:id="@+id/btnEdit"

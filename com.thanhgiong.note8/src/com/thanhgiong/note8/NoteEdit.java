@@ -211,7 +211,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			break;
 		case R.id.btnLock: {
 			Intent i = new Intent(v.getContext(), LoginActivity.class);
-			this.fileList();
 			v.getContext().startActivity(i);
 		}
 			break;
