@@ -19,8 +19,8 @@
             android:id="@+id/l20"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-             android:paddingTop="10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
 
             <ImageView
                 android:id="@+id/img"
@@ -33,7 +33,6 @@
                 android:layout_width="@dimen/photo_w"
                 android:layout_height="@dimen/photo_h"
                 android:layout_centerHorizontal="true"
-               
                 android:src="@drawable/bg_default" />
         </LinearLayout>
 
@@ -41,29 +40,31 @@
             android:id="@+id/l21"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
 
             <ImageView
                 android:id="@+id/edit"
                 android:layout_width="@dimen/icon_w_m"
                 android:layout_height="@dimen/icon_w_m"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/info4" />
 
             <EditText
                 android:id="@+id/txtTitleE"
-                style="What"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:text="What" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="what?"
+                android:inputType="textCapSentences|textMultiLine"
+                android:singleLine="false" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l22"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
 
             <ImageView
                 android:id="@+id/date"
@@ -74,16 +75,16 @@
             <EditText
                 android:id="@+id/textwhenE"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:text="when" />
+                android:layout_height="wrap_content"
+                android:singleLine="false" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l23"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
 
             <ImageView
                 android:id="@+id/loc"
@@ -94,16 +95,17 @@
             <EditText
                 android:id="@+id/textWhereE"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:text="where" />
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences|textMultiLine"
+                android:singleLine="false" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l24"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-             android:paddingTop="10dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
 
             <ImageView
                 android:id="@+id/re"
@@ -111,11 +113,11 @@
                 android:layout_height="@dimen/icon_w_m"
                 android:src="@drawable/remind2" />
 
-            <RadioButton
+            <CheckBox
                 android:id="@+id/remind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Yes" />
+                android:text="Remine 15 min before" />
         </LinearLayout>
     </LinearLayout>
 

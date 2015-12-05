@@ -1,17 +1,13 @@
 package com.thanhgiong.note8;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -19,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NoteDetail extends Activity implements OnClickListener, OnDateSetListener {
+public class NoteDetail extends Activity implements OnClickListener {
 	Note n_;
 	TextView what;
 	TextView when;
@@ -38,42 +34,45 @@ public class NoteDetail extends Activity implements OnClickListener, OnDateSetLi
 	public static int ACTION_TYPE_EDIT = 2;
 	public static int ACTION_TYPE_ADDNEW = 3;
 	int current_action;
-	boolean isEdit = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_detail);
-		isEdit = false;
-		n_ = (Note) this.getIntent().getExtras().get("note");
-
+		Bundle b = this.getIntent().getExtras();
 		img = (ImageView) findViewById(R.id.image);
-		if (n_.binary != null) {
-			Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
-			img.setImageBitmap(bm);
-		} else
-			img.setImageBitmap(BitmapFactory.decodeResource(getBaseContext().getResources(), R.drawable.bg_default));
-		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/angelina.ttf");
-		what = (TextView) findViewById(R.id.txtTitle);
+		what = (TextView) findViewById(R.id.txtWhat);
 		when = (TextView) findViewById(R.id.textwhen);
 		where = (TextView) findViewById(R.id.textWhere);
-
-		what.setTypeface(tf);
-		what.setText(n_.what);
-
-		when.setTypeface(tf);
-		when.setText(n_.getFormatedDate());
-
-		where.setTypeface(tf);
-		where.setText(n_.where);
-
 		remind = (TextView) findViewById(R.id.textRemind);
-		if (Boolean.parseBoolean(n_.remind))
-			remind.setVisibility(View.VISIBLE);
-		else
-			remind.setVisibility(View.GONE);
+		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/angelina.ttf");
+		what.setTypeface(tf);
+		when.setTypeface(tf);
+		where.setTypeface(tf);
+		remind.setTypeface(tf);
+		if (b != null) {
+			n_ = (Note) b.get("note");
+			if (n_ != null) {
+				if (n_.binary != null) {
+					Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
+					img.setImageBitmap(bm);
+				} else {
+					Resources res = getResources();
+					int id = R.drawable.bg_default;
+					Bitmap bm = BitmapFactory.decodeResource(res, id);
+					img.setImageBitmap(bm);
+				}
+				if (Boolean.parseBoolean(n_.remind))
+					remind.setVisibility(View.VISIBLE);
+				else
+					remind.setVisibility(View.GONE);
+				when.setText(n_.getFormatedDate());
+				where.setText(n_.where);
+				what.setText(n_.what);
+			}
+		}
 
-		int displayButton[] = { View.VISIBLE, View.VISIBLE, View.GONE, View.GONE, View.GONE, View.VISIBLE,
+		int displayButton[] = { View.VISIBLE, View.VISIBLE, View.VISIBLE, View.GONE, View.GONE, View.VISIBLE,
 				View.VISIBLE };
 		edit = (ImageButton) findViewById(R.id.btnEdit);
 		add = (ImageButton) findViewById(R.id.btnAddnew);
@@ -102,25 +101,7 @@ public class NoteDetail extends Activity implements OnClickListener, OnDateSetLi
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.textwhen: {
-			DatePickerDialog dialog = new DatePickerDialog(v.getContext(), this, 2015, 11, 27);
-			dialog.show();
-		}
-			break;
-		case R.id.img: {
-			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-			startActivityForResult(takePictureIntent, 1);
-		}
-			break;
-		case R.id.textWhere: {
-			String uri = "geo:47.6,-122.3";
-			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-			if (isAppInstalled("com.google.android.apps.maps")) {
-				intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-				startActivity(intent);
-			}
-		}
 		case R.id.btnEdit: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
 			i.putExtra("note", n_);
@@ -134,7 +115,6 @@ public class NoteDetail extends Activity implements OnClickListener, OnDateSetLi
 			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
 			this.fileList();
 			v.getContext().startActivity(i);
-			isEdit = false;
 			current_action = ACTION_TYPE_ADDNEW;
 		}
 			break;
@@ -155,40 +135,15 @@ public class NoteDetail extends Activity implements OnClickListener, OnDateSetLi
 			db.delete("note8tb", "id= ?", new String[] { n_.id });
 			db.close();
 			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+			Intent i = new Intent(v.getContext(), HomeActivity.class);
+			this.fileList();
+			v.getContext().startActivity(i);
 		}
 			break;
 		default:
 			break;
 		}
 
-	}
-
-	private boolean isAppInstalled(String uri) {
-		PackageManager pm = getApplicationContext().getPackageManager();
-		boolean app_installed = false;
-		try {
-			pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
-			app_installed = true;
-		} catch (PackageManager.NameNotFoundException e) {
-			app_installed = false;
-		}
-		return app_installed;
-	}
-
-	public void showMap(Uri geoLocation) {
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(geoLocation);
-		if (intent.resolveActivity(getPackageManager()) != null) {
-			startActivity(intent);
-		}
-	}
-
-	public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-		// TODO Auto-generated method stub
-
-		when.setText(new StringBuilder()
-				// Month is 0 based so add 1
-				.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year).append(" "));
 	}
 
 }

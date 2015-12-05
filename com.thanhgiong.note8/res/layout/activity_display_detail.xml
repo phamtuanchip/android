@@ -23,68 +23,89 @@
         android:layout_marginRight="25dp"
         android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/txtTitle"
-            style="What"
+        <LinearLayout
+            android:id="@+id/l20"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="What" />
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
+
+            <ImageView
+                android:id="@+id/when"
+                android:layout_width="@dimen/icon_w_md"
+                android:layout_height="@dimen/icon_h_md"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/info4" />
+
+            <TextView
+                android:id="@+id/txtWhat"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textsize" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l21"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
 
             <ImageView
                 android:id="@+id/when"
-                android:layout_width="@dimen/icon_w_sm"
-                android:layout_height="@dimen/icon_h_sm"
+                android:layout_width="@dimen/icon_w_md"
+                android:layout_height="@dimen/icon_h_md"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/calendar2" />
 
             <TextView
                 android:id="@+id/textwhen"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="when" />
+                android:textSize="@dimen/textsize" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l22"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
 
             <ImageView
                 android:id="@+id/where"
-                android:layout_width="@dimen/icon_w_sm"
-                android:layout_height="@dimen/icon_h_sm"
+                android:layout_width="@dimen/icon_w_md"
+                android:layout_height="@dimen/icon_h_md"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/location44" />
 
             <TextView
                 android:id="@+id/textWhere"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="where" />
+                android:textSize="@dimen/textsize" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/l23"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingTop="10dp" >
 
             <ImageView
-                android:id="@+id/re"
-                android:layout_width="@dimen/icon_w_sm"
-                android:layout_height="@dimen/icon_h_sm"
-                android:src="@drawable/remind2" />
+                android:id="@+id/remind"
+                android:layout_width="@dimen/icon_w_md"
+                android:layout_height="@dimen/icon_h_md"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/remind4" />
 
             <TextView
                 android:id="@+id/textRemind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="15 mins before" />
+                android:text="At 08:00 AM"
+                android:textSize="@dimen/textsize" />
         </LinearLayout>
     </LinearLayout>
 

@@ -1,8 +1,6 @@
 package com.thanhgiong.note8;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -87,33 +85,16 @@ public class Note implements Parcelable {
 		return new Note[size];
 	}
 
-	public String getDate() {
-		return when;
-	}
-
 	public String getFormatedDate() {
 		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sf2 = new SimpleDateFormat("EEEE dd MMMM, yyyy");
 		try {
 
-			return sf.format(new Date(Long.parseLong(when)));
+			return sf2.format(sf.parse(when));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sf.format(new Date());
-	}
-
-	public void setDate(String date) {
-		this.when = date;
-	}
-
-	public void setDateValue(String f) {
-		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
-		try {
-			when = String.valueOf(sf.parse(f));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return "";
 	}
 
 }

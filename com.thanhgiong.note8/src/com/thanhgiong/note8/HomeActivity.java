@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 	ImageButton sw;
 	ImageButton lock;
 	ImageButton home;
+	SharedPreferences settings;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,17 @@ public class HomeActivity extends Activity implements OnClickListener {
 		lock.setOnClickListener(this);
 
 		list = (ListView) findViewById(R.id.listView);
-		list.setAdapter(new NoteAdapter(this, getData()));
+		settings = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+		String viewType = settings.getString(LoginActivity.PREFS_VIEW, null);
+		if (viewType == null) {
+			list.setAdapter(new NoteAdapter(this, getData()));
+		} else {
+			if ("list".equals(viewType)) {
+				list.setAdapter(new NoteListAdapter(this, getData()));
+			} else {
+				list.setAdapter(new NoteAdapter(this, getData()));
+			}
+		}
 
 	}
 
@@ -104,12 +117,15 @@ public class HomeActivity extends Activity implements OnClickListener {
 		case R.id.btnSwitch: {
 			Toast.makeText(this, "Change view", Toast.LENGTH_SHORT).show();
 			list = (ListView) findViewById(R.id.listView);
+			SharedPreferences.Editor editor = settings.edit();
 			if (list.getAdapter() instanceof NoteAdapter) {
 				list.setAdapter(new NoteListAdapter(this, getData()));
-
+				editor.putString(LoginActivity.PREFS_VIEW, "list");
 			} else {
 				list.setAdapter(new NoteAdapter(this, getData()));
+				editor.putString(LoginActivity.PREFS_VIEW, "block");
 			}
+			editor.commit();
 
 		}
 			break;

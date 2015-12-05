@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,12 +54,15 @@ public class NoteListAdapter extends BaseAdapter {
 		Holder holder = new Holder();
 		n_ = (Note) getItem(position);
 		holder.what = (TextView) rowView.findViewById(R.id.txtWhat);
-		holder.what.setText(n_.what);
 		holder.when = (TextView) rowView.findViewById(R.id.txtWhen);
-		holder.when.setText(n_.when);
 		holder.remind = (ImageView) rowView.findViewById(R.id.re);
 		holder.loc = (ImageView) rowView.findViewById(R.id.loc);
 		holder.img = (ImageView) rowView.findViewById(R.id.img);
+		Typeface tf = Typeface.createFromAsset(currentContext_.getAssets(), "fonts/angelina.ttf");
+		holder.what.setTypeface(tf);
+		holder.when.setTypeface(tf);
+		holder.what.setText(n_.what);
+		holder.when.setText(n_.getFormatedDate());
 		if (!Boolean.parseBoolean(n_.remind))
 			holder.remind.setVisibility(View.GONE);
 		else

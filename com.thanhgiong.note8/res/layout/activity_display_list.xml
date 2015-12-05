@@ -12,6 +12,7 @@
         android:layout_height="fill_parent"
         android:orientation="horizontal"
         android:paddingLeft="15dp"
+        android:paddingRight="15dp"
         android:paddingTop="15dp" >
 
         <TextView
@@ -20,7 +21,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:text="When" />
+            android:textSize="@dimen/textsize_m" />
 
         <ImageView
             android:id="@+id/img"
@@ -50,6 +51,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/l21"
         android:paddingLeft="30dp"
-        android:text="What" />
+        android:textSize="@dimen/textsize_m" />
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package com.thanhgiong.note8;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +29,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,11 +46,11 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	ImageView when;
 	ImageView where;
 	// GPSTracker class
-    GPSTracker gps;
+	GPSTracker gps;
 
 	ImageView img;
 	ImageView img_frame;
-	RadioButton reminder;
+	CheckBox reminder;
 	ImageButton edit;
 	ImageButton add;
 	ImageButton del;
@@ -68,26 +71,37 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_edit);
-		isEdit = false;
 		Bundle b = this.getIntent().getExtras();
 		img = (ImageView) findViewById(R.id.img);
 		img_frame = (ImageView) findViewById(R.id.image);
-		reminder = (RadioButton) findViewById(R.id.remind);
+		reminder = (CheckBox) findViewById(R.id.remind);
 		whatE = (EditText) findViewById(R.id.txtTitleE);
 		whenE = (EditText) findViewById(R.id.textwhenE);
 		textTimeE = (EditText) findViewById(R.id.textwhenE);
 		whereE = (EditText) findViewById(R.id.textWhereE);
 		when = (ImageView) findViewById(R.id.date);
 		where = (ImageView) findViewById(R.id.loc);
+		whenE.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+		current_action = b.getInt("type");
 		if (b != null) {
 			n_ = (Note) b.get("note");
-			if (n_ != null && n_.binary != null) {
-				mImageBitmap = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
-				img_frame.setImageBitmap(mImageBitmap);
+			if (n_ != null) {
+				if (n_.binary != null) {
+					mImageBitmap = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
+					img_frame.setImageBitmap(mImageBitmap);
+				} else {
+					Resources res = getResources();
+					int id = R.drawable.bg_default;
+					mImageBitmap = BitmapFactory.decodeResource(res, id);
+					img_frame.setImageBitmap(mImageBitmap);
+				}
+				whatE.setText(n_.what);
+				whenE.setText(n_.when);
+				whereE.setText(n_.where);
+				reminder.setChecked(Boolean.parseBoolean(n_.remind));
 			}
-			current_action = b.getInt("type");
 		}
-		whenE.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+
 		img.setOnClickListener(this);
 		when.setOnClickListener(this);
 		where.setOnClickListener(this);
@@ -138,31 +152,34 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		}
 			break;
 		case R.id.loc: {
-//			gps = new GPSTracker(NoteEdit.this);
-//            // check if GPS enabled     
-//            if(gps.canGetLocation()){
-//                 
-//                double latitude = gps.getLatitude();
-//                double longitude = gps.getLongitude();
-//            	String uri = "geo:"+latitude+","+longitude+"";
-//    			Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-//    			if (isAppInstalled("com.google.android.apps.maps")) {
-//    				intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-//    				startActivity(intent);
-//    			}
-//                // \n is for new line
-//                //Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();    
-//            }else{
-//                // can't get location
-//                // GPS or Network is not enabled
-//                // Ask user to enable GPS/network in settings
-//                gps.showSettingsAlert();
-//            }
-			
+			// gps = new GPSTracker(NoteEdit.this);
+			// // check if GPS enabled
+			// if(gps.canGetLocation()){
+			//
+			// double latitude = gps.getLatitude();
+			// double longitude = gps.getLongitude();
+			// String uri = "geo:"+latitude+","+longitude+"";
+			// Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+			// Uri.parse(uri));
+			// if (isAppInstalled("com.google.android.apps.maps")) {
+			// intent.setClassName("com.google.android.apps.maps",
+			// "com.google.android.maps.MapsActivity");
+			// startActivity(intent);
+			// }
+			// // \n is for new line
+			// //Toast.makeText(getApplicationContext(), "Your Location is -
+			// \nLat: " + latitude + "\nLong: " + longitude,
+			// Toast.LENGTH_LONG).show();
+			// }else{
+			// // can't get location
+			// // GPS or Network is not enabled
+			// // Ask user to enable GPS/network in settings
+			// gps.showSettingsAlert();
+			// }
+
 			Intent i = new Intent(this, MapPane.class);
 			startActivity(i);
 
-		
 		}
 			break;
 		case R.id.btnSave: {
@@ -255,8 +272,8 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	}
 
 	public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-		whenE.setText(new StringBuilder()
-				.append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year));
+		whenE.setText(
+				new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year));
 	}
 
 	@Override
@@ -309,8 +326,8 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		}
 		tv.setText(sb.toString());
 	}
-	
-	public void checkLocation(){
+
+	public void checkLocation() {
 		String location_context = Context.LOCATION_SERVICE;
 		locationManager = (LocationManager) getSystemService(location_context);
 		Criteria criteria = new Criteria();
@@ -323,9 +340,9 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		String bestProvider = locationManager.getBestProvider(criteria, true);
 		String provider = LocationManager.GPS_PROVIDER;
 		Location location = locationManager.getLastKnownLocation(bestProvider);
-		//testProviders();
+		// testProviders();
 		if (location != null)
 			whereE.setText(location.getLongitude() + "," + location.getLatitude());
 	}
-	
+
 }

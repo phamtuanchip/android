@@ -16,36 +16,36 @@
         android:id="@+id/btnAddnew"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/addnew2" />
+        android:background="@drawable/addnew4" />
 
     <ImageButton
         android:id="@+id/btnDel"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/delete" />
+        android:background="@drawable/delete4" />
 
     <ImageButton
         android:id="@+id/btnSave"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/save" />
+        android:background="@drawable/save4" />
 
     <ImageButton
         android:id="@+id/btnSwitch"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/switch2" />
+        android:background="@drawable/switch4" />
 
     <ImageButton
         android:id="@+id/btnLock"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/pwd2" />
+        android:background="@drawable/pwd4" />
 
     <ImageButton
         android:id="@+id/btnHome"
         android:layout_width="@dimen/icon_w"
         android:layout_height="@dimen/icon_h"
-        android:background="@drawable/home2" />
+        android:background="@drawable/home4" />
 
 </LinearLayout>
