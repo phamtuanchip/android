@@ -20,6 +20,9 @@
         android:id="@+id/createPass"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginTop="25dp"
         android:orientation="vertical"
         android:visibility="gone" >
 
@@ -45,7 +48,6 @@
 
         <Button
             android:id="@+id/savePass"
-            style="?android:textAppearanceSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -76,10 +78,9 @@
 
         <Button
             android:id="@+id/email_sign_in_button"
-            style="?android:textAppearanceSmall"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/login4"
+            android:text="@string/action_sign_in"
             android:textStyle="bold" />
     </LinearLayout>
 
