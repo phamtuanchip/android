@@ -1,9 +1,12 @@
 package com.thanhgiong.note8;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +28,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 	ImageButton sw;
 	ImageButton lock;
 	SharedPreferences settings;
-
+	private PendingIntent pendingIntent;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,6 +57,25 @@ public class HomeActivity extends Activity implements OnClickListener {
 				list.setAdapter(new NoteAdapter(this, getData()));
 			}
 		}
+		
+		Calendar calendar = Calendar.getInstance();
+	     
+	      calendar.set(Calendar.MONTH, 6);
+	      calendar.set(Calendar.YEAR, 2013);
+	      calendar.set(Calendar.DAY_OF_MONTH, 13);
+	 
+	      calendar.set(Calendar.HOUR_OF_DAY, 20);
+	      calendar.set(Calendar.MINUTE, 48);
+	      calendar.set(Calendar.SECOND, 0);
+	      calendar.set(Calendar.AM_PM,Calendar.PM);
+	     
+	      Intent myIntent = new Intent(HomeActivity.this, MyReceiver.class);
+	      pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, 0, myIntent,0);
+	     
+	      AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+	      alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
+	    
+
 
 	}
 
