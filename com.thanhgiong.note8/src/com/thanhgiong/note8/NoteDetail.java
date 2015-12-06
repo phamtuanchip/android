@@ -65,6 +65,8 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 					Bitmap bm = BitmapFactory.decodeResource(res, id);
 					img.setImageBitmap(bm);
 				}
+				if(n_.remindTime != null && !n_.remindTime.isEmpty())
+				remind.setText(new StringBuffer(remind.getText().toString()).append(n_.remindTime));
 				if (Boolean.parseBoolean(n_.remind))
 					remind.setVisibility(View.VISIBLE);
 				else

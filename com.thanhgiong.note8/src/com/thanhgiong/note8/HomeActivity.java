@@ -19,7 +19,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
-@SuppressWarnings("deprecation")
 public class HomeActivity extends Activity implements OnClickListener {
 	public final static String EXTRA_MESSAGE = "MESSAGE";
 	private ListView list;
@@ -57,23 +56,10 @@ public class HomeActivity extends Activity implements OnClickListener {
 				list.setAdapter(new NoteAdapter(this, getData()));
 			}
 		}
-		
-		Calendar calendar = Calendar.getInstance();
-	     
-	      calendar.set(Calendar.MONTH, 6);
-	      calendar.set(Calendar.YEAR, 2013);
-	      calendar.set(Calendar.DAY_OF_MONTH, 13);
-	 
-	      calendar.set(Calendar.HOUR_OF_DAY, 20);
-	      calendar.set(Calendar.MINUTE, 48);
-	      calendar.set(Calendar.SECOND, 0);
-	      calendar.set(Calendar.AM_PM,Calendar.PM);
-	     
+		 
 	      Intent myIntent = new Intent(HomeActivity.this, MyReceiver.class);
 	      pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, 0, myIntent,0);
 	     
-	      AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-	      alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pendingIntent);
 	    
 
 
@@ -87,7 +73,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 		if (cs.moveToFirst()) {
 			do {
 				Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3),
-						cs.getString(4), cs.getString(5), cs.getBlob(6));
+						cs.getString(4), cs.getString(5), cs.getBlob(6), cs.getString(7));
 				data_.add(n);
 			} while (cs.moveToNext());
 		}
@@ -103,7 +89,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 		if (cs.isBeforeFirst()) {
 			do {
 				Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3),
-						cs.getString(4), cs.getString(5), cs.getBlob(6));
+						cs.getString(4), cs.getString(5), cs.getBlob(6), cs.getString(7));
 				data_.add(n);
 			} while (cs.moveToNext());
 		}

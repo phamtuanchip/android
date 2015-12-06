@@ -13,12 +13,14 @@ public class Note implements Parcelable {
 	public String where;
 	public String image;
 	public String remind;
+	public String remindTime;
 	public byte[] binary;
 
 	public Note() {
 
 	}
 
+	@Deprecated
 	public Note(String id, String what, String when, String where, String remind, String image) {
 		this.id = id;
 		this.what = what;
@@ -27,12 +29,15 @@ public class Note implements Parcelable {
 		this.remind = remind;
 		this.image = image;
 	}
-
+	@Deprecated
 	public Note(String id, String what, String when, String where, String remind, String image, byte[] binary) {
 		this(id, what, when, where, remind, image);
 		this.binary = binary;
 	}
-
+	public Note(String id, String what, String when, String where, String remind, String image, byte[] binary, String remindTime) {
+		this(id, what, when, where, remind, image, binary);
+		this.remindTime = remindTime;
+	}
 	public Note(Parcel p) {
 		this.id = p.readString();
 		this.what = p.readString();
@@ -40,9 +45,11 @@ public class Note implements Parcelable {
 		this.where = p.readString();
 		this.remind = p.readString();
 		this.image = p.readString();
+		this.remindTime = p.readString();
 		this.binary = new byte[p.readInt()];
 		if (binary.length > 0)
 			p.readByteArray(this.binary);
+		
 	}
 
 	@Override
@@ -60,10 +67,12 @@ public class Note implements Parcelable {
 		dest.writeString(where);
 		dest.writeString(remind);
 		dest.writeString(image);
+		dest.writeString(remindTime);
 		if (binary != null) {
 			dest.writeInt(binary.length);
 			dest.writeByteArray(binary);
 		}
+		
 	}
 
 	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {

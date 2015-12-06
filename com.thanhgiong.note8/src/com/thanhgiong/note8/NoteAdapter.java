@@ -62,6 +62,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 		holder.where = (TextView) rowView.findViewById(R.id.txtWhere);
 		holder.loc = (ImageView) rowView.findViewById(R.id.loc);
 		holder.remind = (ImageView) rowView.findViewById(R.id.re);
+		//holder.reminderTime = (TextView) rowView.findViewById(R.id.textRemindTime);
 		holder.img = (ImageView) rowView.findViewById(R.id.image);
 		if (n_.binary != null) {
 			Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
@@ -105,6 +106,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 		TextView what;
 		TextView when;
 		TextView where;
+		//TextView reminderTime;
 		RadioButton rimder;
 		ImageView img;
 		ImageView remind;

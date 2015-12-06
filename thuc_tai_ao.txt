@@ -7,4 +7,72 @@ Mot so ung dung co ban
 + phim, anh, games
 - Y te
 + Chuan doan hinh anh
-+ Co the anh
++ Co the ao
++ Xay dung he thong bao tang
++ Phat thanh vien ao
++ Cu chi
++ Lai xe ngu gat,
++ Kiem soat vao ra
+
+Bai tap
+cho 2 diem xa, ya, xb, yb
+Ve doan thang noi tu xa, ya, sang xb, yb
+
+nen duong thang thuc noi 2 diem xa ya, xb , yb co the khong ton tai
+khong lam mat tinh tong quat, gia thiet xa <= xb vi 
+
+Ta co gia thiet 
+K> 0
+Ta co ft dt di qua xa, ya, xb, yb
+la 
+y-ya/x-xa = yb-ya/xb-xa 
+=> y = yb-ya/xb-xa*x + ya- yb-ya/xb-xa
+Dat 
+deltax = xb -xa,
+deltay = yb - ya
+Pi = deltax(d1-d2)
+deltax*(2y-2y-1)
+detalx [2 (deltay/deltax(x1+1)+ y1 - detaly/deltax*xa)-2y1-1]
+
+So do khoi 
+x- xa,
+y= ya,
+deltax = xb -xa
+deltay = yb-ya
+p = 2deltay-deltax
+
+luu x,y
+p<= 0
+-> y = y+1; p = p+2deltay - 2deltax;
+-> p = p+2deltay
+x= x+1
+x> xb -> ket thuc
+-> quay lai luuxy
+
+Chuong trinh
+int blline(int xa, int ya, int xb, int yb, pointer* kq){
+int x, y, deltax, deltay,p, count, t;
+boolean f1 = false, f2 = false;
+//Truong hop song song truc toa do
+//song song truc x
+if(ya == yb){
+ if(xa > xb){
+  x = xa, xa = xb, xb = x;
+  for(count =0; x = xa, <= xb; x++) {
+  kq[count].x = xa; 
+  kq[count].y = ya;
+  
+  }
+  return count;
+ }
+}
+//song song voi truc y
+if(xa==xb) {
+}
+
+}
+
+
+Vi du 2
+
+

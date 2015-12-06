@@ -104,7 +104,7 @@
                 android:id="@+id/textRemind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="At 08:00 AM"
+                android:text="At:"
                 android:textSize="@dimen/textsize" />
         </LinearLayout>
     </LinearLayout>
