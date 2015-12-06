@@ -1,5 +1,6 @@
 package com.thanhgiong.note8;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -11,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -20,28 +20,32 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class NoteAdapter extends BaseAdapter implements Filterable {
-	static List<Note> data_;
+	 List<Note> data_;
+	 List<Note> filter_data_;
+	 private ItemFilter mFilter = new ItemFilter();
 	static Note n_;
-	private static LayoutInflater inflater = null;
+	private static LayoutInflater mInflater = null;
 	Context currentContext_;
-
+	
 	public NoteAdapter(Context currentContext, List<Note> data) {
 		super();
 		currentContext_ = currentContext;
 		data_ = data;
-		inflater = (LayoutInflater) currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		filter_data_ = data;
+		//inflater = (LayoutInflater) currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		mInflater = LayoutInflater.from(currentContext);
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return data_.size();
+		return filter_data_.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return data_.get(arg0);
+		return filter_data_.get(arg0);
 	}
 
 	@Override
@@ -54,7 +58,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 	public View getView(int position, View currentContext, ViewGroup arg2) {
 		View rowView = currentContext;
 		if (rowView == null)
-			rowView = inflater.inflate(R.layout.activity_display_block, arg2, false);
+			rowView = mInflater.inflate(R.layout.activity_display_block, arg2, false);
 		Holder holder = new Holder();
 		n_ = (Note) getItem(position);
 		holder.what = (TextView) rowView.findViewById(R.id.txtTitle);
@@ -115,6 +119,42 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 
 	@Override
 	public Filter getFilter() {
-		return null;
+		return mFilter;
+	}
+	
+	private class ItemFilter extends Filter {
+	    protected FilterResults performFiltering(CharSequence constraint) {
+
+	        String filterString = constraint.toString().toLowerCase();
+
+	        FilterResults results = new FilterResults();
+
+	        final List<Note> list = data_;
+
+	        int count = list.size();
+	        final ArrayList<Note> nlist = new ArrayList<Note>(count);
+
+	       Note n ;
+
+	        for (int i = 0; i < count; i++) {
+	            n = list.get(i);
+	            if (n.what.toLowerCase().contains(filterString)) {
+	                nlist.add(n);
+	            }
+	        }
+
+	        results.values = nlist;
+	        results.count = nlist.size();
+
+	        return results;
+	    }
+
+	    @SuppressWarnings("unchecked")
+	    @Override
+	    protected void publishResults(CharSequence constraint, FilterResults results) {
+	        filter_data_ = (ArrayList<Note>) results.values;
+	        notifyDataSetChanged();
+	    }
+
 	}
 }

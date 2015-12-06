@@ -1,5 +1,6 @@
 package com.thanhgiong.note8;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -10,34 +11,40 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-public class NoteListAdapter extends BaseAdapter {
+public class NoteListAdapter extends BaseAdapter implements Filterable {
 	static List<Note> data_;
 	static Note n_;
-	private static LayoutInflater inflater = null;
+	private static LayoutInflater mInflater = null;
 	Context currentContext_;
-
+	List<Note> filter_data_;
+	 private ItemFilter mFilter = new ItemFilter();
 	public NoteListAdapter(Context currentContext, List<Note> data) {
 		super();
 		currentContext_ = currentContext;
 		data_ = data;
-		inflater = (LayoutInflater) currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		filter_data_ = data;
+		 mInflater = LayoutInflater.from(currentContext);
+
+		 //mInflater = (LayoutInflater) currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 	}
 
 	@Override
 	public int getCount() {
 		// TODO Auto-generated method stub
-		return data_.size();
+		return filter_data_.size();
 	}
 
 	@Override
 	public Object getItem(int arg0) {
 		// TODO Auto-generated method stub
-		return data_.get(arg0);
+		return filter_data_.get(arg0);
 	}
 
 	@Override
@@ -50,7 +57,7 @@ public class NoteListAdapter extends BaseAdapter {
 	public View getView(int position, View currentContext, ViewGroup arg2) {
 		View rowView = currentContext;
 		if (rowView == null)
-			rowView = inflater.inflate(R.layout.activity_display_list, arg2, false);
+			rowView = mInflater.inflate(R.layout.activity_display_list, arg2, false);
 		Holder holder = new Holder();
 		n_ = (Note) getItem(position);
 		holder.what = (TextView) rowView.findViewById(R.id.txtWhat);
@@ -102,5 +109,45 @@ public class NoteListAdapter extends BaseAdapter {
 		ImageView img;
 		ImageView remind;
 		ImageView loc;
+	}
+	@Override
+	public Filter getFilter() {
+		return mFilter;
+	}
+	
+	private class ItemFilter extends Filter {
+	    protected FilterResults performFiltering(CharSequence constraint) {
+
+	        String filterString = constraint.toString().toLowerCase();
+
+	        FilterResults results = new FilterResults();
+
+	        final List<Note> list = data_;
+
+	        int count = list.size();
+	        final ArrayList<Note> nlist = new ArrayList<Note>(count);
+
+	       Note n ;
+
+	        for (int i = 0; i < count; i++) {
+	            n = list.get(i);
+	            if (n.what.toLowerCase().contains(filterString)) {
+	                nlist.add(n);
+	            }
+	        }
+
+	        results.values = nlist;
+	        results.count = nlist.size();
+
+	        return results;
+	    }
+
+	    @SuppressWarnings("unchecked")
+	    @Override
+	    protected void publishResults(CharSequence constraint, FilterResults results) {
+	        filter_data_ = (ArrayList<Note>) results.values;
+	        notifyDataSetChanged();
+	    }
+
 	}
 }

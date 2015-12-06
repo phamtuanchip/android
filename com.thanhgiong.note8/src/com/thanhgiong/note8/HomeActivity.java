@@ -1,11 +1,9 @@
 package com.thanhgiong.note8;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -13,19 +11,22 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
-public class HomeActivity extends Activity implements OnClickListener {
+public class HomeActivity extends Activity implements OnClickListener, SearchView.OnQueryTextListener  {
 	public final static String EXTRA_MESSAGE = "MESSAGE";
 	private ListView list;
 	public static List<Note> data_;
 	ImageButton add;
 	ImageButton sw;
 	ImageButton lock;
+	SearchView search;
 	SharedPreferences settings;
 	private PendingIntent pendingIntent;
 	@Override
@@ -35,11 +36,13 @@ public class HomeActivity extends Activity implements OnClickListener {
 		add = (ImageButton) findViewById(R.id.btnAddnew);
 		sw = (ImageButton) findViewById(R.id.btnSwitch);
 		lock = (ImageButton) findViewById(R.id.btnLock);
-
+		search = (SearchView) findViewById(R.id.searchView);
 		add.setVisibility(View.VISIBLE);
 		sw.setVisibility(View.VISIBLE);
 		lock.setVisibility(View.VISIBLE);
 
+		search.setOnQueryTextListener(this);
+		//search.setSubmitButtonEnabled(false);
 		add.setOnClickListener(this);
 		sw.setOnClickListener(this);
 		lock.setOnClickListener(this);
@@ -47,6 +50,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 		list = (ListView) findViewById(R.id.listView);
 		settings = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
 		String viewType = settings.getString(LoginActivity.PREFS_VIEW, null);
+		list.setTextFilterEnabled(true);
 		if (viewType == null) {
 			list.setAdapter(new NoteAdapter(this, getData()));
 		} else {
@@ -84,7 +88,7 @@ public class HomeActivity extends Activity implements OnClickListener {
 	private List<Note> searchData(String key) {
 		SQLiteDatabase db = openOrCreateDatabase("note8db", MODE_PRIVATE, null);
 		db.execSQL(NoteEdit.CREATE_TABLE);
-		Cursor cs = db.rawQuery("SELECT * FROM note8tb where nwhat like '?'", new String[] { key });
+		Cursor cs = db.rawQuery("SELECT * FROM note8tb where nwhat like ?", new String[] { key });
 		data_ = new ArrayList<Note>();
 		if (cs.isBeforeFirst()) {
 			do {
@@ -129,5 +133,23 @@ public class HomeActivity extends Activity implements OnClickListener {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public boolean onQueryTextChange(String key) {
+		 if (TextUtils.isEmpty(key)) {
+	            list.clearTextFilter();
+	        } else {
+	        	list.setFilterText(key);
+	        }
+
+		
+		return true;
+	}
+
+	@Override
+	public boolean onQueryTextSubmit(String arg0) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
