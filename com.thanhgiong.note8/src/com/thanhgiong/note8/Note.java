@@ -29,15 +29,19 @@ public class Note implements Parcelable {
 		this.remind = remind;
 		this.image = image;
 	}
+
 	@Deprecated
 	public Note(String id, String what, String when, String where, String remind, String image, byte[] binary) {
 		this(id, what, when, where, remind, image);
 		this.binary = binary;
 	}
-	public Note(String id, String what, String when, String where, String remind, String image, byte[] binary, String remindTime) {
+
+	public Note(String id, String what, String when, String where, String remind, String image, byte[] binary,
+			String remindTime) {
 		this(id, what, when, where, remind, image, binary);
 		this.remindTime = remindTime;
 	}
+
 	public Note(Parcel p) {
 		this.id = p.readString();
 		this.what = p.readString();
@@ -49,7 +53,7 @@ public class Note implements Parcelable {
 		this.binary = new byte[p.readInt()];
 		if (binary.length > 0)
 			p.readByteArray(this.binary);
-		
+
 	}
 
 	@Override
@@ -72,7 +76,7 @@ public class Note implements Parcelable {
 			dest.writeInt(binary.length);
 			dest.writeByteArray(binary);
 		}
-		
+
 	}
 
 	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {

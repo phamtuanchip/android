@@ -23,15 +23,17 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 	private static LayoutInflater mInflater = null;
 	Context currentContext_;
 	List<Note> filter_data_;
-	 private ItemFilter mFilter = new ItemFilter();
+	private ItemFilter mFilter = new ItemFilter();
+
 	public NoteListAdapter(Context currentContext, List<Note> data) {
 		super();
 		currentContext_ = currentContext;
 		data_ = data;
 		filter_data_ = data;
-		 mInflater = LayoutInflater.from(currentContext);
+		mInflater = LayoutInflater.from(currentContext);
 
-		 //mInflater = (LayoutInflater) currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// mInflater = (LayoutInflater)
+		// currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 	}
 
@@ -93,7 +95,7 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 				// Toast.LENGTH_LONG).show();
 				Intent i = new Intent(v.getContext(), NoteDetail.class);
 				Integer position = (Integer) v.getTag();
-				i.putExtra("note", (Note)getItem(position));
+				i.putExtra("note", (Note) getItem(position));
 				i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
 				v.getContext().startActivity(i);
 			}
@@ -110,44 +112,45 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 		ImageView remind;
 		ImageView loc;
 	}
+
 	@Override
 	public Filter getFilter() {
 		return mFilter;
 	}
-	
+
 	private class ItemFilter extends Filter {
-	    protected FilterResults performFiltering(CharSequence constraint) {
+		protected FilterResults performFiltering(CharSequence constraint) {
 
-	        String filterString = constraint.toString().toLowerCase();
+			String filterString = constraint.toString().toLowerCase();
 
-	        FilterResults results = new FilterResults();
+			FilterResults results = new FilterResults();
 
-	        final List<Note> list = data_;
+			final List<Note> list = data_;
 
-	        int count = list.size();
-	        final ArrayList<Note> nlist = new ArrayList<Note>(count);
+			int count = list.size();
+			final ArrayList<Note> nlist = new ArrayList<Note>(count);
 
-	       Note n ;
+			Note n;
 
-	        for (int i = 0; i < count; i++) {
-	            n = list.get(i);
-	            if (n.what.toLowerCase().contains(filterString)) {
-	                nlist.add(n);
-	            }
-	        }
+			for (int i = 0; i < count; i++) {
+				n = list.get(i);
+				if (n.what.toLowerCase().contains(filterString)) {
+					nlist.add(n);
+				}
+			}
 
-	        results.values = nlist;
-	        results.count = nlist.size();
+			results.values = nlist;
+			results.count = nlist.size();
 
-	        return results;
-	    }
+			return results;
+		}
 
-	    @SuppressWarnings("unchecked")
-	    @Override
-	    protected void publishResults(CharSequence constraint, FilterResults results) {
-	        filter_data_ = (ArrayList<Note>) results.values;
-	        notifyDataSetChanged();
-	    }
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			filter_data_ = (ArrayList<Note>) results.values;
+			notifyDataSetChanged();
+		}
 
 	}
 }

@@ -3,7 +3,6 @@ package com.thanhgiong.note8;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,8 +11,8 @@ import java.util.List;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -36,8 +35,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -94,7 +91,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		home = (ImageButton) findViewById(R.id.btnHome);
 
 		whenE.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-		remindTime.setText(Calendar.getInstance().get(Calendar.HOUR_OF_DAY)+":00");
+		remindTime.setText(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":00");
 		current_action = b.getInt("type");
 		if (b != null) {
 			n_ = (Note) b.get("note");
@@ -112,13 +109,13 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 				whenE.setText(n_.when);
 				whereE.setText(n_.where);
 				reminder.setChecked(Boolean.parseBoolean(n_.remind));
-				if(Boolean.parseBoolean(n_.remind)) 	{
+				if (Boolean.parseBoolean(n_.remind)) {
 					remindTime.setText(n_.remindTime);
 					remindTime.setVisibility(View.VISIBLE);
 				} else {
 					remindTime.setVisibility(View.GONE);
 				}
-				//add.setVisibility(View.VISIBLE);
+				// add.setVisibility(View.VISIBLE);
 			}
 		}
 
@@ -126,8 +123,8 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		when.setOnClickListener(this);
 		where.setOnClickListener(this);
 		reminder.setOnClickListener(this);
-		remindTime.setOnClickListener(this); 
-		add.setOnClickListener(this); 
+		remindTime.setOnClickListener(this);
+		add.setOnClickListener(this);
 		save.setVisibility(View.VISIBLE);
 		cancel.setVisibility(View.VISIBLE);
 		lock.setVisibility(View.VISIBLE);
@@ -144,10 +141,11 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		switch (v.getId()) {
 		case R.id.date: {
 			Calendar cal = Calendar.getInstance();
-			DatePickerDialog dialog = new DatePickerDialog(v.getContext(), this, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+			DatePickerDialog dialog = new DatePickerDialog(v.getContext(), this, cal.get(Calendar.YEAR),
+					cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
 			dialog.show();
 		}
-		break;
+			break;
 		case R.id.img: {
 			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			File f = null;
@@ -162,7 +160,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			}
 			startActivityForResult(takePictureIntent, 1);
 		}
-		break;
+			break;
 		case R.id.loc: {
 			// gps = new GPSTracker(NoteEdit.this);
 			// // check if GPS enabled
@@ -193,31 +191,33 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			startActivity(i);
 
 		}
-		break;
+			break;
 		case R.id.remind: {
-			if(reminder.isChecked()){
+			if (reminder.isChecked()) {
 				Calendar cal = Calendar.getInstance();
 				String mins = String.valueOf(cal.getMinimum(Calendar.HOUR_OF_DAY));
-				if(cal.getMinimum(Calendar.MINUTE) < 10) mins="0"+mins;
-				remindTime.setText(new StringBuilder().append(cal.get(Calendar.HOUR)).append(":").append(mins));				
+				if (cal.getMinimum(Calendar.MINUTE) < 10)
+					mins = "0" + mins;
+				remindTime.setText(new StringBuilder().append(cal.get(Calendar.HOUR)).append(":").append(mins));
 				remindTime.setVisibility(View.VISIBLE);
 			} else {
 				remindTime.setVisibility(View.GONE);
 			}
 		}
-		break;
+			break;
 		case R.id.textRemindTime: {
 			Calendar cal = Calendar.getInstance();
-			TimePickerDialog dialog = new TimePickerDialog(v.getContext(), this, cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE), false);
+			TimePickerDialog dialog = new TimePickerDialog(v.getContext(), this, cal.get(Calendar.HOUR_OF_DAY),
+					cal.get(Calendar.MINUTE), false);
 			dialog.show();
 		}
-		break;
+			break;
 		case R.id.btnAddnew: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
 			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
 			v.getContext().startActivity(i);
 		}
-		break;
+			break;
 		case R.id.btnSave: {
 			byte[] binary = null;
 			if (mImageBitmap != null) {
@@ -238,21 +238,21 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			i.putExtra("note", n);
 			startActivity(i);
 		}
-		break;
+			break;
 		case R.id.btnCancel: {
 			this.finish();
 		}
-		break;
+			break;
 		case R.id.btnHome: {
 			Intent i = new Intent(v.getContext(), HomeActivity.class);
 			v.getContext().startActivity(i);
 		}
-		break;
+			break;
 		case R.id.btnLock: {
 			Intent i = new Intent(v.getContext(), LoginActivity.class);
 			v.getContext().startActivity(i);
 		}
-		break;
+			break;
 		default:
 			break;
 		}
@@ -329,7 +329,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		File image = File.createTempFile(imageFileName, /* prefix */
 				".jpg", /* suffix */
 				storageDir /* directory */
-				);
+		);
 		this.image = "file:" + image.getAbsolutePath();
 		return image;
 	}
@@ -386,9 +386,9 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	@Override
 	public void onTimeSet(TimePicker arg0, int hours, int min) {
 		String mins = String.valueOf(min);
-		if(min < 10) mins="0"+mins;
-		remindTime.setText(
-				new StringBuilder().append(hours).append(":").append(mins));
+		if (min < 10)
+			mins = "0" + mins;
+		remindTime.setText(new StringBuilder().append(hours).append(":").append(mins));
 	}
 
 }

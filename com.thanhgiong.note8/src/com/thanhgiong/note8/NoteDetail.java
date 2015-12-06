@@ -15,7 +15,6 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +41,7 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_detail);
 		Bundle b = this.getIntent().getExtras();
-		l1 = (LinearLayout)findViewById(R.id.l2);
+		l1 = (LinearLayout) findViewById(R.id.l2);
 		img = (ImageView) findViewById(R.id.image);
 		what = (TextView) findViewById(R.id.txtWhat);
 		when = (TextView) findViewById(R.id.textwhen);
@@ -65,8 +64,8 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 					Bitmap bm = BitmapFactory.decodeResource(res, id);
 					img.setImageBitmap(bm);
 				}
-				if(n_.remindTime != null && !n_.remindTime.isEmpty())
-				remind.setText(new StringBuffer(remind.getText().toString()).append(n_.remindTime));
+				if (n_.remindTime != null && !n_.remindTime.isEmpty())
+					remind.setText(new StringBuffer(remind.getText().toString()).append(n_.remindTime));
 				if (Boolean.parseBoolean(n_.remind))
 					remind.setVisibility(View.VISIBLE);
 				else
@@ -141,10 +140,10 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-//		Intent i = new Intent(v.getContext(), NoteEdit.class);
-//		i.putExtra("note", n_);
-//		i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
-//		v.getContext().startActivity(i);
+		// Intent i = new Intent(v.getContext(), NoteEdit.class);
+		// i.putExtra("note", n_);
+		// i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
+		// v.getContext().startActivity(i);
 		return false;
 	}
 

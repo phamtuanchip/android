@@ -20,19 +20,20 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class NoteAdapter extends BaseAdapter implements Filterable {
-	 List<Note> data_;
-	 List<Note> filter_data_;
-	 private ItemFilter mFilter = new ItemFilter();
+	List<Note> data_;
+	List<Note> filter_data_;
+	private ItemFilter mFilter = new ItemFilter();
 	static Note n_;
 	private static LayoutInflater mInflater = null;
 	Context currentContext_;
-	
+
 	public NoteAdapter(Context currentContext, List<Note> data) {
 		super();
 		currentContext_ = currentContext;
 		data_ = data;
 		filter_data_ = data;
-		//inflater = (LayoutInflater) currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		// inflater = (LayoutInflater)
+		// currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mInflater = LayoutInflater.from(currentContext);
 	}
 
@@ -66,7 +67,8 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 		holder.where = (TextView) rowView.findViewById(R.id.txtWhere);
 		holder.loc = (ImageView) rowView.findViewById(R.id.loc);
 		holder.remind = (ImageView) rowView.findViewById(R.id.re);
-		//holder.reminderTime = (TextView) rowView.findViewById(R.id.textRemindTime);
+		// holder.reminderTime = (TextView)
+		// rowView.findViewById(R.id.textRemindTime);
 		holder.img = (ImageView) rowView.findViewById(R.id.image);
 		if (n_.binary != null) {
 			Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
@@ -89,18 +91,17 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 			holder.loc.setVisibility(View.VISIBLE);
 		else
 			holder.loc.setVisibility(View.GONE);
-		
+
 		rowView.setTag(position);
 		rowView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), NoteDetail.class);
 				Integer position = (Integer) v.getTag();
-				i.putExtra("note", (Note)getItem(position));
+				i.putExtra("note", (Note) getItem(position));
 				i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
 				v.getContext().startActivity(i);
 			}
-			 
 
 		});
 		return rowView;
@@ -110,7 +111,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 		TextView what;
 		TextView when;
 		TextView where;
-		//TextView reminderTime;
+		// TextView reminderTime;
 		RadioButton rimder;
 		ImageView img;
 		ImageView remind;
@@ -121,40 +122,40 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 	public Filter getFilter() {
 		return mFilter;
 	}
-	
+
 	private class ItemFilter extends Filter {
-	    protected FilterResults performFiltering(CharSequence constraint) {
+		protected FilterResults performFiltering(CharSequence constraint) {
 
-	        String filterString = constraint.toString().toLowerCase();
+			String filterString = constraint.toString().toLowerCase();
 
-	        FilterResults results = new FilterResults();
+			FilterResults results = new FilterResults();
 
-	        final List<Note> list = data_;
+			final List<Note> list = data_;
 
-	        int count = list.size();
-	        final ArrayList<Note> nlist = new ArrayList<Note>(count);
+			int count = list.size();
+			final ArrayList<Note> nlist = new ArrayList<Note>(count);
 
-	       Note n ;
+			Note n;
 
-	        for (int i = 0; i < count; i++) {
-	            n = list.get(i);
-	            if (n.what.toLowerCase().contains(filterString)) {
-	                nlist.add(n);
-	            }
-	        }
+			for (int i = 0; i < count; i++) {
+				n = list.get(i);
+				if (n.what.toLowerCase().contains(filterString)) {
+					nlist.add(n);
+				}
+			}
 
-	        results.values = nlist;
-	        results.count = nlist.size();
+			results.values = nlist;
+			results.count = nlist.size();
 
-	        return results;
-	    }
+			return results;
+		}
 
-	    @SuppressWarnings("unchecked")
-	    @Override
-	    protected void publishResults(CharSequence constraint, FilterResults results) {
-	        filter_data_ = (ArrayList<Note>) results.values;
-	        notifyDataSetChanged();
-	    }
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			filter_data_ = (ArrayList<Note>) results.values;
+			notifyDataSetChanged();
+		}
 
 	}
 }

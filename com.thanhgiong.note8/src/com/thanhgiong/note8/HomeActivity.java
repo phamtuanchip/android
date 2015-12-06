@@ -19,7 +19,7 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-public class HomeActivity extends Activity implements OnClickListener, SearchView.OnQueryTextListener  {
+public class HomeActivity extends Activity implements OnClickListener, SearchView.OnQueryTextListener {
 	public final static String EXTRA_MESSAGE = "MESSAGE";
 	private ListView list;
 	public static List<Note> data_;
@@ -29,6 +29,7 @@ public class HomeActivity extends Activity implements OnClickListener, SearchVie
 	SearchView search;
 	SharedPreferences settings;
 	private PendingIntent pendingIntent;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,7 +43,7 @@ public class HomeActivity extends Activity implements OnClickListener, SearchVie
 		lock.setVisibility(View.VISIBLE);
 
 		search.setOnQueryTextListener(this);
-		//search.setSubmitButtonEnabled(false);
+		// search.setSubmitButtonEnabled(false);
 		add.setOnClickListener(this);
 		sw.setOnClickListener(this);
 		lock.setOnClickListener(this);
@@ -60,12 +61,9 @@ public class HomeActivity extends Activity implements OnClickListener, SearchVie
 				list.setAdapter(new NoteAdapter(this, getData()));
 			}
 		}
-		 
-	      Intent myIntent = new Intent(HomeActivity.this, MyReceiver.class);
-	      pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, 0, myIntent,0);
-	     
-	    
 
+		Intent myIntent = new Intent(HomeActivity.this, MyReceiver.class);
+		pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, 0, myIntent, 0);
 
 	}
 
@@ -109,7 +107,7 @@ public class HomeActivity extends Activity implements OnClickListener, SearchVie
 			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
 			v.getContext().startActivity(i);
 		}
-		break;
+			break;
 		case R.id.btnSwitch: {
 			Toast.makeText(this, "Change view", Toast.LENGTH_SHORT).show();
 			list = (ListView) findViewById(R.id.listView);
@@ -124,12 +122,12 @@ public class HomeActivity extends Activity implements OnClickListener, SearchVie
 			editor.commit();
 
 		}
-		break;
+			break;
 		case R.id.btnLock: {
 			Intent i = new Intent(this, LoginActivity.class);
 			v.getContext().startActivity(i);
 		}
-		break;
+			break;
 		default:
 			break;
 		}
@@ -137,13 +135,12 @@ public class HomeActivity extends Activity implements OnClickListener, SearchVie
 
 	@Override
 	public boolean onQueryTextChange(String key) {
-		 if (TextUtils.isEmpty(key)) {
-	            list.clearTextFilter();
-	        } else {
-	        	list.setFilterText(key);
-	        }
+		if (TextUtils.isEmpty(key)) {
+			list.clearTextFilter();
+		} else {
+			list.setFilterText(key);
+		}
 
-		
 		return true;
 	}
 
