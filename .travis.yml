@@ -1,4 +1,5 @@
 language: java
+sudo: true
 install:
 - ~/apache-maven-3.2.3/bin/mvn clean install
 before_install:
