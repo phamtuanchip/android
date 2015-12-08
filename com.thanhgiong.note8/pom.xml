@@ -64,7 +64,7 @@
                 <configuration>
                     <sdk>
                         <platform>${android.sdk.platform.version}</platform>
-						<path>D:/android/sdk</path> 
+					<!--	<path>D:/android/sdk</path> -->
                     </sdk>
                 </configuration>
             </plugin>
