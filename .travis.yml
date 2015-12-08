@@ -1,5 +1,7 @@
 language: java
-mvn version: 3.2.3
 before_install:
+  - wget http://archive.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.zip
+  - unzip -qq apache-maven-3.2.3-bin.zip
+  - export PATH=$MAVEN_HOME/bin:$PATH
   - cd com.thanhgiong.note8/
   
