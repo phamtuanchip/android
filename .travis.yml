@@ -9,4 +9,5 @@ before_install:
   - export PATH=$M2_HOME/bin:$PATH
   - export PATH=$MAVEN_HOME/bin:$PATH
   - cd com.thanhgiong.note8/
-  
+ install:
+ mvn clean install
