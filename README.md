@@ -1,3 +1,9 @@
+# Build with maven
+maven 3.2.3
+repository 
+
+
+
 #Bai tap nhom 8
 - Nghien cuu va viet 1 ung dung de lam viec voi du lieu tran android 
 - Nhom chon viet ung dung quan ly ghi chu (note)

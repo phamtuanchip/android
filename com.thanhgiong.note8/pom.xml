@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.thanhgiong</groupId>
     <artifactId>note8</artifactId>
@@ -10,11 +11,20 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <platform.version>4.1.1.4</platform.version>
+        <platform.version>4.0.1.2</platform.version>
         <android.plugin.version>3.8.0</android.plugin.version>
-        <android.sdk.platform.version>17</android.sdk.platform.version>
+        <android.sdk.platform.version>15</android.sdk.platform.version>
     </properties>
 
+
+	<repositories>
+	 
+		<repository>
+			<id>exo-repository</id>
+			<url>http://repository.exoplatform.org/public/</url>
+		</repository> 
+		
+	</repositories>
     <dependencies>
         <dependency>
             <groupId>com.google.android</groupId>
@@ -22,6 +32,18 @@
             <version>${platform.version}</version>
             <scope>provided</scope>
         </dependency>
+		 <dependency>
+		  <groupId>com.google.android.gms</groupId>
+		  <artifactId>google-play-services</artifactId>
+		  <version>18.0.0</version>
+		  <type>apklib</type>
+		</dependency>
+
+		<dependency>
+		  <groupId>com.google.android.gms</groupId>
+		  <artifactId>google-play-services</artifactId>
+		  <version>18.0.0</version>
+		</dependency>
     </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>
@@ -42,6 +64,7 @@
                 <configuration>
                     <sdk>
                         <platform>${android.sdk.platform.version}</platform>
+						<path>D:/android/sdk</path> 
                     </sdk>
                 </configuration>
             </plugin>
