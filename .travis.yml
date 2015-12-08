@@ -1,6 +1,7 @@
 language: java
 install:
-- /../apache-maven-3.2.3/bin/mvn clean install
+- sudo chmod +x ../apache-maven-3.2.3/bin/mvn
+- ../apache-maven-3.2.3/bin/mvn clean install
 before_install:
   # download the latest android sdk and unzip
   - cd com.thanhgiong.note8/
