@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!--
+PUMA
+-->
+
+<!--
+ | This is the configuration file for Maven. It can be specified at two levels:
+ |
+ |  1. User Level. This settings.xml file provides configuration for a single user, 
+ |                 and is normally provided in ${user.home}/.m2/settings.xml.
+ |
+ |                 NOTE: This location can be overridden with the CLI option:
+ |
+ |                 -s /path/to/user/settings.xml
+ |
+ |  2. Global Level. This settings.xml file provides configuration for all Maven
+ |                 users on a machine (assuming they're all using the same Maven
+ |                 installation). It's normally provided in 
+ |                 ${maven.home}/conf/settings.xml.
+ |
+ |                 NOTE: This location can be overridden with the CLI option:
+ |
+ |                 -gs /path/to/global/settings.xml
+ |
+ | The sections in this sample file are intended to give you a running start at
+ | getting the most out of your Maven installation. Where appropriate, the default
+ | values (values used when the setting is not specified) are provided.
+ |
+ |-->
+ 
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    
+	<localRepository>D:/repository</localRepository>
+    
+	<profiles>
+        <profile>
+            <id>jboss-ga</id>
+            <repositories>
+                <repository>
+                    <id>jboss-ga-repository</id>
+                    <name>JBoss GA Tech Preview Maven Repository</name>
+                    <url>http://maven.repository.redhat.com/techpreview/all/</url>
+                    <layout>default</layout>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                </repository>
+				<repository>
+                    <id>jaspersoft</id>
+                    <name>jaspersoft-releases</name>
+                    <url>http://jaspersoft.artifactoryonline.com/jaspersoft/jr-ce-releases</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>jboss-ga-plugin-repository</id>
+                    <name>JBoss 6 Maven Plugin Repository</name>
+                    <url>http://maven.repository.redhat.com/techpreview/all</url>
+                    <layout>default</layout>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+		</profile>
+    </profiles>
+    
+	<proxies>
+    <proxy>
+      <id>httpproxy</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <host>10.225.3.1</host>
+      <port>3128</port>
+      
+    </proxy>
+	 <proxy>
+      <id>httpsproxy</id>
+      <active>true</active>
+      <protocol>https</protocol>
+      <host>10.225.3.1</host>
+      <port>3128</port>
+      
+    </proxy>
+  </proxies>
+</settings>
+

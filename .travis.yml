@@ -1,6 +1,6 @@
 language: java
-maven: 
-  version: 3.2.3
+install:
+- ../apache-maven-3.2.3/bin/mvn.bat clean install
 before_install:
   # download the latest android sdk and unzip
   - cd com.thanhgiong.note8/
