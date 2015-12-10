@@ -8,6 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -17,16 +20,13 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -53,7 +53,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	ImageView where;
 	// GPSTracker class
 	GPSTracker gps;
-
+	LatLng current;
 	ImageView img;
 	ImageView img_frame;
 	CheckBox reminder;
@@ -83,7 +83,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		remindTime = (TextView) findViewById(R.id.textRemindTime);
 		whatE = (EditText) findViewById(R.id.txtTitleE);
 		whenE = (EditText) findViewById(R.id.textwhenE);
-		textTimeE = (EditText) findViewById(R.id.textRemindTime);
+		textTimeE = (TextView) findViewById(R.id.textRemindTime);
 		whereE = (EditText) findViewById(R.id.textWhereE);
 		when = (ImageView) findViewById(R.id.date);
 		where = (ImageView) findViewById(R.id.loc);
@@ -120,6 +120,40 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 					remindTime.setVisibility(View.GONE);
 				}
 				// add.setVisibility(View.VISIBLE);
+			}else {
+				gps = new GPSTracker(this);
+				if (gps.canGetLocation()) {
+					double latitude = gps.getLatitude();
+					double longitude = gps.getLongitude();
+					CityAsyncTask cs = new CityAsyncTask(this, latitude, longitude);
+					cs.execute();
+				}
+				
+//				runOnUiThread(new Runnable() {
+//					@Override
+//					public void run() {
+//
+//						gps = new GPSTracker(NoteEdit.this);
+//						// check if GPS enabled
+//						if (gps.canGetLocation()) {
+//							double latitude = gps.getLatitude();
+//							double longitude = gps.getLongitude();
+//							Geocoder geocoder = new Geocoder(NoteEdit.this, Locale.getDefault());
+//							try {
+//								List<Address> addresses = geocoder.getFromLocation(latitude,
+//										longitude, 1);
+//								whereE.setText(addresses.get(0).getAddressLine(0)+"," + addresses.get(0).getAddressLine(2) +"," +addresses.get(0).getAddressLine(3));
+//
+//							} catch (IOException e) {
+//								e.printStackTrace();
+//							}
+//						}  
+//
+//					}
+//
+//
+//				});
+
 			}
 		}
 
@@ -166,33 +200,13 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		}
 		break;
 		case R.id.loc: {
-			// gps = new GPSTracker(NoteEdit.this);
-			// // check if GPS enabled
-			// if(gps.canGetLocation()){
-			//
-			// double latitude = gps.getLatitude();
-			// double longitude = gps.getLongitude();
-			// String uri = "geo:"+latitude+","+longitude+"";
-			// Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
-			// Uri.parse(uri));
-			// if (isAppInstalled("com.google.android.apps.maps")) {
-			// intent.setClassName("com.google.android.apps.maps",
-			// "com.google.android.maps.MapsActivity");
-			// startActivity(intent);
-			// }
-			// // \n is for new line
-			// //Toast.makeText(getApplicationContext(), "Your Location is -
-			// \nLat: " + latitude + "\nLong: " + longitude,
-			// Toast.LENGTH_LONG).show();
-			// }else{
-			// // can't get location
-			// // GPS or Network is not enabled
-			// // Ask user to enable GPS/network in settings
-			// gps.showSettingsAlert();
-			// }
-
-			Intent i = new Intent(this, MapPane.class);
-			startActivity(i);
+			gps = new GPSTracker(this);
+			if (gps.canGetLocation()) {
+				double latitude = gps.getLatitude();
+				double longitude = gps.getLongitude();
+				CityAsyncTask cs = new CityAsyncTask(this, latitude, longitude);
+				cs.execute();
+			}
 
 		}
 		break;
@@ -308,25 +322,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
 	}
 
-	private boolean isAppInstalled(String uri) {
-		PackageManager pm = getApplicationContext().getPackageManager();
-		boolean app_installed = false;
-		try {
-			pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
-			app_installed = true;
-		} catch (PackageManager.NameNotFoundException e) {
-			app_installed = false;
-		}
-		return app_installed;
-	}
-
-	public void showMap(Uri geoLocation) {
-		Intent intent = new Intent(Intent.ACTION_VIEW);
-		intent.setData(geoLocation);
-		if (intent.resolveActivity(getPackageManager()) != null) {
-			startActivity(intent);
-		}
-	}
 
 	public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 		whenE.setText(
@@ -353,54 +348,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		return image;
 	}
 
-	public void testProviders() {
-		EditText tv = (EditText) findViewById(R.id.textwhenE);
-		StringBuilder sb = new StringBuilder("Enabled Providers:");
-		List<String> providers = locationManager.getProviders(true);
-		for (String provider : providers) {
-			locationManager.requestLocationUpdates(provider, 1000, 0, new LocationListener() {
-				public void onLocationChanged(Location location) {
-				}
-
-				public void onProviderDisabled(String provider) {
-				}
-
-				public void onProviderEnabled(String provider) {
-				}
-
-				public void onStatusChanged(String provider, int status, Bundle extras) {
-				}
-			});
-			sb.append("\n").append(provider).append(": ");
-			Location location = locationManager.getLastKnownLocation(provider);
-			if (location != null) {
-				double lat = location.getLatitude();
-				double lng = location.getLongitude();
-				sb.append(lat).append(", ").append(lng);
-			} else {
-				sb.append("No Location");
-			}
-		}
-		tv.setText(sb.toString());
-	}
-
-	public void checkLocation() {
-		String location_context = Context.LOCATION_SERVICE;
-		locationManager = (LocationManager) getSystemService(location_context);
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-		criteria.setPowerRequirement(Criteria.POWER_LOW);
-		criteria.setAltitudeRequired(false);
-		criteria.setBearingRequired(false);
-		criteria.setSpeedRequired(false);
-		criteria.setCostAllowed(true);
-		String bestProvider = locationManager.getBestProvider(criteria, true);
-		String provider = LocationManager.GPS_PROVIDER;
-		Location location = locationManager.getLastKnownLocation(bestProvider);
-		// testProviders();
-		if (location != null)
-			whereE.setText(location.getLongitude() + "," + location.getLatitude());
-	}
 	public void setAlarm(Date date, PendingIntent intent) {
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), intent);

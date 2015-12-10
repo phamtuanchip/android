@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/l1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/not_bg_n"
     android:orientation="vertical" >
 
@@ -44,8 +44,8 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="@dimen/photo_w"
-            android:layout_height="@dimen/photo_h"
+            android:layout_width="@dimen/photo_w_sm"
+            android:layout_height="@dimen/photo_h_sm"
             android:layout_gravity="center_vertical"
             android:src="@drawable/bg_default" />
 
