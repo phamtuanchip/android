@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
@@ -48,7 +49,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	LatLng current;
 	int current_action;
 	ImageButton del;
-	// GPSTracker class
 	GPSTracker gps;
 	ImageButton home;
 	String image;
@@ -61,7 +61,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	CheckBox reminder;
 	TextView remindTime;
 	ImageButton save;
-	TextView textTimeE;
 	EditText whatE;
 	ImageView when;
 	EditText whenE;
@@ -151,6 +150,11 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		}
 			break;
 		case R.id.btnSave: {
+			if(TextUtils.isEmpty(whatE.getText().toString())) {
+				whatE.setError(getString(R.string.error_field_required));
+				whatE.requestFocus();
+				return;
+			}
 			byte[] binary = null;
 			if (mImageBitmap != null) {
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -158,7 +162,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 				binary = stream.toByteArray();
 			}
 			Note n = new Note(null, whatE.getText().toString(), whenE.getText().toString(), whereE.getText().toString(),
-					String.valueOf(reminder.isChecked()), image, binary, textTimeE.getText().toString());
+					String.valueOf(reminder.isChecked()), image, binary, remindTime.getText().toString());
 			if (current_action == ACTION_TYPE_EDIT) {
 				n.id = n_.id;
 				update(n);
@@ -202,7 +206,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		remindTime = (TextView) findViewById(R.id.textRemindTime);
 		whatE = (EditText) findViewById(R.id.txtTitleE);
 		whenE = (EditText) findViewById(R.id.textwhenE);
-		textTimeE = (TextView) findViewById(R.id.textRemindTime);
 		whereE = (EditText) findViewById(R.id.textWhereE);
 		when = (ImageView) findViewById(R.id.date);
 		where = (ImageView) findViewById(R.id.loc);
@@ -212,7 +215,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		cancel = (ImageButton) findViewById(R.id.btnCancel);
 		lock = (ImageButton) findViewById(R.id.btnLock);
 		home = (ImageButton) findViewById(R.id.btnHome);
-
 		whenE.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		remindTime.setText(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":00");
 		current_action = b.getInt("type");
@@ -238,7 +240,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 				} else {
 					remindTime.setVisibility(View.GONE);
 				}
-				// add.setVisibility(View.VISIBLE);
 			} else {
 				gps = new GPSTracker(this);
 				if (gps.canGetLocation()) {
@@ -247,35 +248,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 					CityAsyncTask cs = new CityAsyncTask(this, latitude, longitude);
 					cs.execute();
 				}
-
-				// runOnUiThread(new Runnable() {
-				// @Override
-				// public void run() {
-				//
-				// gps = new GPSTracker(NoteEdit.this);
-				// // check if GPS enabled
-				// if (gps.canGetLocation()) {
-				// double latitude = gps.getLatitude();
-				// double longitude = gps.getLongitude();
-				// Geocoder geocoder = new Geocoder(NoteEdit.this,
-				// Locale.getDefault());
-				// try {
-				// List<Address> addresses = geocoder.getFromLocation(latitude,
-				// longitude, 1);
-				// whereE.setText(addresses.get(0).getAddressLine(0)+"," +
-				// addresses.get(0).getAddressLine(2) +","
-				// +addresses.get(0).getAddressLine(3));
-				//
-				// } catch (IOException e) {
-				// e.printStackTrace();
-				// }
-				// }
-				//
-				// }
-				//
-				//
-				// });
-
 			}
 		}
 
@@ -285,15 +257,14 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		reminder.setOnClickListener(this);
 		remindTime.setOnClickListener(this);
 		add.setOnClickListener(this);
-		save.setVisibility(View.VISIBLE);
-		cancel.setVisibility(View.VISIBLE);
-		lock.setVisibility(View.VISIBLE);
-		home.setVisibility(View.VISIBLE);
-
 		save.setOnClickListener(this);
 		cancel.setOnClickListener(this);
 		home.setOnClickListener(this);
 		lock.setOnClickListener(this);
+		save.setVisibility(View.VISIBLE);
+		cancel.setVisibility(View.VISIBLE);
+		lock.setVisibility(View.VISIBLE);
+		home.setVisibility(View.VISIBLE);
 
 	}
 
@@ -330,11 +301,9 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			intent.putExtra("message", n.what);
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, Integer.parseInt(n.id), intent,
 					PendingIntent.FLAG_CANCEL_CURRENT);
-
 			try {
 				setAlarm(new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(n.when + " " + n.remindTime), pendingIntent);
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

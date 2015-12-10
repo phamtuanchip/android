@@ -141,10 +141,6 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		// Intent i = new Intent(v.getContext(), NoteEdit.class);
-		// i.putExtra("note", n_);
-		// i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
-		// v.getContext().startActivity(i);
 		return false;
 	}
 

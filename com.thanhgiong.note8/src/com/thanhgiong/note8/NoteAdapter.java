@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,28 +34,20 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 	private class ItemFilter extends Filter {
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
-
 			String filterString = constraint.toString().toLowerCase();
-
 			FilterResults results = new FilterResults();
-
 			final List<Note> list = data_;
-
 			int count = list.size();
 			final ArrayList<Note> nlist = new ArrayList<Note>(count);
-
 			Note n;
-
 			for (int i = 0; i < count; i++) {
 				n = list.get(i);
-				if (n.what.toLowerCase().contains(filterString)) {
+				if (n.what.toLowerCase().contains(filterString) || (!TextUtils.isEmpty(n.where) && n.where.toLowerCase().contains(filterString))) {
 					nlist.add(n);
 				}
 			}
-
 			results.values = nlist;
 			results.count = nlist.size();
-
 			return results;
 		}
 
@@ -80,14 +73,11 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 		currentContext_ = currentContext;
 		data_ = data;
 		filter_data_ = data;
-		// inflater = (LayoutInflater)
-		// currentContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mInflater = LayoutInflater.from(currentContext);
 	}
 
 	@Override
 	public int getCount() {
-		// TODO Auto-generated method stub
 		return filter_data_.size();
 	}
 
@@ -98,13 +88,11 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 
 	@Override
 	public Object getItem(int arg0) {
-		// TODO Auto-generated method stub
 		return filter_data_.get(arg0);
 	}
 
 	@Override
 	public long getItemId(int arg0) {
-		// TODO Auto-generated method stub
 		return arg0;
 	}
 
@@ -120,8 +108,6 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 		holder.where = (TextView) rowView.findViewById(R.id.txtWhere);
 		holder.loc = (ImageView) rowView.findViewById(R.id.loc);
 		holder.remind = (ImageView) rowView.findViewById(R.id.re);
-		// holder.reminderTime = (TextView)
-		// rowView.findViewById(R.id.textRemindTime);
 		holder.img = (ImageView) rowView.findViewById(R.id.image);
 		if (n_.binary != null) {
 			Bitmap bm = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
