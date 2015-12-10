@@ -19,22 +19,64 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class NoteDetail extends Activity implements OnClickListener, OnTouchListener {
+	public static int ACTION_TYPE_ADDNEW = 3;
+	public static int ACTION_TYPE_EDIT = 2;
+	public static int ACTION_TYPE_VIEW = 1;
+	ImageButton add;
+	int current_action;
+	ImageButton del;
+	ImageButton edit;
+	ImageButton home;
+	ImageView img;
+	LinearLayout l1;
+	ImageButton lock;
 	Note n_;
+	TextView remind;
 	TextView what;
 	TextView when;
 	TextView where;
-	TextView remind;
-	ImageView img;
-	ImageButton edit;
-	ImageButton add;
-	ImageButton del;
-	ImageButton lock;
-	ImageButton home;
-	LinearLayout l1;
-	public static int ACTION_TYPE_VIEW = 1;
-	public static int ACTION_TYPE_EDIT = 2;
-	public static int ACTION_TYPE_ADDNEW = 3;
-	int current_action;
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btnEdit: {
+			Intent i = new Intent(v.getContext(), NoteEdit.class);
+			i.putExtra("note", n_);
+			i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
+			v.getContext().startActivity(i);
+		}
+			break;
+		case R.id.btnAddnew: {
+			Intent i = new Intent(v.getContext(), NoteEdit.class);
+			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
+			v.getContext().startActivity(i);
+			current_action = ACTION_TYPE_ADDNEW;
+		}
+			break;
+		case R.id.btnHome: {
+			Intent i = new Intent(v.getContext(), HomeActivity.class);
+			v.getContext().startActivity(i);
+		}
+			break;
+		case R.id.btnLock: {
+			Intent i = new Intent(v.getContext(), LoginActivity.class);
+			v.getContext().startActivity(i);
+		}
+			break;
+		case R.id.btnDel: {
+			SQLiteDatabase db = openOrCreateDatabase("note8db", MODE_PRIVATE, null);
+			db.delete("note8tb", "id= ?", new String[] { n_.id });
+			db.close();
+			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+			Intent i = new Intent(v.getContext(), HomeActivity.class);
+			v.getContext().startActivity(i);
+		}
+			break;
+		default:
+			break;
+		}
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,47 +137,6 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 		del.setOnClickListener(this);
 		l1.setOnTouchListener(this);
 		current_action = ACTION_TYPE_VIEW;
-	}
-
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.btnEdit: {
-			Intent i = new Intent(v.getContext(), NoteEdit.class);
-			i.putExtra("note", n_);
-			i.putExtra("type", NoteEdit.ACTION_TYPE_EDIT);
-			v.getContext().startActivity(i);
-		}
-			break;
-		case R.id.btnAddnew: {
-			Intent i = new Intent(v.getContext(), NoteEdit.class);
-			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
-			v.getContext().startActivity(i);
-			current_action = ACTION_TYPE_ADDNEW;
-		}
-			break;
-		case R.id.btnHome: {
-			Intent i = new Intent(v.getContext(), HomeActivity.class);
-			v.getContext().startActivity(i);
-		}
-			break;
-		case R.id.btnLock: {
-			Intent i = new Intent(v.getContext(), LoginActivity.class);
-			v.getContext().startActivity(i);
-		}
-			break;
-		case R.id.btnDel: {
-			SQLiteDatabase db = openOrCreateDatabase("note8db", MODE_PRIVATE, null);
-			db.delete("note8tb", "id= ?", new String[] { n_.id });
-			db.close();
-			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
-			Intent i = new Intent(v.getContext(), HomeActivity.class);
-			v.getContext().startActivity(i);
-		}
-			break;
-		default:
-			break;
-		}
-
 	}
 
 	@Override

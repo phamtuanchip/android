@@ -26,12 +26,45 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 
-public class MapPane extends Activity implements OnMapReadyCallback, ConnectionCallbacks, OnMapLoadedCallback, OnConnectionFailedListener, OnMapClickListener {
+public class MapPane extends Activity implements OnMapReadyCallback, ConnectionCallbacks, OnMapLoadedCallback,
+		OnConnectionFailedListener, OnMapClickListener {
 	LatLng current;
 	GPSTracker gps;
 	private GoogleMap map;
 	GoogleApiClient mGoogleApiClient;
 	Location mLastLocation;
+
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+		if (mLastLocation != null) {
+			// mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+			// mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+
+		}
+	}
+
+	@Override
+	public void onConnectionFailed(ConnectionResult arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	// @Override
+	// public void onInfoWindowClick(Marker marker) {
+	// gps.stopUsingGPS();
+	// Intent i = new Intent(this, NoteEdit.class);
+	// startActivity(i);
+	// // TODO Auto-generated method stub
+	//
+	// }
+
+	@Override
+	public void onConnectionSuspended(int cause) {
+		// TODO Auto-generated method stub
+
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,49 +83,46 @@ public class MapPane extends Activity implements OnMapReadyCallback, ConnectionC
 		}
 
 		if (mGoogleApiClient == null) {
-			mGoogleApiClient = new GoogleApiClient.Builder(this)
-					.addConnectionCallbacks(this)
-					.addOnConnectionFailedListener(this)
-					.addApi(LocationServices.API)
-					.build();
+			mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
+					.addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
 		}
 		MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
-		map =	mapFragment.getMap() ;
-		if (map!=null){
+		map = mapFragment.getMap();
+		if (map != null) {
 			mapFragment.getMapAsync(this);
 			map.setOnMapLoadedCallback(this);
 			map.setOnMapClickListener(this);
-			//map.setOnInfoWindowClickListener(this);
+			// map.setOnInfoWindowClickListener(this);
 			map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 			map.getUiSettings().setZoomGesturesEnabled(true);
 		}
 
-
 	}
 
 	@Override
-	public void onMapReady(GoogleMap map) {
-//		map.setMyLocationEnabled(true);
-//		map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 13));
+	public void onMapClick(LatLng point) {
+		Intent i = new Intent(this, NoteEdit.class);
+		Geocoder gcd = new Geocoder(this, Locale.getDefault());
+		try {
+			List<Address> addresses = gcd.getFromLocation(point.latitude, point.longitude, 1);
+			if (addresses.size() > 0)
+				i.putExtra("address", addresses.get(0).getLocality());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		gps.stopUsingGPS();
+		startActivity(i);
 
 	}
-
-	//	@Override
-	//	public void onInfoWindowClick(Marker marker) {
-	//		gps.stopUsingGPS();
-	//		Intent i = new Intent(this, NoteEdit.class);
-	//		startActivity(i);
-	//		// TODO Auto-generated method stub
-	//
-	//	}
 
 	@Override
 	public void onMapLoaded() {
 		Geocoder gcd = new Geocoder(this, Locale.getDefault());
 		try {
 			List<Address> addresses = gcd.getFromLocation(current.latitude, current.longitude, 1);
-			if (addresses.size() > 0) 	{	    
-				Marker mk =	map.addMarker(new MarkerOptions().position(current).title(addresses.get(0).getLocality()));
+			if (addresses.size() > 0) {
+				Marker mk = map.addMarker(new MarkerOptions().position(current).title(addresses.get(0).getLocality()));
 			}
 
 		} catch (IOException e) {
@@ -104,42 +134,9 @@ public class MapPane extends Activity implements OnMapReadyCallback, ConnectionC
 	}
 
 	@Override
-	public void onConnectionFailed(ConnectionResult arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void onConnected(Bundle connectionHint) {
-		mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-				mGoogleApiClient);
-		if (mLastLocation != null) {
-			//mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
-			//mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
-
-		}
-	}
-
-
-	@Override
-	public void onConnectionSuspended(int cause) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onMapClick(LatLng point) {		
-		Intent i = new Intent(this, NoteEdit.class);
-		Geocoder gcd = new Geocoder(this, Locale.getDefault());
-		try {
-			List<Address> addresses = gcd.getFromLocation(point.latitude, point.longitude, 1);
-			if (addresses.size() > 0) 		    
-				i.putExtra("address", addresses.get(0).getLocality());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		gps.stopUsingGPS();
-		startActivity(i);
+	public void onMapReady(GoogleMap map) {
+		// map.setMyLocationEnabled(true);
+		// map.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 13));
 
 	}
 }

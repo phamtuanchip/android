@@ -10,6 +10,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -58,13 +59,20 @@ public class MyAlarmService extends Service {
 
 	}
 
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
+
 	@SuppressWarnings("static-access")
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 
+		this.getApplicationContext();
 		mManager = (NotificationManager) this.getApplicationContext()
-				.getSystemService(this.getApplicationContext().NOTIFICATION_SERVICE);
+				.getSystemService(Context.NOTIFICATION_SERVICE);
 		Intent intent1 = new Intent(this.getApplicationContext(), HomeActivity.class);
 
 		Notification notification = new Notification(R.drawable.ic_launcher, "This is a test message!",
@@ -74,16 +82,11 @@ public class MyAlarmService extends Service {
 		PendingIntent pendingNotificationIntent = PendingIntent.getActivity(this.getApplicationContext(), 0, intent1,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
-		//notification.setLatestEventInfo(this.getApplicationContext(), "AlarmManagerDemo", "This is a test message!",
-			//	pendingNotificationIntent);
+		// notification.setLatestEventInfo(this.getApplicationContext(),
+		// "AlarmManagerDemo", "This is a test message!",
+		// pendingNotificationIntent);
 
 		mManager.notify(0, notification);
-	}
-
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
 	}
 
 }

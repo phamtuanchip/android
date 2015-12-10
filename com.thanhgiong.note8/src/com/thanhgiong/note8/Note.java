@@ -7,16 +7,45 @@ import android.os.Parcelable;
 
 public class Note implements Parcelable {
 
+	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
+
+		@Override
+		public Note createFromParcel(Parcel source) {
+			// TODO Auto-generated method stub
+			return new Note(source);
+		}
+
+		@Override
+		public Note[] newArray(int size) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+	public byte[] binary;
 	public String id;
-	public String what;
-	public String when;
-	public String where;
 	public String image;
 	public String remind;
 	public String remindTime;
-	public byte[] binary;
+	public String what;
+	public String when;
+
+	public String where;
 
 	public Note() {
+
+	}
+
+	public Note(Parcel p) {
+		this.id = p.readString();
+		this.what = p.readString();
+		this.when = p.readString();
+		this.where = p.readString();
+		this.remind = p.readString();
+		this.image = p.readString();
+		this.remindTime = p.readString();
+		this.binary = new byte[p.readInt()];
+		if (binary.length > 0)
+			p.readByteArray(this.binary);
 
 	}
 
@@ -42,24 +71,26 @@ public class Note implements Parcelable {
 		this.remindTime = remindTime;
 	}
 
-	public Note(Parcel p) {
-		this.id = p.readString();
-		this.what = p.readString();
-		this.when = p.readString();
-		this.where = p.readString();
-		this.remind = p.readString();
-		this.image = p.readString();
-		this.remindTime = p.readString();
-		this.binary = new byte[p.readInt()];
-		if (binary.length > 0)
-			p.readByteArray(this.binary);
-
-	}
-
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public String getFormatedDate() {
+		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sf2 = new SimpleDateFormat("EEEE dd MMMM, yyyy");
+		try {
+
+			return sf2.format(sf.parse(when));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	public Note[] newArray(int size) {
+		return new Note[size];
 	}
 
 	@Override
@@ -77,37 +108,6 @@ public class Note implements Parcelable {
 			dest.writeByteArray(binary);
 		}
 
-	}
-
-	public static final Parcelable.Creator<Note> CREATOR = new Parcelable.Creator<Note>() {
-
-		@Override
-		public Note createFromParcel(Parcel source) {
-			// TODO Auto-generated method stub
-			return new Note(source);
-		}
-
-		@Override
-		public Note[] newArray(int size) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-	};
-
-	public Note[] newArray(int size) {
-		return new Note[size];
-	}
-
-	public String getFormatedDate() {
-		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat sf2 = new SimpleDateFormat("EEEE dd MMMM, yyyy");
-		try {
-
-			return sf2.format(sf.parse(when));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";
 	}
 
 }

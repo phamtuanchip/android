@@ -7,8 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -25,8 +23,6 @@ import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -43,34 +39,157 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class NoteEdit extends Activity implements OnClickListener, OnDateSetListener, OnTimeSetListener {
-	Note n_;
-	EditText whatE;
-	EditText whenE;
-	EditText whereE;
-	String image;
-	TextView textTimeE;
-	ImageView when;
-	ImageView where;
+	public static int ACTION_TYPE_ADDNEW = 3;
+	public static int ACTION_TYPE_EDIT = 2;
+	public static int ACTION_TYPE_VIEW = 1;
+	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS note8tb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125), nbinary BLOB, ntime varchar(5) )";
+	ImageButton add;
+	ImageButton cancel;
+	LatLng current;
+	int current_action;
+	ImageButton del;
 	// GPSTracker class
 	GPSTracker gps;
-	LatLng current;
+	ImageButton home;
+	String image;
 	ImageView img;
 	ImageView img_frame;
+	LocationManager locationManager;
+	ImageButton lock;
+	Bitmap mImageBitmap;
+	Note n_;
 	CheckBox reminder;
 	TextView remindTime;
-	ImageButton add;
-	ImageButton del;
 	ImageButton save;
-	ImageButton cancel;
-	ImageButton lock;
-	ImageButton home;
-	LocationManager locationManager;
-	Bitmap mImageBitmap;
-	public static int ACTION_TYPE_VIEW = 1;
-	public static int ACTION_TYPE_EDIT = 2;
-	public static int ACTION_TYPE_ADDNEW = 3;
-	int current_action;
-	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS note8tb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125), nbinary BLOB, ntime varchar(5) )";
+	TextView textTimeE;
+	EditText whatE;
+	ImageView when;
+	EditText whenE;
+	ImageView where;
+	EditText whereE;
+
+	private File createImageFile() throws IOException {
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		String imageFileName = "JPEG_" + timeStamp + "_";
+		File storageDir = Environment.getDataDirectory();
+		File image = File.createTempFile(imageFileName, /* prefix */
+				".jpg", /* suffix */
+				storageDir /* directory */
+		);
+		this.image = "file:" + image.getAbsolutePath();
+		return image;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Bundle extras = data.getExtras();
+		mImageBitmap = (Bitmap) extras.get("data");
+		img_frame.setImageBitmap(mImageBitmap);
+		Toast.makeText(this, "Snaped", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.date: {
+			Calendar cal = Calendar.getInstance();
+			DatePickerDialog dialog = new DatePickerDialog(v.getContext(), this, cal.get(Calendar.YEAR),
+					cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+			dialog.show();
+		}
+			break;
+		case R.id.img: {
+			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			File f = null;
+			try {
+				f = createImageFile();
+				if (f != null)
+					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			} catch (IOException e) {
+				e.printStackTrace();
+				f = null;
+				image = null;
+			}
+			startActivityForResult(takePictureIntent, 1);
+		}
+			break;
+		case R.id.loc: {
+			gps = new GPSTracker(this);
+			if (gps.canGetLocation()) {
+				double latitude = gps.getLatitude();
+				double longitude = gps.getLongitude();
+				CityAsyncTask cs = new CityAsyncTask(this, latitude, longitude);
+				cs.execute();
+			}
+
+		}
+			break;
+		case R.id.remind: {
+			if (reminder.isChecked()) {
+				Calendar cal = Calendar.getInstance();
+				String mins = String.valueOf(cal.getMinimum(Calendar.HOUR_OF_DAY));
+				if (cal.getMinimum(Calendar.MINUTE) < 10)
+					mins = "0" + mins;
+				remindTime.setText(new StringBuilder().append(cal.get(Calendar.HOUR)).append(":").append(mins));
+				remindTime.setVisibility(View.VISIBLE);
+			} else {
+				remindTime.setVisibility(View.GONE);
+			}
+		}
+			break;
+		case R.id.textRemindTime: {
+			Calendar cal = Calendar.getInstance();
+			TimePickerDialog dialog = new TimePickerDialog(v.getContext(), this, cal.get(Calendar.HOUR_OF_DAY),
+					cal.get(Calendar.MINUTE), false);
+			dialog.show();
+		}
+			break;
+		case R.id.btnAddnew: {
+			Intent i = new Intent(v.getContext(), NoteEdit.class);
+			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
+			v.getContext().startActivity(i);
+		}
+			break;
+		case R.id.btnSave: {
+			byte[] binary = null;
+			if (mImageBitmap != null) {
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				binary = stream.toByteArray();
+			}
+			Note n = new Note(null, whatE.getText().toString(), whenE.getText().toString(), whereE.getText().toString(),
+					String.valueOf(reminder.isChecked()), image, binary, textTimeE.getText().toString());
+			if (current_action == ACTION_TYPE_EDIT) {
+				n.id = n_.id;
+				update(n);
+			} else if (current_action == ACTION_TYPE_ADDNEW) {
+				n_ = save(n);
+
+			}
+			Intent i = new Intent(v.getContext(), NoteDetail.class);
+			i.putExtra("note", n);
+			startActivity(i);
+		}
+			break;
+		case R.id.btnCancel: {
+			this.finish();
+		}
+			break;
+		case R.id.btnHome: {
+			Intent i = new Intent(v.getContext(), HomeActivity.class);
+			v.getContext().startActivity(i);
+		}
+			break;
+		case R.id.btnLock: {
+			Intent i = new Intent(v.getContext(), LoginActivity.class);
+			v.getContext().startActivity(i);
+		}
+			break;
+		default:
+			break;
+		}
+
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +239,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 					remindTime.setVisibility(View.GONE);
 				}
 				// add.setVisibility(View.VISIBLE);
-			}else {
+			} else {
 				gps = new GPSTracker(this);
 				if (gps.canGetLocation()) {
 					double latitude = gps.getLatitude();
@@ -128,31 +247,34 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 					CityAsyncTask cs = new CityAsyncTask(this, latitude, longitude);
 					cs.execute();
 				}
-				
-//				runOnUiThread(new Runnable() {
-//					@Override
-//					public void run() {
-//
-//						gps = new GPSTracker(NoteEdit.this);
-//						// check if GPS enabled
-//						if (gps.canGetLocation()) {
-//							double latitude = gps.getLatitude();
-//							double longitude = gps.getLongitude();
-//							Geocoder geocoder = new Geocoder(NoteEdit.this, Locale.getDefault());
-//							try {
-//								List<Address> addresses = geocoder.getFromLocation(latitude,
-//										longitude, 1);
-//								whereE.setText(addresses.get(0).getAddressLine(0)+"," + addresses.get(0).getAddressLine(2) +"," +addresses.get(0).getAddressLine(3));
-//
-//							} catch (IOException e) {
-//								e.printStackTrace();
-//							}
-//						}  
-//
-//					}
-//
-//
-//				});
+
+				// runOnUiThread(new Runnable() {
+				// @Override
+				// public void run() {
+				//
+				// gps = new GPSTracker(NoteEdit.this);
+				// // check if GPS enabled
+				// if (gps.canGetLocation()) {
+				// double latitude = gps.getLatitude();
+				// double longitude = gps.getLongitude();
+				// Geocoder geocoder = new Geocoder(NoteEdit.this,
+				// Locale.getDefault());
+				// try {
+				// List<Address> addresses = geocoder.getFromLocation(latitude,
+				// longitude, 1);
+				// whereE.setText(addresses.get(0).getAddressLine(0)+"," +
+				// addresses.get(0).getAddressLine(2) +","
+				// +addresses.get(0).getAddressLine(3));
+				//
+				// } catch (IOException e) {
+				// e.printStackTrace();
+				// }
+				// }
+				//
+				// }
+				//
+				//
+				// });
 
 			}
 		}
@@ -175,106 +297,18 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 
 	}
 
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.date: {
-			Calendar cal = Calendar.getInstance();
-			DatePickerDialog dialog = new DatePickerDialog(v.getContext(), this, cal.get(Calendar.YEAR),
-					cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-			dialog.show();
-		}
-		break;
-		case R.id.img: {
-			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			File f = null;
-			try {
-				f = createImageFile();
-				if (f != null)
-					takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-			} catch (IOException e) {
-				e.printStackTrace();
-				f = null;
-				image = null;
-			}
-			startActivityForResult(takePictureIntent, 1);
-		}
-		break;
-		case R.id.loc: {
-			gps = new GPSTracker(this);
-			if (gps.canGetLocation()) {
-				double latitude = gps.getLatitude();
-				double longitude = gps.getLongitude();
-				CityAsyncTask cs = new CityAsyncTask(this, latitude, longitude);
-				cs.execute();
-			}
+	@Override
+	public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+		whenE.setText(
+				new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year));
+	}
 
-		}
-		break;
-		case R.id.remind: {
-			if (reminder.isChecked()) {
-				Calendar cal = Calendar.getInstance();
-				String mins = String.valueOf(cal.getMinimum(Calendar.HOUR_OF_DAY));
-				if (cal.getMinimum(Calendar.MINUTE) < 10)
-					mins = "0" + mins;
-				remindTime.setText(new StringBuilder().append(cal.get(Calendar.HOUR)).append(":").append(mins));
-				remindTime.setVisibility(View.VISIBLE);
-			} else {
-				remindTime.setVisibility(View.GONE);
-			}
-		}
-		break;
-		case R.id.textRemindTime: {
-			Calendar cal = Calendar.getInstance();
-			TimePickerDialog dialog = new TimePickerDialog(v.getContext(), this, cal.get(Calendar.HOUR_OF_DAY),
-					cal.get(Calendar.MINUTE), false);
-			dialog.show();
-		}
-		break;
-		case R.id.btnAddnew: {
-			Intent i = new Intent(v.getContext(), NoteEdit.class);
-			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
-			v.getContext().startActivity(i);
-		}
-		break;
-		case R.id.btnSave: {
-			byte[] binary = null;
-			if (mImageBitmap != null) {
-				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-				binary = stream.toByteArray();
-			}
-			Note n = new Note(null, whatE.getText().toString(), whenE.getText().toString(), whereE.getText().toString(),
-					String.valueOf(reminder.isChecked()), image, binary, textTimeE.getText().toString());
-			if (current_action == ACTION_TYPE_EDIT) {
-				n.id = n_.id;
-				update(n);
-			} else if (current_action == ACTION_TYPE_ADDNEW) {
-				n_ = save(n);
-
-			}
-			Intent i = new Intent(v.getContext(), NoteDetail.class);
-			i.putExtra("note", n);
-			startActivity(i);
-		}
-		break;
-		case R.id.btnCancel: {
-			this.finish();
-		}
-		break;
-		case R.id.btnHome: {
-			Intent i = new Intent(v.getContext(), HomeActivity.class);
-			v.getContext().startActivity(i);
-		}
-		break;
-		case R.id.btnLock: {
-			Intent i = new Intent(v.getContext(), LoginActivity.class);
-			v.getContext().startActivity(i);
-		}
-		break;
-		default:
-			break;
-		}
-
+	@Override
+	public void onTimeSet(TimePicker arg0, int hours, int min) {
+		String mins = String.valueOf(min);
+		if (min < 10)
+			mins = "0" + mins;
+		remindTime.setText(new StringBuilder().append(hours).append(":").append(mins));
 	}
 
 	private Note save(Note n) {
@@ -290,14 +324,15 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		values.put("nbinary", n.binary);
 		n.id = String.valueOf(db.insert("note8tb", null, values));
 		db.close();
-		if(Boolean.parseBoolean(n.remind)){
+		if (Boolean.parseBoolean(n.remind)) {
 			Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
-			intent.putExtra("note8Remind", n.id );
+			intent.putExtra("note8Remind", n.id);
 			intent.putExtra("message", n.what);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, Integer.parseInt(n.id), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, Integer.parseInt(n.id), intent,
+					PendingIntent.FLAG_CANCEL_CURRENT);
 
 			try {
-				setAlarm(new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(n.when+" "+n.remindTime) , pendingIntent);
+				setAlarm(new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(n.when + " " + n.remindTime), pendingIntent);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -305,6 +340,11 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		}
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 		return n;
+	}
+
+	public void setAlarm(Date date, PendingIntent intent) {
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), intent);
 	}
 
 	private void update(Note n) {
@@ -320,44 +360,6 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		db.update("note8tb", values, "id= ?", new String[] { n.id });
 		db.close();
 		Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
-	}
-
-
-	public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-		whenE.setText(
-				new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year));
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Bundle extras = data.getExtras();
-		mImageBitmap = (Bitmap) extras.get("data");
-		img_frame.setImageBitmap(mImageBitmap);
-		Toast.makeText(this, "Snaped", Toast.LENGTH_SHORT).show();
-	}
-
-	private File createImageFile() throws IOException {
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		String imageFileName = "JPEG_" + timeStamp + "_";
-		File storageDir = Environment.getDataDirectory();
-		File image = File.createTempFile(imageFileName, /* prefix */
-				".jpg", /* suffix */
-				storageDir /* directory */
-				);
-		this.image = "file:" + image.getAbsolutePath();
-		return image;
-	}
-
-	public void setAlarm(Date date, PendingIntent intent) {
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), intent);
-	}
-	@Override
-	public void onTimeSet(TimePicker arg0, int hours, int min) {
-		String mins = String.valueOf(min);
-		if (min < 10)
-			mins = "0" + mins;
-		remindTime.setText(new StringBuilder().append(hours).append(":").append(mins));
 	}
 
 }

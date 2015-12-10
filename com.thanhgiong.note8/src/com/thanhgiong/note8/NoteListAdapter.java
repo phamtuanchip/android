@@ -18,11 +18,58 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class NoteListAdapter extends BaseAdapter implements Filterable {
+	public class Holder {
+		ImageView img;
+		ImageView loc;
+		ImageView remind;
+		RadioButton rimder;
+		TextView what;
+		TextView when;
+		TextView where;
+	}
+	private class ItemFilter extends Filter {
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+
+			String filterString = constraint.toString().toLowerCase();
+
+			FilterResults results = new FilterResults();
+
+			final List<Note> list = data_;
+
+			int count = list.size();
+			final ArrayList<Note> nlist = new ArrayList<Note>(count);
+
+			Note n;
+
+			for (int i = 0; i < count; i++) {
+				n = list.get(i);
+				if (n.what.toLowerCase().contains(filterString)) {
+					nlist.add(n);
+				}
+			}
+
+			results.values = nlist;
+			results.count = nlist.size();
+
+			return results;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			filter_data_ = (ArrayList<Note>) results.values;
+			notifyDataSetChanged();
+		}
+
+	}
 	static List<Note> data_;
-	static Note n_;
 	private static LayoutInflater mInflater = null;
+	static Note n_;
 	Context currentContext_;
+
 	List<Note> filter_data_;
+
 	private ItemFilter mFilter = new ItemFilter();
 
 	public NoteListAdapter(Context currentContext, List<Note> data) {
@@ -41,6 +88,11 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 	public int getCount() {
 		// TODO Auto-generated method stub
 		return filter_data_.size();
+	}
+
+	@Override
+	public Filter getFilter() {
+		return mFilter;
 	}
 
 	@Override
@@ -101,56 +153,5 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 			}
 		});
 		return rowView;
-	}
-
-	public class Holder {
-		TextView what;
-		TextView when;
-		TextView where;
-		RadioButton rimder;
-		ImageView img;
-		ImageView remind;
-		ImageView loc;
-	}
-
-	@Override
-	public Filter getFilter() {
-		return mFilter;
-	}
-
-	private class ItemFilter extends Filter {
-		protected FilterResults performFiltering(CharSequence constraint) {
-
-			String filterString = constraint.toString().toLowerCase();
-
-			FilterResults results = new FilterResults();
-
-			final List<Note> list = data_;
-
-			int count = list.size();
-			final ArrayList<Note> nlist = new ArrayList<Note>(count);
-
-			Note n;
-
-			for (int i = 0; i < count; i++) {
-				n = list.get(i);
-				if (n.what.toLowerCase().contains(filterString)) {
-					nlist.add(n);
-				}
-			}
-
-			results.values = nlist;
-			results.count = nlist.size();
-
-			return results;
-		}
-
-		@SuppressWarnings("unchecked")
-		@Override
-		protected void publishResults(CharSequence constraint, FilterResults results) {
-			filter_data_ = (ArrayList<Note>) results.values;
-			notifyDataSetChanged();
-		}
-
 	}
 }
