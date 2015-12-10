@@ -31,9 +31,7 @@ public class CityAsyncTask extends AsyncTask<String, String, String> {
             List<Address> addresses = geocoder.getFromLocation(latitude,
                     longitude, 1);
             //Log.e("Addresses", "-->" + addresses);
-            result = addresses.get(0).toString();
-           
-            
+            result = new StringBuilder(addresses.get(0).getAddressLine(0)).append(",").append(addresses.get(0).getAddressLine(2)).append(",").append(addresses.get(0).getAddressLine(3)).toString();
         } catch (IOException e) {
             e.printStackTrace();
         }
