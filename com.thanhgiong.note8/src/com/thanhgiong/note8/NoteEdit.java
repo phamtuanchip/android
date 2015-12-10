@@ -88,7 +88,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	}
 
 	@Override
-	public void onClick(View v) {
+	public void onClick(View v) {		
 		switch (v.getId()) {
 		case R.id.date: {
 			Calendar cal = Calendar.getInstance();
@@ -125,11 +125,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			break;
 		case R.id.remind: {
 			if (reminder.isChecked()) {
-				Calendar cal = Calendar.getInstance();
-				String mins = String.valueOf(cal.getMinimum(Calendar.HOUR_OF_DAY));
-				if (cal.getMinimum(Calendar.MINUTE) < 10)
-					mins = "0" + mins;
-				remindTime.setText(new StringBuilder().append(cal.get(Calendar.HOUR)).append(":").append(mins));
+				remindTime.setText(new SimpleDateFormat("HH:mm").format(new Date()));
 				remindTime.setVisibility(View.VISIBLE);
 			} else {
 				remindTime.setVisibility(View.GONE);
@@ -216,7 +212,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		lock = (ImageButton) findViewById(R.id.btnLock);
 		home = (ImageButton) findViewById(R.id.btnHome);
 		whenE.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-		remindTime.setText(Calendar.getInstance().get(Calendar.HOUR_OF_DAY) + ":00");
+		remindTime.setText(new SimpleDateFormat("HH:mm").format(new Date()));
 		current_action = b.getInt("type");
 		if (b != null) {
 			n_ = (Note) b.get("note");
@@ -296,12 +292,9 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		n.id = String.valueOf(db.insert("note8tb", null, values));
 		db.close();
 		if (Boolean.parseBoolean(n.remind)) {
-			Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
-			intent.putExtra("note8Remind", n.id);
-			intent.putExtra("message", n.what);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, Integer.parseInt(n.id), intent,
-					PendingIntent.FLAG_CANCEL_CURRENT);
 			try {
+				 Intent myIntent = new Intent(getApplicationContext(), MyReceiver.class);
+				 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,PendingIntent.FLAG_ONE_SHOT);
 				setAlarm(new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(n.when + " " + n.remindTime), pendingIntent);
 			} catch (ParseException e) {
 				e.printStackTrace();

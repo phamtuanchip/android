@@ -72,10 +72,6 @@
             android:label="Select location" >
         </activity>
 
-        <service
-            android:name=".MyAlarmService"
-            android:enabled="true" />
-
         <receiver android:name=".MyReceiver" />
 
         <meta-data
