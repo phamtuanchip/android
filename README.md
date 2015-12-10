@@ -1,3 +1,5 @@
+ipk file downloader 
+http://www.apkmirror.com
 # Build with maven
 maven 3.2.3
 repository 

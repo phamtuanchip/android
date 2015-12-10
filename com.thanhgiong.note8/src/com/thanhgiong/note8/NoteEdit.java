@@ -3,14 +3,17 @@ package com.thanhgiong.note8;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ContentValues;
@@ -35,6 +38,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -44,7 +48,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	EditText whenE;
 	EditText whereE;
 	String image;
-	EditText textTimeE;
+	TextView textTimeE;
 	ImageView when;
 	ImageView where;
 	// GPSTracker class
@@ -53,7 +57,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 	ImageView img;
 	ImageView img_frame;
 	CheckBox reminder;
-	EditText remindTime;
+	TextView remindTime;
 	ImageButton add;
 	ImageButton del;
 	ImageButton save;
@@ -76,7 +80,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		img = (ImageView) findViewById(R.id.img);
 		img_frame = (ImageView) findViewById(R.id.image);
 		reminder = (CheckBox) findViewById(R.id.remind);
-		remindTime = (EditText) findViewById(R.id.textRemindTime);
+		remindTime = (TextView) findViewById(R.id.textRemindTime);
 		whatE = (EditText) findViewById(R.id.txtTitleE);
 		whenE = (EditText) findViewById(R.id.textwhenE);
 		textTimeE = (EditText) findViewById(R.id.textRemindTime);
@@ -145,7 +149,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 					cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
 			dialog.show();
 		}
-			break;
+		break;
 		case R.id.img: {
 			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			File f = null;
@@ -160,7 +164,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			}
 			startActivityForResult(takePictureIntent, 1);
 		}
-			break;
+		break;
 		case R.id.loc: {
 			// gps = new GPSTracker(NoteEdit.this);
 			// // check if GPS enabled
@@ -191,7 +195,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			startActivity(i);
 
 		}
-			break;
+		break;
 		case R.id.remind: {
 			if (reminder.isChecked()) {
 				Calendar cal = Calendar.getInstance();
@@ -204,20 +208,20 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 				remindTime.setVisibility(View.GONE);
 			}
 		}
-			break;
+		break;
 		case R.id.textRemindTime: {
 			Calendar cal = Calendar.getInstance();
 			TimePickerDialog dialog = new TimePickerDialog(v.getContext(), this, cal.get(Calendar.HOUR_OF_DAY),
 					cal.get(Calendar.MINUTE), false);
 			dialog.show();
 		}
-			break;
+		break;
 		case R.id.btnAddnew: {
 			Intent i = new Intent(v.getContext(), NoteEdit.class);
 			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
 			v.getContext().startActivity(i);
 		}
-			break;
+		break;
 		case R.id.btnSave: {
 			byte[] binary = null;
 			if (mImageBitmap != null) {
@@ -238,21 +242,21 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 			i.putExtra("note", n);
 			startActivity(i);
 		}
-			break;
+		break;
 		case R.id.btnCancel: {
 			this.finish();
 		}
-			break;
+		break;
 		case R.id.btnHome: {
 			Intent i = new Intent(v.getContext(), HomeActivity.class);
 			v.getContext().startActivity(i);
 		}
-			break;
+		break;
 		case R.id.btnLock: {
 			Intent i = new Intent(v.getContext(), LoginActivity.class);
 			v.getContext().startActivity(i);
 		}
-			break;
+		break;
 		default:
 			break;
 		}
@@ -268,9 +272,23 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		values.put("nwhere", n.where);
 		values.put("nremind", n.remind);
 		values.put("nimage", n.image);
+		values.put("ntime", n.remindTime);
 		values.put("nbinary", n.binary);
 		n.id = String.valueOf(db.insert("note8tb", null, values));
 		db.close();
+		if(Boolean.parseBoolean(n.remind)){
+			Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+			intent.putExtra("note8Remind", n.id );
+			intent.putExtra("message", n.what);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(this, Integer.parseInt(n.id), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+			try {
+				setAlarm(new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(n.when+" "+n.remindTime) , pendingIntent);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 		return n;
 	}
@@ -283,6 +301,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		values.put("nwhere", n.where);
 		values.put("nremind", n.remind);
 		values.put("nimage", n.image);
+		values.put("ntime", n.remindTime);
 		values.put("nbinary", n.binary);
 		db.update("note8tb", values, "id= ?", new String[] { n.id });
 		db.close();
@@ -329,7 +348,7 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		File image = File.createTempFile(imageFileName, /* prefix */
 				".jpg", /* suffix */
 				storageDir /* directory */
-		);
+				);
 		this.image = "file:" + image.getAbsolutePath();
 		return image;
 	}
@@ -382,7 +401,10 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		if (location != null)
 			whereE.setText(location.getLongitude() + "," + location.getLatitude());
 	}
-
+	public void setAlarm(Date date, PendingIntent intent) {
+		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), intent);
+	}
 	@Override
 	public void onTimeSet(TimePicker arg0, int hours, int min) {
 		String mins = String.valueOf(min);
