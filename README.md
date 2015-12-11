@@ -1,4 +1,4 @@
-ipk file downloader 
+apk file downloader 
 http://www.apkmirror.com
 # Build with maven
 maven 3.2.3
@@ -16,6 +16,7 @@ repository
 - Nhac lich khi den ngay 
 
 - Co so du lieu su dung SQL Lite trong Android 
+- Shared preference
 - Cong cu phat trien: eclipse hoac android studio 
 - Nen tang cung cap tu android 4.0 tro len
 
