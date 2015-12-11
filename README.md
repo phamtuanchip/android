@@ -81,6 +81,9 @@ adb kill-server
 
 adb start-server 
 
+
+adb connect 10.225.3.151:5555
+
 you can check devices connected to adb
 
 adb devices
