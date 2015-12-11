@@ -59,16 +59,17 @@ public class NoteActivity extends Activity{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		IntentFilter ift = new IntentFilter();
-		registerReceiver(mr,ift);
-		//Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
-		pendingIntent = PendingIntent.getBroadcast(this, 0, this.getIntent(),PendingIntent.FLAG_UPDATE_CURRENT);
+		
+		Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
+		pendingIntent = PendingIntent.getBroadcast(this, 0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
+		//unregisterReceiver(mr);
 		super.onStop();
-		unregisterReceiver(mr);
+		
 	}
 
 }

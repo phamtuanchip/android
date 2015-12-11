@@ -102,6 +102,7 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 		n_ = (Note) getItem(position);
 		holder.what = (TextView) rowView.findViewById(R.id.txtWhat);
 		holder.when = (TextView) rowView.findViewById(R.id.txtWhen);
+		holder.where = (TextView) rowView.findViewById(R.id.txtWhere);
 		holder.remind = (ImageView) rowView.findViewById(R.id.re);
 		holder.loc = (ImageView) rowView.findViewById(R.id.loc);
 		holder.img = (ImageView) rowView.findViewById(R.id.img);

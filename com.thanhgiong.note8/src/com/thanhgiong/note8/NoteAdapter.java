@@ -121,6 +121,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 		holder.where.setTypeface(tf);
 		holder.what.setText(n_.what);
 		holder.when.setText(n_.getFormatedDate());
+		holder.where.setText(n_.where);
 		if (!Boolean.parseBoolean(n_.remind))
 			holder.remind.setVisibility(View.GONE);
 		else
