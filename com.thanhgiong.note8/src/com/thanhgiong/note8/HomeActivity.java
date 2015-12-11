@@ -47,6 +47,7 @@ public class HomeActivity extends Activity implements OnClickListener, SearchVie
 		return data_;
 	}
 
+	// Xử lý sự kiện khi có touch vào các nút
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

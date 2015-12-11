@@ -3,10 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <!-- Giao dien chinh co 1 search box -->
+
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
+    <!-- Giao dien chinh co 1 list view de hien danh sach ghi chu -->
 
     <ListView
         android:id="@+id/listView"
@@ -16,7 +19,8 @@
         android:orientation="vertical" >
     </ListView>
 
-    <include
+    <!-- Lien ket voi giao dien cac nut xu ly su kien tu 1 file xml khac -->
+    <include
         android:id="@+id/menu"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
