@@ -1,6 +1,5 @@
 package com.thanhgiong.note8;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,24 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NoteDetail extends Activity implements OnClickListener, OnTouchListener {
-	public static int ACTION_TYPE_ADDNEW = 3;
-	public static int ACTION_TYPE_EDIT = 2;
-	public static int ACTION_TYPE_VIEW = 1;
-	ImageButton add;
-	int current_action;
-	ImageButton del;
-	ImageButton edit;
-	ImageButton home;
-	ImageView img;
-	LinearLayout l1;
-	ImageButton lock;
-	Note n_;
-	TextView remind;
-	TextView what;
-	TextView when;
-	TextView where;
-
+public class NoteDetail extends NoteActivity implements OnClickListener, OnTouchListener {
+	 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -85,15 +68,15 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 		Bundle b = this.getIntent().getExtras();
 		l1 = (LinearLayout) findViewById(R.id.l2);
 		img = (ImageView) findViewById(R.id.image);
-		what = (TextView) findViewById(R.id.txtWhat);
-		when = (TextView) findViewById(R.id.textwhen);
-		where = (TextView) findViewById(R.id.textWhere);
-		remind = (TextView) findViewById(R.id.textRemind);
+		whatT = (TextView) findViewById(R.id.txtWhat);
+		whenT = (TextView) findViewById(R.id.textwhen);
+		whereT = (TextView) findViewById(R.id.textWhere);
+		remindT = (TextView) findViewById(R.id.textRemind);
 		Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/angelina.ttf");
-		what.setTypeface(tf);
-		when.setTypeface(tf);
-		where.setTypeface(tf);
-		remind.setTypeface(tf);
+		whatT.setTypeface(tf);
+		whenT.setTypeface(tf);
+		whereT.setTypeface(tf);
+		remindT.setTypeface(tf);
 		if (b != null) {
 			n_ = (Note) b.get("note");
 			if (n_ != null) {
@@ -107,14 +90,14 @@ public class NoteDetail extends Activity implements OnClickListener, OnTouchList
 					img.setImageBitmap(bm);
 				}
 				if (n_.remindTime != null && !n_.remindTime.isEmpty())
-					remind.setText(new StringBuffer(remind.getText().toString()).append(n_.remindTime));
+					remindT.setText(new StringBuffer(remindT.getText().toString()).append(n_.remindTime));
 				if (Boolean.parseBoolean(n_.remind))
-					remind.setVisibility(View.VISIBLE);
+					remindT.setVisibility(View.VISIBLE);
 				else
-					remind.setVisibility(View.GONE);
-				when.setText(n_.getFormatedDate());
-				where.setText(n_.where);
-				what.setText(n_.what);
+					remindT.setVisibility(View.GONE);
+				whenT.setText(n_.getFormatedDate());
+				whereT.setText(n_.where);
+				whatT.setText(n_.what);
 			}
 		}
 
