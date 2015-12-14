@@ -10,7 +10,6 @@ import java.util.Date;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -39,33 +38,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class NoteEdit extends Activity implements OnClickListener, OnDateSetListener, OnTimeSetListener {
-	public static int ACTION_TYPE_ADDNEW = 3;
-	public static int ACTION_TYPE_EDIT = 2;
-	public static int ACTION_TYPE_VIEW = 1;
-	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS note8tb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125), nbinary BLOB, ntime varchar(5) )";
-	ImageButton add;
-	ImageButton cancel;
+public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSetListener, OnTimeSetListener {
 	LatLng current;
-	int current_action;
-	ImageButton del;
 	GPSTracker gps;
 	ImageButton home;
-	String image;
-	ImageView img;
-	ImageView img_frame;
 	LocationManager locationManager;
-	ImageButton lock;
 	Bitmap mImageBitmap;
-	Note n_;
-	CheckBox reminder;
-	TextView remindTime;
-	ImageButton save;
-	EditText whatE;
-	ImageView when;
-	EditText whenE;
-	ImageView where;
-	EditText whereE;
 
 	private File createImageFile() throws IOException {
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -203,8 +181,8 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		whatE = (EditText) findViewById(R.id.txtTitleE);
 		whenE = (EditText) findViewById(R.id.textwhenE);
 		whereE = (EditText) findViewById(R.id.textWhereE);
-		when = (ImageView) findViewById(R.id.date);
-		where = (ImageView) findViewById(R.id.loc);
+		whenI = (ImageView) findViewById(R.id.date);
+		whereI = (ImageView) findViewById(R.id.loc);
 		add = (ImageButton) findViewById(R.id.btnAddnew);
 		del = (ImageButton) findViewById(R.id.btnDel);
 		save = (ImageButton) findViewById(R.id.btnSave);
@@ -248,8 +226,8 @@ public class NoteEdit extends Activity implements OnClickListener, OnDateSetList
 		}
 
 		img.setOnClickListener(this);
-		when.setOnClickListener(this);
-		where.setOnClickListener(this);
+		whenI.setOnClickListener(this);
+		whereI.setOnClickListener(this);
 		reminder.setOnClickListener(this);
 		remindTime.setOnClickListener(this);
 		add.setOnClickListener(this);

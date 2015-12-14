@@ -4,6 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +25,7 @@ import android.widget.Toast;
 
 public class LoginActivity extends Activity {
 
-	// Class cài đặt login chạy ngầm AsyncTask
+	// Class cÃ i Ä‘áº·t login cháº¡y ngáº§m AsyncTask
 	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
 		private final String mPassword;
@@ -31,7 +34,7 @@ public class LoginActivity extends Activity {
 			mPassword = password;
 		}
 
-		// Thực hiện login chạy ngầm
+		// Thá»±c hiá»‡n login cháº¡y ngáº§m
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			try {
@@ -50,7 +53,7 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 
-		// Thực hiện chuyển giao diện nếu login thành công
+		// Thá»±c hiá»‡n chuyá»ƒn giao diá»‡n náº¿u login thÃ nh cÃ´ng
 		@Override
 		protected void onPostExecute(final Boolean success) {
 			mAuthTask = null;
@@ -95,7 +98,7 @@ public class LoginActivity extends Activity {
 		boolean cancel = false;
 		View focusView = null;
 
-		// Thực hiện kiểm tra mật khẩu
+		// Thá»±c hiá»‡n kiá»ƒm tra máº­t kháº©u
 		if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
 			mPasswordView.setError(getString(R.string.error_invalid_password));
 			focusView = mPasswordView;
@@ -105,14 +108,14 @@ public class LoginActivity extends Activity {
 		if (cancel) {
 			focusView.requestFocus();
 		} else {
-			// Tực hiện quá trình login
+			// Tá»±c hiá»‡n quÃ¡ trÃ¬nh login
 			showProgress(true);
 			mAuthTask = new UserLoginTask(password);
 			mAuthTask.execute((Void) null);
 		}
 	}
 
-	// Hàm kiểm tra độ dài tối thiểu của mật khẩu
+	// HÃ m kiá»ƒm tra Ä‘á»™ dÃ i tá»‘i thiá»ƒu cá»§a máº­t kháº©u
 	private boolean isPasswordValid(String password) {
 		return password.length() > 4;
 	}
@@ -121,15 +124,17 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		// Lấy thông tin sharedprefrence để kiểm tra xem người dùng đã lưu mật
-		// khẩu chưa
+		startService(new Intent(this, MyAlarmService.class));
+		 
+		// Láº¥y thÃ´ng tin sharedprefrence Ä‘á»ƒ kiá»ƒm tra xem ngÆ°á»�i dÃ¹ng Ä‘Ã£ lÆ°u máº­t
+		// kháº©u chÆ°a
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-		// lấy form login
+		// láº¥y form login
 		mLoginFormView = findViewById(R.id.login_form);
-		// lấy form có ảnh progess
+		// láº¥y form cÃ³ áº£nh progess
 		mProgressView = findViewById(R.id.login_progress);
 		createPass = findViewById(R.id.createPass);
-		// Kiểm tra mật khẩu đã lưu nếu chưa lưu mật khẩu hiện form lưu mật khẩu
+		// Kiá»ƒm tra máº­t kháº©u Ä‘Ã£ lÆ°u náº¿u chÆ°a lÆ°u máº­t kháº©u hiá»‡n form lÆ°u máº­t kháº©u
 		if (settings.getString(PREFS_KEY, null) == null) {
 			createPass.setVisibility(View.VISIBLE);
 			mLoginFormView.setVisibility(View.GONE);
@@ -143,14 +148,14 @@ public class LoginActivity extends Activity {
 					SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 					SharedPreferences.Editor editor = settings.edit();
 					String p1 = e1.getText().toString();
-					// Mật khẩu không được để trống
+					// Máº­t kháº©u khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng
 					if (!TextUtils.isEmpty(p1) && !isPasswordValid(p1)) {
 						e1.setError(getString(R.string.error_invalid_password));
 						e1.requestFocus();
 						return;
 					}
 					String p2 = e2.getText().toString();
-					// Ghõ lại mật khẩu không được để trống
+					// GhÃµ láº¡i máº­t kháº©u khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng
 					if (!TextUtils.isEmpty(p2) && !isPasswordValid(p2)) {
 						e2.setError(getString(R.string.error_invalid_password));
 						e2.requestFocus();
@@ -170,7 +175,7 @@ public class LoginActivity extends Activity {
 			});
 
 		} else {
-			// Nếu đã lưu mật khẩu rồi thì hiện form đăng nhập
+			// Náº¿u Ä‘Ã£ lÆ°u máº­t kháº©u rá»“i thÃ¬ hiá»‡n form Ä‘Äƒng nháº­p
 			createPass.setVisibility(View.GONE);
 			mLoginFormView.setVisibility(View.VISIBLE);
 			mPasswordView = (EditText) findViewById(R.id.password);
@@ -178,7 +183,7 @@ public class LoginActivity extends Activity {
 				@Override
 				public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
 					if (id == R.id.login || id == EditorInfo.IME_NULL) {
-						// Gọi hàm login
+						// Gá»�i hÃ m login
 						attemptLogin();
 						return true;
 					}
@@ -197,7 +202,7 @@ public class LoginActivity extends Activity {
 		}
 	}
 
-	// Hàm thực hiện việc login và load ảnh quay (progressbar)
+	// HÃ m thá»±c hiá»‡n viá»‡c login vÃ  load áº£nh quay (progressbar)
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	public void showProgress(final boolean show) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
@@ -224,4 +229,28 @@ public class LoginActivity extends Activity {
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
+
+	 public void createNotification(View view) {
+		 if(view != null) {
+	        // Prepare intent which is triggered if the
+	        // notification is selected
+	        Intent intent = new Intent(this, LoginActivity.class);
+	        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+	        // Build notification
+	        // Actions are just fake
+	        Notification noti = new Notification.Builder(this)
+	            .setContentTitle("Notification Title")
+	            .setContentText("Click here to read").setSmallIcon(R.drawable.ic_launcher)
+	            .setContentIntent(pIntent)
+	            .build();
+	        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+	        // hide the notification after its selected
+	        noti.flags |= Notification.FLAG_AUTO_CANCEL;
+
+	        notificationManager.notify(0, noti);
+		 }
+	      } 
+
+
 }

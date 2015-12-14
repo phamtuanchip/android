@@ -1,4 +1,4 @@
-ipk file downloader 
+apk file downloader 
 http://www.apkmirror.com
 # Build with maven
 maven 3.2.3
@@ -16,6 +16,7 @@ repository
 - Nhac lich khi den ngay 
 
 - Co so du lieu su dung SQL Lite trong Android 
+- Shared preference
 - Cong cu phat trien: eclipse hoac android studio 
 - Nen tang cung cap tu android 4.0 tro len
 
@@ -23,7 +24,7 @@ repository
 
 - Nhan vao download source code o day: https://github.com/phamtuanchip/android/archive/master.zip
 - download ve va unzip thu muc android-master 
-- downloa eclopse o day https://drive.google.com/file/d/0Bw2eZ8CfkgNBZ3c2VzgxeWJZOGs/view?usp=sharing
+- downloa eclipse o day https://drive.google.com/file/d/0Bw2eZ8CfkgNBZ3c2VzgxeWJZOGs/view?usp=sharing
 - unzip eclipse-android ben trong
 - download android SDK tai day: http://developer.android.com/sdk/index.html#Other
 - download java 7 SDK o day: http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-windows-i586.exe
