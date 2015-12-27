@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/l2"
+    android:layout_width="fill_parent"
+    android:layout_height="100dp"
+    android:background="@drawable/not_bg_n"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp" >
+
+    <LinearLayout
+        android:id="@+id/l21"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="15dp" >
+
+        <TextView
+            android:id="@+id/txtWhen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textSize="@dimen/textsize_m" />
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="@dimen/icon_w_sm"
+            android:layout_height="@dimen/icon_h_sm"
+            android:layout_gravity="right"
+            android:src="@drawable/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/re"
+            android:layout_width="@dimen/icon_w_sm"
+            android:layout_height="@dimen/icon_h_sm"
+            android:layout_gravity="right"
+            android:src="@drawable/remind4" />
+
+        <ImageView
+            android:id="@+id/loc"
+            android:layout_width="@dimen/icon_w_sm"
+            android:layout_height="@dimen/icon_h_sm"
+            android:layout_gravity="right"
+            android:src="@drawable/loc4" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txtWhat"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/l21"
+        android:paddingLeft="10dp"
+        android:paddingRight="15dp"
+        android:textSize="@dimen/textsize_m" />
+
+</RelativeLayout>
