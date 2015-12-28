@@ -1,9 +1,7 @@
 package com.thanhgiong.note8;
 
-import java.util.Calendar;
 import java.util.Timer;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
@@ -33,23 +31,6 @@ public class MyAlarmService extends Service {
 		// code to execute when the service is first created
 		super.onCreate();
 		Log.i("MyService", "Service Started.");
-		showNotification();
-	}
-
-	public void showNotification() {
-		final Calendar cld = Calendar.getInstance();
-
-		int time = cld.get(Calendar.HOUR_OF_DAY);
-		if (time > 12) {
-			not.createNotification(null);
-
-		} else {
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setMessage("Not yet");
-			alert.setTitle("Error");
-			alert.setPositiveButton("OK", null);
-			alert.create().show();
-		}
 	}
 
 	@Override
