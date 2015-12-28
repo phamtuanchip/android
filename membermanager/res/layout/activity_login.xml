@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bglogin"
     android:gravity="center"
     android:orientation="vertical" >
 
@@ -18,12 +17,20 @@
         android:orientation="vertical" >
 
         <EditText
+            android:id="@+id/uid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="user name"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+        <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_password"
+            android:hint="password"
             android:imeActionId="@+id/login"
-            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeActionLabel="login"
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
@@ -33,7 +40,7 @@
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/action_sign_in"
+            android:text="login"
             android:textStyle="bold" />
     </LinearLayout>
 

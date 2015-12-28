@@ -68,7 +68,7 @@ public class MemberListAdapter extends BaseAdapter implements Filterable {
 		n_ = (Member) getItem(position);
 		holder.what = (TextView) rowView.findViewById(R.id.txtWhat);
 		holder.when = (TextView) rowView.findViewById(R.id.txtWhen);
-		holder.where = (TextView) rowView.findViewById(R.id.txtWhere);
+		//holder.where = (TextView) rowView.findViewById(R.id.txtWhere);
 		holder.remind = (ImageView) rowView.findViewById(R.id.re);
 		holder.loc = (ImageView) rowView.findViewById(R.id.loc);
 		holder.img = (ImageView) rowView.findViewById(R.id.img);
@@ -93,11 +93,17 @@ public class MemberListAdapter extends BaseAdapter implements Filterable {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), MemberEdit.class);
-				i.putExtra("member", (Member) getItem(position));
+				//i.putExtra("member", (Member) getItem(Integer.parseInt(rowView.getTag().toString())));
 				i.putExtra("type", HomeActivity.ACTION_TYPE_EDIT);
 				v.getContext().startActivity(i);
 			}
 		});
 		return rowView;
+	}
+
+	@Override
+	public Filter getFilter() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

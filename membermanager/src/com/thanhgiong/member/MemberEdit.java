@@ -3,7 +3,6 @@ package com.thanhgiong.member;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,15 +12,10 @@ import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
-import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -124,7 +118,6 @@ int current_action;
 			break;
 		case R.id.btnSave: {
 			if(TextUtils.isEmpty(whatE.getText().toString())) {
-				whatE.setError(getString(R.string.error_field_required));
 				whatE.requestFocus();
 				return;
 			}
@@ -185,31 +178,7 @@ int current_action;
 		home = (ImageButton) findViewById(R.id.btnHome);
 		whenE.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		current_action = b.getInt("type");
-		if (b != null) {
-			n_ = (Member) b.get("member");
-			if (n_ != null) {
-				if (n_.binary != null) {
-					mImageBitmap = BitmapFactory.decodeByteArray(n_.binary, 0, n_.binary.length);
-					img_frame.setImageBitmap(mImageBitmap);
-				} else {
-					Resources res = getResources();
-					int id = R.drawable.bg_default;
-					mImageBitmap = BitmapFactory.decodeResource(res, id);
-					img_frame.setImageBitmap(mImageBitmap);
-				}
-				whatE.setText(n_.what);
-				whenE.setText(n_.when);
-				whereE.setText(n_.where);
-				reminder.setChecked(Boolean.parseBoolean(n_.remind));
-				if (Boolean.parseBoolean(n_.remind)) {
-					remindTime.setText(n_.remindTime);
-					remindTime.setVisibility(View.VISIBLE);
-				} else {
-					remindTime.setVisibility(View.GONE);
-				}
-			}  
-			}
-		}
+		 
 
 		img.setOnClickListener(this);
 		whenI.setOnClickListener(this);
@@ -234,7 +203,6 @@ int current_action;
 				new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year));
 	}
 
-	@Override
 	public void onTimeSet(TimePicker arg0, int hours, int min) {
 		String mins = String.valueOf(min);
 		if (min < 10)
@@ -244,7 +212,7 @@ int current_action;
 
 	private Member save(Member n) {
 		SQLiteDatabase db = openOrCreateDatabase("note8db", MODE_PRIVATE, null);
-		db.execSQL(CREATE_TABLE);
+		db.execSQL(HomeActivity.CREATE_TABLE);
 		ContentValues values = new ContentValues();
 		values.put("nwhat", n.what);
 		values.put("nwhen", n.when);
@@ -255,15 +223,7 @@ int current_action;
 		values.put("nbinary", n.binary);
 		n.id = String.valueOf(db.insert("note8tb", null, values));
 		db.close();
-		if (Boolean.parseBoolean(n.remind)) {
-			try {
-				 Intent myIntent = new Intent(getApplicationContext(), MyReceiver.class);
-				 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,PendingIntent.FLAG_ONE_SHOT);
-				setAlarm(new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(n.when + " " + n.remindTime), pendingIntent);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
+		 
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 		return n;
 	}
