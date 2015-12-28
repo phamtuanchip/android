@@ -122,7 +122,6 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		startService(new Intent(this, MyAlarmService.class));
 
 		// Láº¥y thÃ´ng tin sharedprefrence Ä‘á»ƒ kiá»ƒm tra xem ngÆ°á»�i dÃ¹ng
 		// Ä‘Ã£ lÆ°u máº­t
