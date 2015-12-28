@@ -31,10 +31,10 @@ public class CityAsyncTask extends AsyncTask<String, String, String> {
 		try {
 			List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
 			// Log.e("Addresses", "-->" + addresses);
-			if(addresses != null && addresses.size() > 0)
-			result = new StringBuilder(addresses.get(0).getAddressLine(0)).append(",")
-					.append(addresses.get(0).getAddressLine(2)).append(",").append(addresses.get(0).getAddressLine(3))
-					.toString();
+			if (addresses != null && addresses.size() > 0)
+				result = new StringBuilder(addresses.get(0).getAddressLine(0)).append(",")
+						.append(addresses.get(0).getAddressLine(2)).append(",")
+						.append(addresses.get(0).getAddressLine(3)).toString();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

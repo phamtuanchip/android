@@ -67,10 +67,6 @@
             android:name="com.thanhgiong.note8.NoteEdit"
             android:label="Note edit" >
         </activity>
-        <activity
-            android:name="com.thanhgiong.note8.MapPane"
-            android:label="Select location" >
-        </activity>
 
         <receiver android:name=".MyReceiver" />
 

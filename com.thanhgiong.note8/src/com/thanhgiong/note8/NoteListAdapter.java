@@ -28,6 +28,7 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 		TextView when;
 		TextView where;
 	}
+
 	private class ItemFilter extends Filter {
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
@@ -39,7 +40,8 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 			Note n;
 			for (int i = 0; i < count; i++) {
 				n = list.get(i);
-				if (n.what.toLowerCase().contains(filterString) || (!TextUtils.isEmpty(n.where) && n.where.toLowerCase().contains(filterString))) {
+				if (n.what.toLowerCase().contains(filterString)
+						|| (!TextUtils.isEmpty(n.where) && n.where.toLowerCase().contains(filterString))) {
 					nlist.add(n);
 				}
 			}
@@ -56,6 +58,7 @@ public class NoteListAdapter extends BaseAdapter implements Filterable {
 		}
 
 	}
+
 	static List<Note> data_;
 	private static LayoutInflater mInflater = null;
 	static Note n_;

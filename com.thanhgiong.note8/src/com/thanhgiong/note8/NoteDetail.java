@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class NoteDetail extends NoteActivity implements OnClickListener, OnTouchListener {
-	 
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {

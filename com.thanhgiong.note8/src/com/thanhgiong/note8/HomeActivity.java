@@ -22,7 +22,7 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 	public final static String EXTRA_MESSAGE = "MESSAGE";
 	ListView list;
 	SearchView search;
-	SharedPreferences settings;	
+	SharedPreferences settings;
 
 	// HÃ m load dá»¯ liá»‡u Ä‘Ã£ lÆ°u trong cÆ¡ sá»Ÿ dá»¯ liá»‡u SQLite
 	private List<Note> getData() {
@@ -32,7 +32,8 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 		data_ = new ArrayList<Note>();
 		if (cs.moveToFirst()) {
 			do {
-				// Duyá»‡t qua toÃ n bá»™ doanh sÃ¡ch, táº¡o Ä‘á»‘i tÆ°á»£ng Ä‘á»ƒ hiá»‡n dá»¯ liá»‡u
+				// Duyá»‡t qua toÃ n bá»™ doanh sÃ¡ch, táº¡o Ä‘á»‘i tÆ°á»£ng
+				// Ä‘á»ƒ hiá»‡n dá»¯ liá»‡u
 				// trong list view
 				Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3),
 						cs.getString(4), cs.getString(5), cs.getBlob(6), cs.getString(7));
@@ -105,10 +106,12 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 		// CÃ i Ä‘áº·t filter Ä‘á»ƒ search trÃªn list view
 		list.setTextFilterEnabled(true);
 		if (viewType == null) {
-			// Náº¿u chÆ°a lÆ°u kiá»ƒu view láº§n nÃ o thÃ¬ chá»�n view theo kiá»ƒu khá»‘i
+			// Náº¿u chÆ°a lÆ°u kiá»ƒu view láº§n nÃ o thÃ¬ chá»�n view theo
+			// kiá»ƒu khá»‘i
 			list.setAdapter(new NoteAdapter(this, getData()));
 		} else {
-			// Náº¿u Ä‘Ã£ lÆ°u kiá»ƒu view láº§n nÃ o thÃ¬ chá»�n view tÆ°Æ¡ng á»©ng kiá»ƒu view Ä‘Ã£
+			// Náº¿u Ä‘Ã£ lÆ°u kiá»ƒu view láº§n nÃ o thÃ¬ chá»�n view tÆ°Æ¡ng
+			// á»©ng kiá»ƒu view Ä‘Ã£
 			// lÆ°u
 			if ("list".equals(viewType)) {
 				// view theo dáº¡ng list

@@ -31,7 +31,7 @@
             android:paddingTop="10dp" >
 
             <ImageView
-                android:id="@+id/when"
+                android:id="@+id/what"
                 android:layout_width="@dimen/icon_w_md"
                 android:layout_height="@dimen/icon_h_md"
                 android:layout_marginRight="10dp"

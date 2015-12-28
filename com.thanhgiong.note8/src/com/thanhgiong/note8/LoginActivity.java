@@ -4,9 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -67,6 +64,7 @@ public class LoginActivity extends Activity {
 			}
 		}
 	}
+
 	static final String PREFS_KEY = "pwd";
 	/**
 	 * A dummy authentication store containing known user names and passwords.
@@ -125,8 +123,9 @@ public class LoginActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 		startService(new Intent(this, MyAlarmService.class));
-		 
-		// Láº¥y thÃ´ng tin sharedprefrence Ä‘á»ƒ kiá»ƒm tra xem ngÆ°á»�i dÃ¹ng Ä‘Ã£ lÆ°u máº­t
+
+		// Láº¥y thÃ´ng tin sharedprefrence Ä‘á»ƒ kiá»ƒm tra xem ngÆ°á»�i dÃ¹ng
+		// Ä‘Ã£ lÆ°u máº­t
 		// kháº©u chÆ°a
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 		// láº¥y form login
@@ -134,7 +133,8 @@ public class LoginActivity extends Activity {
 		// láº¥y form cÃ³ áº£nh progess
 		mProgressView = findViewById(R.id.login_progress);
 		createPass = findViewById(R.id.createPass);
-		// Kiá»ƒm tra máº­t kháº©u Ä‘Ã£ lÆ°u náº¿u chÆ°a lÆ°u máº­t kháº©u hiá»‡n form lÆ°u máº­t kháº©u
+		// Kiá»ƒm tra máº­t kháº©u Ä‘Ã£ lÆ°u náº¿u chÆ°a lÆ°u máº­t kháº©u
+		// hiá»‡n form lÆ°u máº­t kháº©u
 		if (settings.getString(PREFS_KEY, null) == null) {
 			createPass.setVisibility(View.VISIBLE);
 			mLoginFormView.setVisibility(View.GONE);
@@ -229,28 +229,5 @@ public class LoginActivity extends Activity {
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
-
-	 public void createNotification(View view) {
-		 if(view != null) {
-	        // Prepare intent which is triggered if the
-	        // notification is selected
-	        Intent intent = new Intent(this, LoginActivity.class);
-	        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-	        // Build notification
-	        // Actions are just fake
-	        Notification noti = new Notification.Builder(this)
-	            .setContentTitle("Notification Title")
-	            .setContentText("Click here to read").setSmallIcon(R.drawable.ic_launcher)
-	            .setContentIntent(pIntent)
-	            .build();
-	        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-	        // hide the notification after its selected
-	        noti.flags |= Notification.FLAG_AUTO_CANCEL;
-
-	        notificationManager.notify(0, noti);
-		 }
-	      } 
-
 
 }

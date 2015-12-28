@@ -66,7 +66,7 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 	}
 
 	@Override
-	public void onClick(View v) {		
+	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.date: {
 			Calendar cal = Calendar.getInstance();
@@ -124,7 +124,7 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 		}
 			break;
 		case R.id.btnSave: {
-			if(TextUtils.isEmpty(whatE.getText().toString())) {
+			if (TextUtils.isEmpty(whatE.getText().toString())) {
 				whatE.setError(getString(R.string.error_field_required));
 				whatE.requestFocus();
 				return;
@@ -271,8 +271,9 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 		db.close();
 		if (Boolean.parseBoolean(n.remind)) {
 			try {
-				 Intent myIntent = new Intent(getApplicationContext(), MyReceiver.class);
-				 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,PendingIntent.FLAG_ONE_SHOT);
+				Intent myIntent = new Intent(getApplicationContext(), MyReceiver.class);
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, myIntent,
+						PendingIntent.FLAG_ONE_SHOT);
 				setAlarm(new SimpleDateFormat("dd/MM/yyyy hh:mm").parse(n.when + " " + n.remindTime), pendingIntent);
 			} catch (ParseException e) {
 				e.printStackTrace();
