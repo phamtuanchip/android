@@ -114,7 +114,6 @@ public class MemberEdit extends Activity implements OnClickListener {
 
 			}
 			Intent i = new Intent(v.getContext(), HomeActivity.class);
-			i.putExtra("note", n);
 			startActivity(i);
 		}
 			break;

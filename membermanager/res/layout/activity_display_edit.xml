@@ -14,58 +14,123 @@
             android:id="@+id/image"
             android:layout_width="@dimen/photo_w"
             android:layout_height="@dimen/photo_h"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/business189" />
 
-        <EditText
-            android:id="@+id/txtName"
+        <LinearLayout
+            android:id="@+id/l1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Name?"
-            android:inputType="textCapSentences|textMultiLine"
-            android:singleLine="false" />
+            android:orientation="horizontal" >
 
-        <EditText
-            android:id="@+id/txtDob"
+            <TextView
+                android:id="@+id/nameT"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Name" />
+
+            <EditText
+                android:id="@+id/txtName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:singleLine="false" />
+            android:orientation="horizontal" >
 
-        <EditText
-            android:id="@+id/txtAdd"
+            <TextView
+                android:id="@+id/dobT"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:singleLine="false"
+                android:text="DOB" />
+
+            <EditText
+                android:id="@+id/txtDob"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences|textMultiLine"
-            android:singleLine="false" />
+            android:orientation="horizontal" >
 
-        <RadioGroup
-            android:id="@+id/rdGt"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/addT"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Address" />
+
+            <EditText
+                android:id="@+id/txtAdd"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:inputType="textCapSentences|textMultiLine"
+                android:singleLine="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l4"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Gioi tinh" >
+            android:orientation="horizontal" >
 
-            <RadioButton
+            <TextView
+                android:id="@+id/gtT"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Sex" />
+
+            <RadioGroup
+                android:id="@+id/rdGt"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/l5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nam" />
+                android:text="Save" />
 
-            <RadioButton
+            <Button
+                android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nu" />
-        </RadioGroup>
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Save" />
-
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Cancel" />
+                android:text="Cancel" />
+        </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
