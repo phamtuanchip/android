@@ -6,5 +6,5 @@ public class DbUtil {
 	public static String DB_NAME = "memberdb";
 	public static String TB_USER_NAME = "usertb";
 	public static String TB_MEMBER_NAME = "membertb";
-	
+
 }

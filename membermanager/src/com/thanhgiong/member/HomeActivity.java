@@ -21,7 +21,8 @@ public class HomeActivity extends Activity {
 	public static int ACTION_TYPE_VIEW = 1;
 	int current_action;
 	ListView list;
-	Button add ;
+	Button add;
+
 	private List<Member> getData() {
 		SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
 		db.execSQL(DbUtil.CREATE_TABLE);
@@ -36,13 +37,7 @@ public class HomeActivity extends Activity {
 			} while (cs.moveToNext());
 		}
 		db.close();
-		if (data_.size() == 0) {
-			for (int i = 0; i < 10; i++) {
-				data_.add(new Member("test"));
-			}
-		}
 		return data_;
-
 	}
 
 	@Override
@@ -53,7 +48,7 @@ public class HomeActivity extends Activity {
 		list.setAdapter(new MemberListAdapter(this, getData()));
 		add = (Button) findViewById(R.id.btnAdd);
 		add.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), MemberEdit.class);

@@ -1,14 +1,11 @@
 package com.thanhgiong.member;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import android.R.integer;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.text.TextUtils;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class MemberListAdapter extends BaseAdapter implements Filterable {
@@ -63,12 +59,19 @@ public class MemberListAdapter extends BaseAdapter implements Filterable {
 		holder.img = (ImageView) rowView.findViewById(R.id.img);
 		holder.name = (TextView) rowView.findViewById(R.id.name);
 		holder.name.setText(n_.name);
+		if (n_.nbinary != null) {
+			Bitmap bm = BitmapFactory.decodeByteArray(n_.nbinary, 0, n_.nbinary.length);
+			holder.img.setImageBitmap(bm);
+		} else
+			holder.img.setImageBitmap(
+					BitmapFactory.decodeResource(currentContext_.getResources(), R.drawable.business189));
 		rowView.setTag(position);
 		rowView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), MemberEdit.class);
-				// i.putExtra("member", (Member) getItem(position);
+				Integer position = (Integer) v.getTag();
+				i.putExtra("member", (Member) getItem(position));
 				i.putExtra("type", HomeActivity.ACTION_TYPE_EDIT);
 				v.getContext().startActivity(i);
 			}

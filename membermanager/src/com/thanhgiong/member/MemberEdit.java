@@ -11,8 +11,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,12 +23,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MemberEdit extends Activity implements OnClickListener {
@@ -35,25 +36,63 @@ public class MemberEdit extends Activity implements OnClickListener {
 	Bitmap mImageBitmap;
 	String image;
 	int current_action;
-
 	Button cancel;
 	Button save;
-
+	Button del;
 	ImageView img_frame;
 	Member n_;
-	TextView nameT;
-	TextView dobT;
-	TextView addT;
-	TextView gtT;
-
-	CheckBox reminder;
-	TextView remindTime;
 
 	EditText name;
 	EditText dob;
 	EditText phone;
 	EditText add;
 	RadioGroup gt;
+	RadioButton m;
+	RadioButton f;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_display_edit);
+		Bundle b = this.getIntent().getExtras();
+		img_frame = (ImageView) findViewById(R.id.image);
+		save = (Button) findViewById(R.id.btnSave);
+		cancel = (Button) findViewById(R.id.btnCancel);
+		del = (Button) findViewById(R.id.btnDel);
+		name = (EditText) findViewById(R.id.txtName);
+		add = (EditText) findViewById(R.id.txtAdd);
+		gt = (RadioGroup) findViewById(R.id.rdGt);
+		m = (RadioButton) findViewById(R.id.rdM);
+		m.setChecked(true);
+		f = (RadioButton) findViewById(R.id.rdF);
+		dob = (EditText) findViewById(R.id.txtDob);
+		phone = (EditText) findViewById(R.id.txtPhone);
+		current_action = b.getInt("type");
+		if (b != null) {
+			n_ = (Member) b.get("member");
+			if (n_ != null) {
+				name.setText(n_.name);
+				add.setText(n_.add);
+				dob.setText(n_.dob);
+				phone.setText(n_.phone);
+				m.setChecked("Male".equals(n_.gt));
+				f.setChecked("Female".equals(n_.gt));
+				if (n_.nbinary != null) {
+					mImageBitmap = BitmapFactory.decodeByteArray(n_.nbinary, 0, n_.nbinary.length);
+					img_frame.setImageBitmap(mImageBitmap);
+				} else {
+					Resources res = getResources();
+					int id = R.drawable.business189;
+					mImageBitmap = BitmapFactory.decodeResource(res, id);
+					img_frame.setImageBitmap(mImageBitmap);
+				}
+			}
+		}
+		img_frame.setOnClickListener(this);
+		save.setOnClickListener(this);
+		cancel.setOnClickListener(this);
+		del.setOnClickListener(this);
+	}
 
 	private File createImageFile() throws IOException {
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -78,7 +117,6 @@ public class MemberEdit extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-
 		case R.id.image: {
 			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			File f = null;
@@ -96,7 +134,8 @@ public class MemberEdit extends Activity implements OnClickListener {
 			break;
 
 		case R.id.btnSave: {
-			if (TextUtils.isEmpty(name.getText().toString())) {
+			if (TextUtils.isEmpty(name.getText())) {
+				name.setError("Name is required!");
 				name.requestFocus();
 				return;
 			}
@@ -106,7 +145,9 @@ public class MemberEdit extends Activity implements OnClickListener {
 				mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 				binary = stream.toByteArray();
 			}
-			Member n = new Member(null, name.getText().toString(), dob.getText().toString(), add.getText().toString(), gt.toString(), phone.getText().toString(), binary);
+			final String value = ((RadioButton) findViewById(gt.getCheckedRadioButtonId())).getText().toString();
+			Member n = new Member(null, name.getText().toString(), dob.getText().toString(), add.getText().toString(),
+					value, phone.getText().toString(), binary);
 			if (current_action == HomeActivity.ACTION_TYPE_EDIT) {
 				n.id = n_.id;
 				update(n);
@@ -122,41 +163,25 @@ public class MemberEdit extends Activity implements OnClickListener {
 			this.finish();
 		}
 			break;
-
+		case R.id.btnDel: {
+			SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
+			db.delete(DbUtil.TB_MEMBER_NAME, "id= ?", new String[] { n_.id });
+			db.close();
+			Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+			Intent i = new Intent(v.getContext(), HomeActivity.class);
+			v.getContext().startActivity(i);
+		}
+			break;
 		default:
 			break;
 		}
 
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_display_edit);
-		Bundle b = this.getIntent().getExtras();
-		img_frame = (ImageView) findViewById(R.id.image);
-		save = (Button) findViewById(R.id.btnSave);
-		cancel = (Button) findViewById(R.id.btnCancel);
-		name = (EditText) findViewById(R.id.txtName);
-		add = (EditText) findViewById(R.id.txtAdd);
-		gt = (RadioGroup) findViewById(R.id.rdGt);
-		dob = (EditText) findViewById(R.id.txtDob);
-		phone = (EditText) findViewById(R.id.txtPhone);
-		dob.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-		n_ = (Member) b.get("member");
-		current_action = b.getInt("type");
-		img_frame.setOnClickListener(this);
-		save.setOnClickListener(this);
-		cancel.setOnClickListener(this);
-	}
-
 	private Member save(Member n) {
 		SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
 		db.execSQL(DbUtil.CREATE_TABLE);
 		ContentValues values = new ContentValues();
-		// d integer primary key autoincrement, name varchar(125), dob
-		// varchar(30), add varchar(125), gt varchar(10), nimage varchar (125),
-		// nbinary BLOB
 		values.put("name", n.name);
 		values.put("dob", n.dob);
 		values.put("addr", n.add);
@@ -165,7 +190,6 @@ public class MemberEdit extends Activity implements OnClickListener {
 		values.put("nbinary", n.nbinary);
 		n.id = String.valueOf(db.insert(DbUtil.TB_MEMBER_NAME, null, values));
 		db.close();
-
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 		return n;
 	}

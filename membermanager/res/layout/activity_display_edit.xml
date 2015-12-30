@@ -122,11 +122,13 @@
                 android:orientation="horizontal" >
 
                 <RadioButton
+                    android:id="@+id/rdM"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Male" />
 
                 <RadioButton
+                    android:id="@+id/rdF"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Female" />
@@ -151,6 +153,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cancel" />
+
+            <Button
+                android:id="@+id/btnDel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete" />
         </LinearLayout>
     </LinearLayout>
 
