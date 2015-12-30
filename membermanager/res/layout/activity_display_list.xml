@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="@dimen/icon_w_sm"
-            android:layout_height="@dimen/icon_h_sm"
+            android:layout_width="@dimen/icon_w_md"
+            android:layout_height="@dimen/icon_h_md"
             android:layout_gravity="right"
             android:background="@drawable/business189" />
 

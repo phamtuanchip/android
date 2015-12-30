@@ -20,9 +20,7 @@ public class LoginActivity extends Activity {
 	private String uid;
 	private String upwd;
 
-	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS membertb (id integer primary key autoincrement, name varchar(125), dob varchar(30), add varchar(125), gt varchar(10), nimage varchar (125), nbinary BLOB)";
-	public static String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS usertb (id integer primary key autoincrement, uid varchar(30), upwd varchar(30))";
-
+	
 	public void attemptLogin() {
 		Intent i = new Intent(this, HomeActivity.class);
 		startActivity(i);
@@ -37,9 +35,9 @@ public class LoginActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		SQLiteDatabase db = openOrCreateDatabase("usertb", MODE_PRIVATE, null);
-		db.execSQL(CREATE_TABLE_USER);
-		Cursor cs = db.rawQuery("SELECT * FROM usertb", null);
+		SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
+		db.execSQL(DbUtil.CREATE_TABLE_USER);
+		Cursor cs = db.rawQuery("SELECT * FROM " + DbUtil.TB_USER_NAME, null);
 		if (cs.moveToNext()) {
 			uid = cs.getString(1);
 			upwd = cs.getString(2);

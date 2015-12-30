@@ -23,7 +23,7 @@ public class Member implements Parcelable {
 	public String dob;
 	public String add;
 	public String gt;
-	public String nimage;
+	public String phone;
 	public byte[] nbinary;
 
 	public Member() {
@@ -34,13 +34,13 @@ public class Member implements Parcelable {
 		this.name = name;
 	}
 
-	public Member(String id, String name, String dob, String add, String gt, String image, byte[] nbinary) {
+	public Member(String id, String name, String dob, String add, String gt, String phone, byte[] nbinary) {
 		this.id = id;
 		this.name = name;
 		this.dob = dob;
 		this.add = add;
 		this.gt = gt;
-		this.nimage = image;
+		this.phone = phone;
 		this.nbinary = nbinary;
 	}
 
@@ -50,7 +50,7 @@ public class Member implements Parcelable {
 		this.dob = p.readString();
 		this.add = p.readString();
 		this.gt = p.readString();
-		this.nimage = p.readString();
+		this.phone = p.readString();
 		this.nbinary = new byte[p.readInt()];
 		if (nbinary.length > 0)
 			p.readByteArray(this.nbinary);
@@ -77,7 +77,7 @@ public class Member implements Parcelable {
 		dest.writeString(dob);
 		dest.writeString(add);
 		dest.writeString(gt);
-		dest.writeString(nimage);
+		dest.writeString(phone);
 		if (nbinary != null) {
 			dest.writeInt(nbinary.length);
 			dest.writeByteArray(nbinary);

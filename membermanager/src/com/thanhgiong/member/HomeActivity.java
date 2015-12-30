@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class HomeActivity extends Activity {
@@ -15,15 +19,13 @@ public class HomeActivity extends Activity {
 	public static int ACTION_TYPE_ADDNEW = 3;
 	public static int ACTION_TYPE_EDIT = 2;
 	public static int ACTION_TYPE_VIEW = 1;
-	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS membertb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125), nbinary BLOB, ntime varchar(5) )";
-	public static String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS usertb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125), nbinary BLOB, ntime varchar(5) )";
 	int current_action;
 	ListView list;
-
+	Button add ;
 	private List<Member> getData() {
-		SQLiteDatabase db = openOrCreateDatabase("memberdb", MODE_PRIVATE, null);
-		db.execSQL(CREATE_TABLE);
-		Cursor cs = db.rawQuery("SELECT * FROM membertb", null);
+		SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
+		db.execSQL(DbUtil.CREATE_TABLE);
+		Cursor cs = db.rawQuery("SELECT * FROM " + DbUtil.TB_MEMBER_NAME, null);
 		data_ = new ArrayList<Member>();
 
 		if (cs.moveToFirst()) {
@@ -49,6 +51,16 @@ public class HomeActivity extends Activity {
 		setContentView(R.layout.activity_home);
 		list = (ListView) findViewById(R.id.listView);
 		list.setAdapter(new MemberListAdapter(this, getData()));
+		add = (Button) findViewById(R.id.btnAdd);
+		add.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(v.getContext(), MemberEdit.class);
+				i.putExtra("type", ACTION_TYPE_ADDNEW);
+				startActivity(i);
+			}
+		});
 	}
 
 }

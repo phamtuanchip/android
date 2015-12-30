@@ -51,6 +51,7 @@ public class MemberEdit extends Activity implements OnClickListener {
 
 	EditText name;
 	EditText dob;
+	EditText phone;
 	EditText add;
 	RadioGroup gt;
 
@@ -78,7 +79,7 @@ public class MemberEdit extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 
-		case R.id.img: {
+		case R.id.image: {
 			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			File f = null;
 			try {
@@ -105,7 +106,7 @@ public class MemberEdit extends Activity implements OnClickListener {
 				mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 				binary = stream.toByteArray();
 			}
-			Member n = new Member(null, "test", "12/2/2012", "hanoi", "nam", "url", null);
+			Member n = new Member(null, name.getText().toString(), dob.getText().toString(), add.getText().toString(), gt.toString(), phone.getText().toString(), binary);
 			if (current_action == HomeActivity.ACTION_TYPE_EDIT) {
 				n.id = n_.id;
 				update(n);
@@ -140,27 +141,29 @@ public class MemberEdit extends Activity implements OnClickListener {
 		add = (EditText) findViewById(R.id.txtAdd);
 		gt = (RadioGroup) findViewById(R.id.rdGt);
 		dob = (EditText) findViewById(R.id.txtDob);
+		phone = (EditText) findViewById(R.id.txtPhone);
 		dob.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
 		n_ = (Member) b.get("member");
 		current_action = b.getInt("type");
+		img_frame.setOnClickListener(this);
 		save.setOnClickListener(this);
 		cancel.setOnClickListener(this);
 	}
 
 	private Member save(Member n) {
-		SQLiteDatabase db = openOrCreateDatabase("memberdb", MODE_PRIVATE, null);
-		db.execSQL(HomeActivity.CREATE_TABLE);
+		SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
+		db.execSQL(DbUtil.CREATE_TABLE);
 		ContentValues values = new ContentValues();
 		// d integer primary key autoincrement, name varchar(125), dob
 		// varchar(30), add varchar(125), gt varchar(10), nimage varchar (125),
 		// nbinary BLOB
 		values.put("name", n.name);
 		values.put("dob", n.dob);
-		values.put("add", n.add);
+		values.put("addr", n.add);
 		values.put("gt", n.gt);
-		values.put("nimage", n.nimage);
+		values.put("phone", n.phone);
 		values.put("nbinary", n.nbinary);
-		n.id = String.valueOf(db.insert("membertb", null, values));
+		n.id = String.valueOf(db.insert(DbUtil.TB_MEMBER_NAME, null, values));
 		db.close();
 
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
@@ -173,15 +176,15 @@ public class MemberEdit extends Activity implements OnClickListener {
 	}
 
 	private void update(Member n) {
-		SQLiteDatabase db = openOrCreateDatabase("memberdb", MODE_PRIVATE, null);
+		SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
 		ContentValues values = new ContentValues();
 		values.put("name", n.name);
 		values.put("dob", n.dob);
-		values.put("add", n.add);
+		values.put("addr", n.add);
 		values.put("gt", n.gt);
-		values.put("nimage", n.nimage);
+		values.put("phone", n.phone);
 		values.put("nbinary", n.nbinary);
-		db.update("membertb", values, "id= ?", new String[] { n.id });
+		db.update(DbUtil.TB_MEMBER_NAME, values, "id= ?", new String[] { n.id });
 		db.close();
 		Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
 	}
