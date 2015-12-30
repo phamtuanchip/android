@@ -2,6 +2,7 @@ package com.thanhgiong.member;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 public class LoginActivity extends Activity {
 
 	private View mLoginFormView;
+	private EditText mIdView;
 	private EditText mPasswordView;
 	private Button signInButton;
 	private String uid;
@@ -21,8 +23,12 @@ public class LoginActivity extends Activity {
 	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS membertb (id integer primary key autoincrement, name varchar(125), dob varchar(30), add varchar(125), gt varchar(10), nimage varchar (125), nbinary BLOB)";
 	public static String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS usertb (id integer primary key autoincrement, uid varchar(30), upwd varchar(30))";
 	public void attemptLogin() {
+		Intent i = new Intent(this, HomeActivity.class);			 
+		startActivity(i);
 		
-
+//		if(uid.equalsIgnoreCase(mIdView.getText().toString()) && upwd.equalsIgnoreCase(mPasswordView.getText().toString())) {
+//			
+//		}
 	}
 
 
@@ -40,7 +46,7 @@ public class LoginActivity extends Activity {
 		} else {			
 		ContentValues values = new ContentValues();
 		values.put("uid", "admin");
-		values.put("pwd", "12345");
+		values.put("upwd", "12345");
 		db.insert("usertb", null, values);
 		}
 		db.close();

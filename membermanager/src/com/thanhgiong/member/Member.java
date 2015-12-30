@@ -1,7 +1,5 @@
 package com.thanhgiong.member;
 
-import java.text.SimpleDateFormat;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,82 +9,58 @@ public class Member implements Parcelable {
 
 		@Override
 		public Member createFromParcel(Parcel source) {
-			// TODO Auto-generated method stub
 			return new Member(source);
 		}
 
 		@Override
 		public Member[] newArray(int size) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 	};
-	public byte[] binary;
-	public String id;
-	public String image;
-	public String remind;
-	public String remindTime;
-	public String what;
-	public String when;
 
-	public String where;
+	public String id;
+	public String name;
+	public String dob;
+	public String add;
+	public String gt;
+	public String nimage;
+	public byte[] nbinary;
 
 	public Member() {
 
 	}
-
+	public Member(String name) {
+		this.name = name;
+	}
+	public Member(String id, String name, String dob, String add, String gt, String image, byte[] nbinary) {
+		this.id = id; 
+		this.name = name;
+		this.dob = dob;
+		this.add = add;
+		this.gt = gt;
+		this.nimage = image;
+		this.nbinary = nbinary;
+	}
 	public Member(Parcel p) {
 		this.id = p.readString();
-		this.what = p.readString();
-		this.when = p.readString();
-		this.where = p.readString();
-		this.remind = p.readString();
-		this.image = p.readString();
-		this.remindTime = p.readString();
-		this.binary = new byte[p.readInt()];
-		if (binary.length > 0)
-			p.readByteArray(this.binary);
+		this.name = p.readString();
+		this.dob = p.readString();
+		this.add = p.readString();
+		this.gt = p.readString();
+		this.nimage = p.readString();
+		this.nbinary = new byte[p.readInt()];
+		if (nbinary.length > 0)
+			p.readByteArray(this.nbinary);
 
-	}
-
-	@Deprecated
-	public Member(String id, String what, String when, String where, String remind, String image) {
-		this.id = id;
-		this.what = what;
-		this.when = when;
-		this.where = where;
-		this.remind = remind;
-		this.image = image;
-	}
-
-	@Deprecated
-	public Member(String id, String what, String when, String where, String remind, String image, byte[] binary) {
-		this(id, what, when, where, remind, image);
-		this.binary = binary;
-	}
-
-	public Member(String id, String what, String when, String where, String remind, String image, byte[] binary,
-			String remindTime) {
-		this(id, what, when, where, remind, image, binary);
-		this.remindTime = remindTime;
 	}
 
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	public String getFormatedDate() {
-		SimpleDateFormat sf = new SimpleDateFormat("dd/MM/yyyy");
-		SimpleDateFormat sf2 = new SimpleDateFormat("EEEE dd MMMM, yyyy");
-		try {
-
-			return sf2.format(sf.parse(when));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return "";
+		return dob;
 	}
 
 	public Member[] newArray(int size) {
@@ -95,17 +69,15 @@ public class Member implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
 		dest.writeString(id);
-		dest.writeString(what);
-		dest.writeString(when);
-		dest.writeString(where);
-		dest.writeString(remind);
-		dest.writeString(image);
-		dest.writeString(remindTime);
-		if (binary != null) {
-			dest.writeInt(binary.length);
-			dest.writeByteArray(binary);
+		dest.writeString(name);
+		dest.writeString(dob);
+		dest.writeString(add);
+		dest.writeString(gt);
+		dest.writeString(nimage);
+		if (nbinary != null) {
+			dest.writeInt(nbinary.length);
+			dest.writeByteArray(nbinary);
 		}
 
 	}
