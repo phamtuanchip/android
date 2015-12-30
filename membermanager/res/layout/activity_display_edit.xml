@@ -12,8 +12,8 @@
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="@dimen/photo_w_sm"
-            android:layout_height="@dimen/photo_h_sm"
+            android:layout_width="@dimen/icon_w"
+            android:layout_height="@dimen/icon_h"
             android:background="@drawable/business189" />
 
         <LinearLayout
