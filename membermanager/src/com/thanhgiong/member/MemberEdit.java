@@ -5,10 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -26,6 +24,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -79,6 +78,7 @@ public class MemberEdit extends Activity implements OnClickListener {
 				f.setChecked("Female".equals(n_.gt));
 				if (n_.nbinary != null) {
 					mImageBitmap = BitmapFactory.decodeByteArray(n_.nbinary, 0, n_.nbinary.length);
+					img_frame.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 					img_frame.setImageBitmap(mImageBitmap);
 				} else {
 					Resources res = getResources();
@@ -94,6 +94,7 @@ public class MemberEdit extends Activity implements OnClickListener {
 		del.setOnClickListener(this);
 	}
 
+	@SuppressLint("SimpleDateFormat")
 	private File createImageFile() throws IOException {
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = "JPEG_" + timeStamp + "_";
@@ -110,8 +111,10 @@ public class MemberEdit extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Bundle extras = data.getExtras();
 		mImageBitmap = (Bitmap) extras.get("data");
+		img_frame.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 		img_frame.setImageBitmap(mImageBitmap);
 		Toast.makeText(this, "Snaped", Toast.LENGTH_SHORT).show();
+		
 	}
 
 	@Override
@@ -192,11 +195,6 @@ public class MemberEdit extends Activity implements OnClickListener {
 		db.close();
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 		return n;
-	}
-
-	public void setAlarm(Date date, PendingIntent intent) {
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), intent);
 	}
 
 	private void update(Member n) {

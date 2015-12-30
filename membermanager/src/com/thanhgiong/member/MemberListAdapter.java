@@ -14,6 +14,7 @@ import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MemberListAdapter extends BaseAdapter implements Filterable {
@@ -61,6 +62,7 @@ public class MemberListAdapter extends BaseAdapter implements Filterable {
 		holder.name.setText(n_.name);
 		if (n_.nbinary != null) {
 			Bitmap bm = BitmapFactory.decodeByteArray(n_.nbinary, 0, n_.nbinary.length);
+			holder.img.setLayoutParams(new LinearLayout.LayoutParams(32, 32));
 			holder.img.setImageBitmap(bm);
 		} else
 			holder.img.setImageBitmap(
