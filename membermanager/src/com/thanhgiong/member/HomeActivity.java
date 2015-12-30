@@ -19,12 +19,13 @@ public class HomeActivity extends Activity {
 	public static String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS usertb (id integer primary key autoincrement, nwhat varchar(125), nwhen varchar(30), nwhere varchar(125), nremind varchar(10), nimage varchar (125), nbinary BLOB, ntime varchar(5) )";
 	int current_action;
 	ListView list;
+
 	private List<Member> getData() {
 		SQLiteDatabase db = openOrCreateDatabase("memberdb", MODE_PRIVATE, null);
 		db.execSQL(CREATE_TABLE);
 		Cursor cs = db.rawQuery("SELECT * FROM membertb", null);
 		data_ = new ArrayList<Member>();
-		
+
 		if (cs.moveToFirst()) {
 			do {
 				Member n = new Member(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3),
@@ -33,16 +34,14 @@ public class HomeActivity extends Activity {
 			} while (cs.moveToNext());
 		}
 		db.close();
-		if(data_.size() == 0) {
-			for (int i =0; i < 10 ; i++) {
+		if (data_.size() == 0) {
+			for (int i = 0; i < 10; i++) {
 				data_.add(new Member("test"));
 			}
 		}
 		return data_;
-		
-	}
 
-	 
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +51,4 @@ public class HomeActivity extends Activity {
 		list.setAdapter(new MemberListAdapter(this, getData()));
 	}
 
-	  
- 
 }

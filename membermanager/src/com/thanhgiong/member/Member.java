@@ -29,11 +29,13 @@ public class Member implements Parcelable {
 	public Member() {
 
 	}
+
 	public Member(String name) {
 		this.name = name;
 	}
+
 	public Member(String id, String name, String dob, String add, String gt, String image, byte[] nbinary) {
-		this.id = id; 
+		this.id = id;
 		this.name = name;
 		this.dob = dob;
 		this.add = add;
@@ -41,6 +43,7 @@ public class Member implements Parcelable {
 		this.nimage = image;
 		this.nbinary = nbinary;
 	}
+
 	public Member(Parcel p) {
 		this.id = p.readString();
 		this.name = p.readString();

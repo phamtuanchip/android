@@ -3,6 +3,7 @@ package com.thanhgiong.member;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,12 +25,11 @@ public class MemberListAdapter extends BaseAdapter implements Filterable {
 		ImageView img;
 		TextView name;
 	}
-	 
+
 	static List<Member> data_;
 	private static LayoutInflater mInflater = null;
 	static Member n_;
 	Context currentContext_;
-
 
 	public MemberListAdapter(Context currentContext, List<Member> data) {
 		super();
@@ -42,8 +42,6 @@ public class MemberListAdapter extends BaseAdapter implements Filterable {
 	public int getCount() {
 		return data_.size();
 	}
-
-	 
 
 	@Override
 	public Object getItem(int arg0) {
@@ -70,7 +68,7 @@ public class MemberListAdapter extends BaseAdapter implements Filterable {
 			@Override
 			public void onClick(View v) {
 				Intent i = new Intent(v.getContext(), MemberEdit.class);
-				//i.putExtra("member", (Member) getItem(Integer.parseInt(rowView.getTag().toString())));
+				// i.putExtra("member", (Member) getItem(position);
 				i.putExtra("type", HomeActivity.ACTION_TYPE_EDIT);
 				v.getContext().startActivity(i);
 			}

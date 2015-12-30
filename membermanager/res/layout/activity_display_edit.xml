@@ -10,69 +10,50 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:id="@+id/l2"
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/photo_w"
+            android:layout_height="@dimen/photo_h"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:id="@+id/txtName"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical" >
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Name?"
+            android:inputType="textCapSentences|textMultiLine"
+            android:singleLine="false" />
 
-            <LinearLayout
-                android:id="@+id/l20"
-                android:layout_width="fill_parent"
+        <EditText
+            android:id="@+id/txtDob"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false" />
+
+        <EditText
+            android:id="@+id/txtAdd"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences|textMultiLine"
+            android:singleLine="false" />
+
+        <RadioGroup
+            android:id="@+id/rdGt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gioi tinh" >
+
+            <RadioButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:text="Nam" />
 
-                <ImageView
-                    android:id="@+id/image"
-                    android:layout_width="@dimen/photo_w"
-                    android:layout_height="@dimen/photo_h"
-                    android:layout_centerHorizontal="true" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/l21"
-                android:layout_width="fill_parent"
+            <RadioButton
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="10dp" >
-
-                <EditText
-                    android:id="@+id/txtName"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="Name?"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:singleLine="false" />
-
-                <EditText
-                    android:id="@+id/txtDob"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="false" />
-
-                <EditText
-                    android:id="@+id/txtAdd"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:singleLine="false" />
-
-                <RadioGroup
-                    android:id="@+id/rdGt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gioi tinh" >
-
-                    <RadioButton android:text="Nam" />
-
-                    <RadioButton android:text="Nu" />
-                </RadioGroup>
-            </LinearLayout>
-        </LinearLayout>
+                android:text="Nu" />
+        </RadioGroup>
 
         <Button
             android:id="@+id/btnSave"

@@ -19,19 +19,19 @@ public class LoginActivity extends Activity {
 	private Button signInButton;
 	private String uid;
 	private String upwd;
-	
+
 	public static String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS membertb (id integer primary key autoincrement, name varchar(125), dob varchar(30), add varchar(125), gt varchar(10), nimage varchar (125), nbinary BLOB)";
 	public static String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS usertb (id integer primary key autoincrement, uid varchar(30), upwd varchar(30))";
+
 	public void attemptLogin() {
-		Intent i = new Intent(this, HomeActivity.class);			 
+		Intent i = new Intent(this, HomeActivity.class);
 		startActivity(i);
-		
-//		if(uid.equalsIgnoreCase(mIdView.getText().toString()) && upwd.equalsIgnoreCase(mPasswordView.getText().toString())) {
-//			
-//		}
+
+		// if(uid.equalsIgnoreCase(mIdView.getText().toString()) &&
+		// upwd.equalsIgnoreCase(mPasswordView.getText().toString())) {
+		//
+		// }
 	}
-
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +40,14 @@ public class LoginActivity extends Activity {
 		SQLiteDatabase db = openOrCreateDatabase("usertb", MODE_PRIVATE, null);
 		db.execSQL(CREATE_TABLE_USER);
 		Cursor cs = db.rawQuery("SELECT * FROM usertb", null);
-		if(cs.moveToNext()) {
-		uid =	cs.getString(1);
-		upwd = 	cs.getString(2);
-		} else {			
-		ContentValues values = new ContentValues();
-		values.put("uid", "admin");
-		values.put("upwd", "12345");
-		db.insert("usertb", null, values);
+		if (cs.moveToNext()) {
+			uid = cs.getString(1);
+			upwd = cs.getString(2);
+		} else {
+			ContentValues values = new ContentValues();
+			values.put("uid", "admin");
+			values.put("upwd", "12345");
+			db.insert("usertb", null, values);
 		}
 		db.close();
 
@@ -63,8 +63,5 @@ public class LoginActivity extends Activity {
 		});
 
 	}
-
-
-
 
 }

@@ -4,13 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -28,13 +25,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class MemberEdit extends Activity implements OnClickListener{
+public class MemberEdit extends Activity implements OnClickListener {
 
 	ImageButton home;
 	Bitmap mImageBitmap;
@@ -44,9 +39,7 @@ public class MemberEdit extends Activity implements OnClickListener{
 	Button cancel;
 	Button save;
 
-	ImageView img;
 	ImageView img_frame;
-	LinearLayout l1;
 	Member n_;
 	TextView nameT;
 	TextView dobT;
@@ -55,13 +48,11 @@ public class MemberEdit extends Activity implements OnClickListener{
 
 	CheckBox reminder;
 	TextView remindTime;
-	
+
 	EditText name;
 	EditText dob;
 	EditText add;
 	RadioGroup gt;
-	 
-	
 
 	private File createImageFile() throws IOException {
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -70,7 +61,7 @@ public class MemberEdit extends Activity implements OnClickListener{
 		File image = File.createTempFile(imageFileName, /* prefix */
 				".jpg", /* suffix */
 				storageDir /* directory */
-				);
+		);
 		this.image = "file:" + image.getAbsolutePath();
 		return image;
 	}
@@ -84,9 +75,9 @@ public class MemberEdit extends Activity implements OnClickListener{
 	}
 
 	@Override
-	public void onClick(View v) {		
+	public void onClick(View v) {
 		switch (v.getId()) {
-		 
+
 		case R.id.img: {
 			Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			File f = null;
@@ -101,11 +92,10 @@ public class MemberEdit extends Activity implements OnClickListener{
 			}
 			startActivityForResult(takePictureIntent, 1);
 		}
-		break;
-
+			break;
 
 		case R.id.btnSave: {
-			if(TextUtils.isEmpty(name.getText().toString())) {
+			if (TextUtils.isEmpty(name.getText().toString())) {
 				name.requestFocus();
 				return;
 			}
@@ -115,8 +105,8 @@ public class MemberEdit extends Activity implements OnClickListener{
 				mImageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 				binary = stream.toByteArray();
 			}
-			Member n = new Member(null,  "test", "12/2/2012", "hanoi", "nam","url", null);
-			if (current_action ==HomeActivity.ACTION_TYPE_EDIT) {
+			Member n = new Member(null, "test", "12/2/2012", "hanoi", "nam", "url", null);
+			if (current_action == HomeActivity.ACTION_TYPE_EDIT) {
 				n.id = n_.id;
 				update(n);
 			} else if (current_action == HomeActivity.ACTION_TYPE_ADDNEW) {
@@ -127,11 +117,11 @@ public class MemberEdit extends Activity implements OnClickListener{
 			i.putExtra("note", n);
 			startActivity(i);
 		}
-		break;
+			break;
 		case R.id.btnCancel: {
 			this.finish();
 		}
-		break;
+			break;
 
 		default:
 			break;
@@ -144,26 +134,27 @@ public class MemberEdit extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_edit);
 		Bundle b = this.getIntent().getExtras();
-		img = (ImageView) findViewById(R.id.img);
 		img_frame = (ImageView) findViewById(R.id.image);
 		save = (Button) findViewById(R.id.btnSave);
 		cancel = (Button) findViewById(R.id.btnCancel);
+		name = (EditText) findViewById(R.id.txtName);
+		add = (EditText) findViewById(R.id.txtAdd);
+		gt = (RadioGroup) findViewById(R.id.rdGt);
+		dob = (EditText) findViewById(R.id.txtDob);
 		dob.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+		n_ = (Member) b.get("member");
 		current_action = b.getInt("type");
-		img.setOnClickListener(this);
 		save.setOnClickListener(this);
 		cancel.setOnClickListener(this);
-
 	}
-
-	 
- 
 
 	private Member save(Member n) {
 		SQLiteDatabase db = openOrCreateDatabase("memberdb", MODE_PRIVATE, null);
 		db.execSQL(HomeActivity.CREATE_TABLE);
 		ContentValues values = new ContentValues();
-		//d integer primary key autoincrement, name varchar(125), dob varchar(30), add varchar(125), gt varchar(10), nimage varchar (125), nbinary BLOB
+		// d integer primary key autoincrement, name varchar(125), dob
+		// varchar(30), add varchar(125), gt varchar(10), nimage varchar (125),
+		// nbinary BLOB
 		values.put("name", n.name);
 		values.put("dob", n.dob);
 		values.put("add", n.add);
