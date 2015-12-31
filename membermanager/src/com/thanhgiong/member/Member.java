@@ -1,9 +1,15 @@
 package com.thanhgiong.member;
 
+import com.parse.ParseClassName;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Member implements Parcelable {
+
+	/**
+	 * 
+	 */
 
 	public static final Parcelable.Creator<Member> CREATOR = new Parcelable.Creator<Member>() {
 

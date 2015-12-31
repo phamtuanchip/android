@@ -89,5 +89,18 @@ you can check devices connected to adb
 
 adb devices
 
+ 416
+down vote
+	
+
+A good way to add external JARs to your Android project or any Java project is:
+
+    Create a folder called libs in your project's root folder
+    Copy your JAR files to the libs folder
+
+    Now right click on the Jar file and then select Build Path > Add to Build Path, which will create a folder called 'Referenced Libraries' within your project
+
+    By doing this, you will not lose your libraries that are being referenced on your hard drive whenever you transfer your project to another computer.
+
 
 =============================

@@ -23,23 +23,24 @@ public class LoginActivity extends Activity {
 
 	public void attemptLogin() {
 		Intent i = new Intent(this, HomeActivity.class);
+		startActivity(i);
 		// startActivity(i);
-		if (TextUtils.isEmpty(uidE.getText())) {
-			uidE.setError("user name is requirded!");
-			uidE.requestFocus();
-			return;
-		}
-		if (TextUtils.isEmpty(upwdE.getText())) {
-			upwdE.setError("password is requirded!");
-			upwdE.requestFocus();
-			return;
-		}
-		if (uid.equalsIgnoreCase(uidE.getText().toString()) && upwd.equalsIgnoreCase(upwdE.getText().toString())) {
-			startActivity(i);
-		} else {
-			Toast.makeText(this, "User name owr passowrd is incorrect", Toast.LENGTH_SHORT).show();
-			return;
-		}
+//		if (TextUtils.isEmpty(uidE.getText())) {
+//			uidE.setError("user name is requirded!");
+//			uidE.requestFocus();
+//			return;
+//		}
+//		if (TextUtils.isEmpty(upwdE.getText())) {
+//			upwdE.setError("password is requirded!");
+//			upwdE.requestFocus();
+//			return;
+//		}
+//		if (uid.equalsIgnoreCase(uidE.getText().toString()) && upwd.equalsIgnoreCase(upwdE.getText().toString())) {
+//			startActivity(i);
+//		} else {
+//			Toast.makeText(this, "User name owr passowrd is incorrect", Toast.LENGTH_SHORT).show();
+//			return;
+//		}
 
 	}
 

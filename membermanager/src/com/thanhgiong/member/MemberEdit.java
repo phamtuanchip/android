@@ -3,16 +3,27 @@ package com.thanhgiong.member;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.parse.Parse;
+import com.parse.ParseACL;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -53,6 +64,8 @@ public class MemberEdit extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_edit);
+		Parse.enableLocalDatastore(this);		 
+		Parse.initialize(this);
 		Bundle b = this.getIntent().getExtras();
 		img_frame = (ImageView) findViewById(R.id.image);
 		save = (Button) findViewById(R.id.btnSave);
@@ -102,7 +115,7 @@ public class MemberEdit extends Activity implements OnClickListener {
 		File image = File.createTempFile(imageFileName, /* prefix */
 				".jpg", /* suffix */
 				storageDir /* directory */
-		);
+				);
 		this.image = "file:" + image.getAbsolutePath();
 		return image;
 	}
@@ -114,7 +127,7 @@ public class MemberEdit extends Activity implements OnClickListener {
 		img_frame.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 		img_frame.setImageBitmap(mImageBitmap);
 		Toast.makeText(this, "Snaped", Toast.LENGTH_SHORT).show();
-		
+
 	}
 
 	@Override
@@ -134,7 +147,7 @@ public class MemberEdit extends Activity implements OnClickListener {
 			}
 			startActivityForResult(takePictureIntent, 1);
 		}
-			break;
+		break;
 
 		case R.id.btnSave: {
 			if (TextUtils.isEmpty(name.getText())) {
@@ -161,11 +174,11 @@ public class MemberEdit extends Activity implements OnClickListener {
 			Intent i = new Intent(v.getContext(), HomeActivity.class);
 			startActivity(i);
 		}
-			break;
+		break;
 		case R.id.btnCancel: {
 			this.finish();
 		}
-			break;
+		break;
 		case R.id.btnDel: {
 			SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
 			db.delete(DbUtil.TB_MEMBER_NAME, "id= ?", new String[] { n_.id });
@@ -174,14 +187,42 @@ public class MemberEdit extends Activity implements OnClickListener {
 			Intent i = new Intent(v.getContext(), HomeActivity.class);
 			v.getContext().startActivity(i);
 		}
-			break;
+		break;
 		default:
 			break;
 		}
 
 	}
 
+	public boolean isOnline() {
+		ConnectivityManager cm =
+				(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		return netInfo != null && netInfo.isConnectedOrConnecting();
+	}
+
 	private Member save(Member n) {
+		if(isOnline()) {
+			  ParseObject p = new ParseObject("member");
+			  for (Field f : n.getClass().getDeclaredFields()) {
+				  try {
+					p.put(f.getName(), f.get(n));
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			  }
+			  p.saveInBackground(new SaveCallback() {
+				@Override
+				public void done(ParseException arg0) {
+					Toast.makeText(MemberEdit.this, "Saved to cloud", Toast.LENGTH_SHORT); 
+				}
+			});
+			 
+		}
 		SQLiteDatabase db = openOrCreateDatabase(DbUtil.DB_NAME, MODE_PRIVATE, null);
 		db.execSQL(DbUtil.CREATE_TABLE);
 		ContentValues values = new ContentValues();

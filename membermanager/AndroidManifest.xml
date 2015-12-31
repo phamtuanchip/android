@@ -4,9 +4,12 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-sdk
         android:minSdkVersion="15"
-        android:targetSdkVersion="15" />
+        android:targetSdkVersion="23" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +19,10 @@
         <activity
             android:name=".LoginActivity"
             android:label="Login" >
+        </activity>
+        <activity
+            android:name=".HomeActivity"
+            android:label="Members" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,13 +30,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
-            android:label="Members" >
-        </activity>
-        <activity
             android:name=".MemberEdit"
             android:label="Edit" >
         </activity>
+
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="Pvj18TX5HnaDUHyQpr7zfEwjBQfz8Td70WJlvzzC" />
+        <meta-data
+            android:name="com.parse.CLIENT_KEY"
+            android:value="RQzjgP3XdeVoGkN6rOZJBxvAOgxX8vwMP8vDC7Zh" />
     </application>
 
 </manifest>
