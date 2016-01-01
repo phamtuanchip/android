@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -24,6 +25,14 @@
         <activity
             android:name=".sendSms"
             android:label="@string/title_activity_send_sms" >
+        </activity>
+        <activity
+            android:name=".callPhone"
+            android:label="Call Phone" >
+        </activity>
+        <activity
+            android:name=".infor"
+            android:label="Member Infor" >
         </activity>
     </application>
 

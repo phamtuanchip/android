@@ -43,29 +43,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.06"
-            android:orientation="horizontal"
-            android:weightSum="1" >
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nội dung"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <EditText
-                android:id="@+id/noidung"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textMultiLine" />
-        </LinearLayout>
-
-        <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -82,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="#99ff09"
-                android:text="Gửi" />
+                android:text="Gọi" />
 
             <Button
                 android:id="@+id/cancel"

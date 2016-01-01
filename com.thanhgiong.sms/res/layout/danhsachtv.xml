@@ -11,9 +11,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="center_horizontal"
-        android:text="Danh sach thanh vien"
-        android:textStyle="bold"
-        android:textSize="20dp" />
+        android:text="Danh sách thành viên"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/i0"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:src="@drawable/logo_hou" />
 
     <LinearLayout
         android:id="@+id/l2"
@@ -22,22 +31,22 @@
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:padding="20dp" >
+        android:padding="5dp" >
 
         <ImageView
             android:id="@+id/i1"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_weight="2"
             android:gravity="center_horizontal"
-            android:src="@drawable/anh1" />
+            android:src="@drawable/lam" />
 
         <ImageView
             android:id="@+id/i2"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_weight="2"
-            android:src="@drawable/anh2" />
+            android:src="@drawable/nhat" />
     </LinearLayout>
 
     <LinearLayout
@@ -48,23 +57,63 @@
         android:layout_weight="1"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        android:padding="20dp" >
+        android:padding="5dp" >
 
         <ImageView
             android:id="@+id/i3"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_weight="2"
             android:gravity="center_horizontal"
-            android:src="@drawable/anh2" />
+            android:src="@drawable/phong" />
 
         <ImageView
             android:id="@+id/i4"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
             android:layout_weight="2"
             android:gravity="center_horizontal"
-            android:src="@drawable/anh1" />
+            android:src="@drawable/tuan" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/l3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="5dp" >
+
+        <ImageView
+            android:id="@+id/i4"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_weight="2"
+            android:gravity="center_horizontal"
+            android:src="@drawable/hung_anh" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.09"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:weightSum="1" >
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="129dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="0.10"
+            android:background="#f79f06"
+            android:text="Hủy" />
     </LinearLayout>
 
 </LinearLayout>
