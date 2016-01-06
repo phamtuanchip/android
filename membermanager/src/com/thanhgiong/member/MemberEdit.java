@@ -64,8 +64,8 @@ public class MemberEdit extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_display_edit);
-		Parse.enableLocalDatastore(this);		 
-		Parse.initialize(this);
+		//Parse.enableLocalDatastore(this);
+		//Parse.initialize(this);
 		Bundle b = this.getIntent().getExtras();
 		img_frame = (ImageView) findViewById(R.id.image);
 		save = (Button) findViewById(R.id.btnSave);
