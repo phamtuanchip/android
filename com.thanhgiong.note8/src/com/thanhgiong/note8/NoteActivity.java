@@ -5,6 +5,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -60,17 +62,29 @@ public class NoteActivity extends Activity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		IntentFilter ift = new IntentFilter();
-
 		Intent intent = new Intent(getApplicationContext(), MyReceiver.class);
 		pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
-	@Override
-	protected void onStop() {
-		// TODO Auto-generated method stub
-		// unregisterReceiver(mr);
-		super.onStop();
+	protected static boolean isVisible = false;
 
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		setVisible(true);
+		Log.e("Currrent -=========",this.getClass().toString()+ isVisible);
 	}
+
+
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		setVisible(false);
+		Log.e("pouse -=========",this.getClass().toString());
+	}
+
+
 
 }

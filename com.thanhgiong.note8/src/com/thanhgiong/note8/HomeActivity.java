@@ -24,7 +24,7 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 	SearchView search;
 	SharedPreferences settings;
 
-	// HÃ m load dá»¯ liá»‡u Ä‘Ã£ lÆ°u trong cÆ¡ sá»Ÿ dá»¯ liá»‡u SQLite
+	// Hàm lấy dữ liệu từ cơ sở dữ liệu sqlite và tạo danh sách đối tượng ghi chú
 	private List<Note> getData() {
 		SQLiteDatabase db = openOrCreateDatabase("note8db", MODE_PRIVATE, null);
 		db.execSQL(NoteEdit.CREATE_TABLE);
@@ -32,9 +32,7 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 		data_ = new ArrayList<Note>();
 		if (cs.moveToFirst()) {
 			do {
-				// Duyá»‡t qua toÃ n bá»™ doanh sÃ¡ch, táº¡o Ä‘á»‘i tÆ°á»£ng
-				// Ä‘á»ƒ hiá»‡n dá»¯ liá»‡u
-				// trong list view
+				// Duyệt qua toàn bộ kết quả của câu truy vấn và lấy giữ liệu từ các cộ tương ứng 
 				Note n = new Note(String.valueOf(cs.getInt(0)), cs.getString(1), cs.getString(2), cs.getString(3),
 						cs.getString(4), cs.getString(5), cs.getBlob(6), cs.getString(7));
 				data_.add(n);
@@ -48,30 +46,32 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		// Thêm mới ghi chú mở form tạo ghi chú notedit activity
 		case R.id.btnAddnew: {
 			Intent i = new Intent(this, NoteEdit.class);
 			i.putExtra("type", NoteEdit.ACTION_TYPE_ADDNEW);
 			v.getContext().startActivity(i);
 		}
 			break;
-		// Cáº­p nháº­t sá»± kiá»‡n chuyá»ƒn dáº¡ng view
+		// Thay đổi các dạng view và load adapter tương ứng
 		case R.id.btnSwitch: {
 			Toast.makeText(this, "Change view", Toast.LENGTH_SHORT).show();
 			list = (ListView) findViewById(R.id.listView);
 			SharedPreferences.Editor editor = settings.edit();
 			if (list.getAdapter() instanceof NoteAdapter) {
 				list.setAdapter(new NoteListAdapter(this, getData()));
-				// LÆ°u dáº¡ng view vÃ o sharedpreference
+				// ghán giá trị vào biến số shared preferences
 				editor.putString(LoginActivity.PREFS_VIEW, "list");
 			} else {
 				list.setAdapter(new NoteAdapter(this, getData()));
-				// LÆ°u dáº¡ng view vÃ o sharedpreference
+				// ghán giá trị vào biến số shared preferences
 				editor.putString(LoginActivity.PREFS_VIEW, "block");
 			}
-			// save dá»¯ liá»‡u vÃ o sharedpreference
+			// lưu kiểu view tương ứng vào sharedprefernces
 			editor.commit();
 		}
 			break;
+			// Khóa ứng dụng quay về màn hình login
 		case R.id.btnLock: {
 			Intent i = new Intent(this, LoginActivity.class);
 			v.getContext().startActivity(i);
@@ -83,6 +83,7 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 	}
 
 	@Override
+	// hàm load đầu tiên của mọi activity, lấy ra các object tương ứng gán vào biến số, cài đặt sự kiện
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
@@ -95,36 +96,34 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 		lock.setVisibility(View.VISIBLE);
 
 		search.setOnQueryTextListener(this);
+		search.setVisibility((data_ != null) && (data_.size() > 0) ? View.VISIBLE : View.GONE);
 		add.setOnClickListener(this);
 		sw.setOnClickListener(this);
 		lock.setOnClickListener(this);
 
 		list = (ListView) findViewById(R.id.listView);
-		// Kiá»ƒm tra kiá»ƒu view Ä‘Ã£ lÆ°u láº§n trÆ°á»›c
+		// kiếm tra giữ liệu đẫ lưu vào preferences hay chưa
 		settings = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
 		String viewType = settings.getString(LoginActivity.PREFS_VIEW, null);
-		// CÃ i Ä‘áº·t filter Ä‘á»ƒ search trÃªn list view
+		// lấy ra kiểu view đã lưu lần trước 
 		list.setTextFilterEnabled(true);
 		if (viewType == null) {
-			// Náº¿u chÆ°a lÆ°u kiá»ƒu view láº§n nÃ o thÃ¬ chá»�n view theo
-			// kiá»ƒu khá»‘i
+			// nếu chưa luu thì set sang dạng list view
 			list.setAdapter(new NoteAdapter(this, getData()));
 		} else {
-			// Náº¿u Ä‘Ã£ lÆ°u kiá»ƒu view láº§n nÃ o thÃ¬ chá»�n view tÆ°Æ¡ng
-			// á»©ng kiá»ƒu view Ä‘Ã£
-			// lÆ°u
+			//  nếu đã lưu thì so sách giá trị
 			if ("list".equals(viewType)) {
-				// view theo dáº¡ng list
+				// view theo dạng list
 				list.setAdapter(new NoteListAdapter(this, getData()));
 			} else {
-				// view theo dáº¡ng khá»‘i
+				// view theo dạng khối
 				list.setAdapter(new NoteAdapter(this, getData()));
 			}
 		}
 
 	}
 
-	// HÃ m filter Ä‘á»ƒ thá»±c hiá»‡n search trÃªn list view Ä‘Ã£ cÃ³
+	// hàm xử lý sự kiên khi ghõ vào ô tìm kiếm sử dụng filter lọc dữ liệu hiện có trên danh sách nghi chú mà không cần gọi lại sqlite
 	@Override
 	public boolean onQueryTextChange(String key) {
 		if (TextUtils.isEmpty(key)) {
@@ -134,7 +133,7 @@ public class HomeActivity extends NoteActivity implements OnClickListener, Searc
 		}
 		return true;
 	}
-
+	
 	@Override
 	public boolean onQueryTextSubmit(String arg0) {
 		return false;

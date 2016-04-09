@@ -33,6 +33,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 	}
 
 	private class ItemFilter extends Filter {
+		// Ghi đè hàm để trả về kết quả khi bắt đầu type trong ô search
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
 			String filterString = constraint.toString().toLowerCase();
@@ -52,7 +53,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 			results.count = nlist.size();
 			return results;
 		}
-
+		// Hàm gọi sau khi kiếm xong thì báo về giao diện
 		@SuppressWarnings("unchecked")
 		@Override
 		protected void publishResults(CharSequence constraint, FilterResults results) {
@@ -70,7 +71,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 	List<Note> filter_data_;
 
 	private ItemFilter mFilter = new ItemFilter();
-
+	// Constructor khởi tạo adapter 
 	public NoteAdapter(Context currentContext, List<Note> data) {
 		super();
 		currentContext_ = currentContext;
@@ -98,7 +99,7 @@ public class NoteAdapter extends BaseAdapter implements Filterable {
 	public long getItemId(int arg0) {
 		return arg0;
 	}
-
+	// Ghi đè hàm để xử lý vấn đề view riêng của adapter 
 	@Override
 	public View getView(int position, View currentContext, ViewGroup arg2) {
 		View rowView = currentContext;

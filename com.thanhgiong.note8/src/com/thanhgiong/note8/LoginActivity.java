@@ -228,5 +228,15 @@ public class LoginActivity extends Activity {
 			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
+	@Override
+	public void onBackPressed() {
+	   return;
+	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    return !(keyCode==KeyEvent.KEYCODE_BACK);
+	         
+	       // Disable back button..............
+	}
 }

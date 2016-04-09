@@ -44,7 +44,7 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 	ImageButton home;
 	LocationManager locationManager;
 	Bitmap mImageBitmap;
-
+	// Tạo file tạm để lưu ảnh sau khi chụp
 	private File createImageFile() throws IOException {
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = "JPEG_" + timeStamp + "_";
@@ -56,7 +56,7 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 		this.image = "file:" + image.getAbsolutePath();
 		return image;
 	}
-
+	// Hàm này gọi sau khi nhấn vào chức năng chụp ảnh
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Bundle extras = data.getExtras();
@@ -215,10 +215,12 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 					remindTime.setVisibility(View.GONE);
 				}
 			} else {
+				// Khởi tạo đối tượng gps để cập nhật location mới nhất
 				gps = new GPSTracker(this);
 				if (gps.canGetLocation()) {
 					double latitude = gps.getLatitude();
 					double longitude = gps.getLongitude();
+					// Thực thi task chạy ngầm lấy tên địa điểm dựa vào kinh độ , vĩ độ
 					CityAsyncTask cs = new CityAsyncTask(this, latitude, longitude);
 					cs.execute();
 				}
@@ -242,12 +244,14 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 
 	}
 
+	// Hàm này gọi sau khi người chùng chọn lịch trên dialog lịch
 	@Override
 	public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 		whenE.setText(
 				new StringBuilder().append(dayOfMonth).append("/").append(monthOfYear + 1).append("/").append(year));
 	}
 
+	// Hàm này gọi sau khi người dùng chọn time
 	@Override
 	public void onTimeSet(TimePicker arg0, int hours, int min) {
 		String mins = String.valueOf(min);
@@ -255,7 +259,7 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 			mins = "0" + mins;
 		remindTime.setText(new StringBuilder().append(hours).append(":").append(mins));
 	}
-
+	// Lưu ghi chú mới dùng Contents values
 	private Note save(Note n) {
 		SQLiteDatabase db = openOrCreateDatabase("note8db", MODE_PRIVATE, null);
 		db.execSQL(CREATE_TABLE);
@@ -282,12 +286,12 @@ public class NoteEdit extends NoteActivity implements OnClickListener, OnDateSet
 		Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 		return n;
 	}
-
+	// Cài đặt alamrm 
 	public void setAlarm(Date date, PendingIntent intent) {
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC_WAKEUP, date.getTime(), intent);
 	}
-
+	// Update ghi chú cũ với các thông tin thay đổi 
 	private void update(Note n) {
 		SQLiteDatabase db = openOrCreateDatabase("note8db", MODE_PRIVATE, null);
 		ContentValues values = new ContentValues();

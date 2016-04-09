@@ -122,6 +122,7 @@ public class NoteDetail extends NoteActivity implements OnClickListener, OnTouch
 		current_action = ACTION_TYPE_VIEW;
 	}
 
+	// Overider ontouch event 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		return false;
